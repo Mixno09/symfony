@@ -10,6 +10,7 @@ use Symfony\Component\Form\Extension\Core\Type\TextareaType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
+use Symfony\Component\Validator\Constraints as Assert;
 
 class ProductType extends AbstractType
 {
@@ -30,6 +31,19 @@ class ProductType extends AbstractType
                 'label' => 'Изображение',
                 'attr' => ['placeholder' => 'Выберите изображение...'],
                 'translation_domain' => false,
+                'mapped' => false, // unmapped означает, что это поле не связано ни с каким свойством объекта
+                'constraints' => [
+                    new Assert\NotBlank(),
+                    new Assert\Image([
+                        'minWidth' => 400,
+                        'maxWidth' => 800,
+                        'minHeight' => 400,
+                        'maxHeight' => 800,
+                        'minRatio' => 1,
+                        'maxRatio' => 1,
+                        'mimeTypes' => ['image/jpeg']
+                    ]),
+                ]
             ])
             ->add('save', SubmitType::class, [
                 'label' => 'Сохранить',
@@ -41,7 +55,7 @@ class ProductType extends AbstractType
     {
         $resolver->setDefaults([
             'data_class' => Product::class,
-            'attr' => ['novalidate' => 'novalidate'],
+            'attr' => ['novalidate' => 'novalidate'], // убирает валидацию html
         ]);
     }
 }
