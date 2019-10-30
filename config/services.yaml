@@ -26,11 +26,15 @@ services:
 
     # add more service definitions when explicit configuration is needed
     # please note that last definitions always *replace* previous ones
-    App\Controller\ProductController:         # указываем контроллеру продуктов куда наш сервис загрузки
-        bind:                                 # изображения будет его сохранять
+    App\Controller\ProductController:         # указываем контроллеру продуктов кокой сервис загрузки пердается в конструктор
+        bind:
             App\Service\FileUploader: '@file_uploader.product'
 
-    file_uploader.product:
+    file_uploader.product:   # регистрация сервиса (идентификатор)
         class: 'App\Service\FileUploader'
         arguments:
             $targetDirectory: '%upload.product%'
+
+    App\Repository\FileProductRepository:
+        arguments:
+            $file: '%kernel.cache_dir%/products.json'

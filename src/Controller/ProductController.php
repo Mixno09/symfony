@@ -4,6 +4,7 @@ namespace App\Controller;
 
 use App\Entity\Product;
 use App\Form\ProductType;
+use App\Repository\ProductRepositoryInterface;
 use App\Service\FileUploader;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
@@ -24,7 +25,7 @@ class ProductController extends AbstractController
     /**
      * @Route("/product/create", name="product.create")
      */
-    public function create(Request $request, FileUploader $fileUploader)
+    public function create(Request $request, FileUploader $fileUploader, ProductRepositoryInterface $repository)
     {
         $product = new Product();
         $form = $this->createForm(ProductType::class, $product);
@@ -33,6 +34,7 @@ class ProductController extends AbstractController
             $image = $form->get('image')->getData();
             $image = $fileUploader->upload($image);
             $product->image = $image;
+            $repository->save($product);
             return $this->redirectToRoute('product', ['id' => $product->id]);
         }
         return $this->render('product/form.html.twig', [
