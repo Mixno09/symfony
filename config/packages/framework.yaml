@@ -14,3 +14,9 @@ framework:
     #fragments: true
     php_errors:
         log: true
+
+    assets: # вебовский путь к картинкам
+        packages:
+            product:
+                base_path: '/upload/product'
+                version: ~

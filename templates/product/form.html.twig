@@ -1,6 +1,8 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Создание товара{% endblock %}
+{% block title %}
+    {% if product|default %}Редактирование товара{% else %}Создание товара{% endif %}
+{% endblock %}
 
 {% block body %}
     <main role="main">
@@ -8,7 +10,14 @@
             <div class="container">
                 <div class="row justify-content-md-center">
                     <div class="col-md-6">
-                        {{ form(form) }}
+                        {{ form_start(form) }}
+                            {{ form_row(form.title) }}
+                            {{ form_row(form.description) }}
+                            {% if product|default %}
+                                <img src="{{ asset(product.image, 'product') }}" alt="">
+                            {% endif %}
+                            {{ form_row(form.image) }}
+                        {{ form_end(form) }}
                     </div>
                 </div>
             </div>

@@ -20,7 +20,7 @@ class FileProductRepository implements ProductRepositoryInterface
     public function __construct(string $file)
     {
         if (! is_file($file)) {
-            $content = json_encode([]);
+            $content = serialize([]);
             file_put_contents($file, $content);
         }
         $this->file = $file;
@@ -32,7 +32,7 @@ class FileProductRepository implements ProductRepositoryInterface
     private function all(): array
     {
         $content = file_get_contents($this->file);
-        $products = json_decode($content);
+        $products = unserialize($content);
         return $products;
     }
 
@@ -56,7 +56,18 @@ class FileProductRepository implements ProductRepositoryInterface
                 }
             }
         }
-        $content = json_encode($products);
+        $content = serialize($products);
         file_put_contents($this->file, $content);
+    }
+
+    public function find(int $id): ?Product
+    {
+        $products = $this->all();
+        foreach ($products as $product) {
+            if ($product->id === $id) {
+                return $product;
+            }
+        }
+        return null;
     }
 }

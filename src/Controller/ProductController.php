@@ -15,10 +15,14 @@ class ProductController extends AbstractController
     /**
      * @Route("/product/{id}", name="product", requirements={"id"="\d+"})
      */
-    public function index(int $id)
+    public function index(int $id, ProductRepositoryInterface $repository)
     {
+        $product = $repository->find($id);
+        if (! $product instanceof Product) {
+            throw $this->createNotFoundException();
+        }
         return $this->render('product/index.html.twig', [
-            'controller_name' => 'ProductController',
+            'product' => $product,
         ]);
     }
 
@@ -39,6 +43,22 @@ class ProductController extends AbstractController
         }
         return $this->render('product/form.html.twig', [
             'form' => $form->createView(),
+        ]);
+    }
+
+    /**
+     * @Route("/product/{id}/update", name="product.update", requirements={"id"="\d+"})
+     */
+    public function update(int $id, ProductRepositoryInterface $repository)
+    {
+        $product = $repository->find($id);
+        if (! $product instanceof Product) {
+            throw $this->createNotFoundException();
+        }
+        $form = $this->createForm(ProductType::class, $product);
+        return $this->render('product/form.html.twig', [
+            'form' => $form->createView(),
+            'product' => $product,
         ]);
     }
 }

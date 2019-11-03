@@ -37,4 +37,4 @@ services:
 
     App\Repository\FileProductRepository:
         arguments:
-            $file: '%kernel.cache_dir%/products.json'
+            $file: '%kernel.cache_dir%/products.data'
