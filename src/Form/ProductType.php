@@ -33,7 +33,7 @@ class ProductType extends AbstractType
                 'translation_domain' => false,
                 'mapped' => false, // unmapped означает, что это поле не связано ни с каким свойством объекта
                 'constraints' => [
-                    new Assert\NotBlank(),
+                    new Assert\NotBlank(['groups' => ['create']]),
                     new Assert\Image([
                         'minWidth' => 400,
                         'maxWidth' => 800,

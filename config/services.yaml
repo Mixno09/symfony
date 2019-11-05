@@ -28,10 +28,10 @@ services:
     # please note that last definitions always *replace* previous ones
     App\Controller\ProductController:         # указываем контроллеру продуктов кокой сервис загрузки пердается в конструктор
         bind:
-            App\Service\FileUploader: '@file_uploader.product'
+            App\Service\FileManager: '@file_manager.product'
 
-    file_uploader.product:   # регистрация сервиса (идентификатор)
-        class: 'App\Service\FileUploader'
+    file_manager.product:   # регистрация сервиса (идентификатор)
+        class: 'App\Service\FileManager'
         arguments:
             $targetDirectory: '%upload.product%'
 

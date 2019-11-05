@@ -7,7 +7,7 @@ namespace App\Service;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 use function transliterator_transliterate;
 
-class FileUploader
+class FileManager
 {
     /**
      * @var string
@@ -31,5 +31,10 @@ class FileUploader
         $fileName = $safeFilename . '-' . uniqid() . '.' . $file->guessExtension();
         $file->move($this->targetDirectory, $fileName);
         return $fileName;
+    }
+
+    public function delete(string $file): void
+    {
+        unlink($this->targetDirectory . '/' . $file);
     }
 }
