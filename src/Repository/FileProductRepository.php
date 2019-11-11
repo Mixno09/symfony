@@ -5,13 +5,20 @@ declare(strict_types=1);
 namespace App\Repository;
 
 use App\Entity\Product;
+use Knp\Bundle\PaginatorBundle\Definition\PaginatorAwareInterface;
+use Knp\Component\Pager\Pagination\PaginationInterface;
+use Knp\Component\Pager\Paginator;
 
-class FileProductRepository implements ProductRepositoryInterface
+class FileProductRepository implements ProductRepositoryInterface, PaginatorAwareInterface
 {
     /**
      * @var string
      */
     private $file;
+    /**
+     * @var \Knp\Component\Pager\Paginator
+     */
+    private $paginator;
 
     /**
      * FileProductRepository constructor.
@@ -69,5 +76,22 @@ class FileProductRepository implements ProductRepositoryInterface
             }
         }
         return null;
+    }
+
+    public function paginate(int $page = 1, int $limit = 10, array $options = []): PaginationInterface
+    {
+        $target = $this->all();
+        $pagination = $this->paginator->paginate($target, $page, $limit, $options);
+        return $pagination;
+    }
+
+    /**
+     * Sets the KnpPaginator instance.
+     *
+     * @param Paginator $paginator
+     */
+    public function setPaginator(Paginator $paginator)
+    {
+        $this->paginator = $paginator;
     }
 }

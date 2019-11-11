@@ -36,5 +36,6 @@ services:
             $targetDirectory: '%upload.product%'
 
     App\Repository\FileProductRepository:
+        tags: ['knp_paginator.injectable']
         arguments:
             $file: '%kernel.cache_dir%/products.data'
