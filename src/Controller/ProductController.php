@@ -9,12 +9,13 @@ use App\Service\FileManager;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpKernel\Exception\HttpException;
 use Symfony\Component\Routing\Annotation\Route;
 
 class ProductController extends AbstractController
 {
     /**
-     * @Route("/product/{id}", name="product", requirements={"id"="\d+"})
+     * @Route("/product/{id}", name="product", methods={"GET"}, requirements={"id"="\d+"})
      */
     public function index(int $id, ProductRepositoryInterface $repository)
     {
@@ -28,7 +29,7 @@ class ProductController extends AbstractController
     }
 
     /**
-     * @Route("/product/create", name="product.create")
+     * @Route("/product/create", name="product.create", methods={"GET", "POST"})
      */
     public function create(Request $request, FileManager $fileManager, ProductRepositoryInterface $repository)
     {
@@ -48,7 +49,7 @@ class ProductController extends AbstractController
     }
 
     /**
-     * @Route("/product/{id}/update", name="product.update", requirements={"id"="\d+"})
+     * @Route("/product/{id}/update", name="product.update", methods={"GET", "PUT"}, requirements={"id"="\d+"})
      */
     public function update(int $id, ProductRepositoryInterface $repository, Request $request, FileManager $fileManager)
     {
@@ -76,5 +77,23 @@ class ProductController extends AbstractController
             'form' => $form->createView(),
             'product' => $product,
         ]);
+    }
+
+    /**
+     * @Route("/product/{id}", name="product.delete", methods={"DELETE"}, requirements={"id"="\d+"})
+     */
+    public function remove(int $id, Request $request, ProductRepositoryInterface $productRepository, FileManager $fileManager)
+    {
+        $token = $request->request->get('token');
+        if (! $this->isCsrfTokenValid('product', $token)) {
+            throw new HttpException(419);
+        }
+        $product = $productRepository->find($id);
+        if (! $product instanceof Product) {
+            throw $this->createNotFoundException();
+        }
+        $productRepository->delete($id);
+        $fileManager->delete($product->image);
+        return $this->redirectToRoute('catalog');
     }
 }

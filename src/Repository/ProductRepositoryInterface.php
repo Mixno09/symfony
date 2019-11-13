@@ -14,4 +14,6 @@ interface ProductRepositoryInterface
     public function find(int $id): ?Product;
 
     public function paginate(int $page = 1, int $limit = 10, array $options = []): PaginationInterface;
+
+    public function delete(int $id): void;
 }

@@ -27,8 +27,7 @@ class FileProductRepository implements ProductRepositoryInterface, PaginatorAwar
     public function __construct(string $file)
     {
         if (! is_file($file)) {
-            $content = serialize([]);
-            file_put_contents($file, $content);
+            $this->persist([]);
         }
         $this->file = $file;
     }
@@ -63,8 +62,7 @@ class FileProductRepository implements ProductRepositoryInterface, PaginatorAwar
                 }
             }
         }
-        $content = serialize($products);
-        file_put_contents($this->file, $content);
+        $this->persist($products);
     }
 
     public function find(int $id): ?Product
@@ -93,5 +91,20 @@ class FileProductRepository implements ProductRepositoryInterface, PaginatorAwar
     public function setPaginator(Paginator $paginator)
     {
         $this->paginator = $paginator;
+    }
+
+    public function delete(int $id): void
+    {
+        $products = $this->all();
+        $products = array_filter($products, function (Product $product) use ($id) { // лучше делать через foreach, array_filter для наглядности
+            return ($product->id !== $id);
+        });
+        $this->persist($products);
+    }
+
+    private function persist(array $products): void
+    {
+        $content = serialize($products);
+        file_put_contents($this->file, $content);
     }
 }
