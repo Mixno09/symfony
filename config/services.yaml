@@ -39,3 +39,7 @@ services:
         tags: ['knp_paginator.injectable']
         arguments:
             $file: '%kernel.cache_dir%/products.data'
+
+    App\Command\SeedFileProductCommand:
+        bind:
+            App\Service\FileManager: '@file_manager.product'

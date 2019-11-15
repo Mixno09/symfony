@@ -15,7 +15,7 @@ class CatalogController extends AbstractController
     public function index(Request $request, ProductRepositoryInterface $repository)
     {
         $page = $request->query->getInt('page', 1);
-        $pagination = $repository->paginate($page, 3);
+        $pagination = $repository->paginate($page, 6);
 
         return $this->render('catalog.html.twig', [
             'pagination' => $pagination,

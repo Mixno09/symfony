@@ -16,4 +16,9 @@ interface ProductRepositoryInterface
     public function paginate(int $page = 1, int $limit = 10, array $options = []): PaginationInterface;
 
     public function delete(int $id): void;
+
+    /**
+     * @return \App\Entity\Product[]
+     */
+    public function last(int $count): array;
 }

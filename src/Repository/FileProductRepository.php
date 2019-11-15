@@ -107,4 +107,15 @@ class FileProductRepository implements ProductRepositoryInterface, PaginatorAwar
         $content = serialize($products);
         file_put_contents($this->file, $content);
     }
+
+    /**
+     * @return \App\Entity\Product[]
+     */
+    public function last(int $count): array
+    {
+        $products = $this->all();
+        $products = array_slice($products, -1 * $count);
+        $products = array_reverse($products);
+        return $products;
+    }
 }

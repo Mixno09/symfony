@@ -1,0 +1,42 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Shop{% endblock %}
+
+{% block body %}
+    <main role="main">
+        <div class="album py-5">
+            <div class="container">
+                <div class="row">
+                    {% for product in products %}
+                    <div class="col-md-4">
+                        <div class="card mb-4 shadow-sm">
+                            <a href="{{ path('product', {'id': product.id}) }}">
+                                <img src="{{ asset(product.image, 'product') }}" alt=""
+                                     class="bd-placeholder-img card-img-top">
+                            </a>
+                            <div class="card-body">
+                                <a href="{{ path('product', {'id': product.id}) }}">
+                                    <h5 class="card-title">{{ product.title }}</h5>
+                                </a>
+                                <div class="d-flex justify-content-between align-items-center">
+
+                                    <a href="{{ path('product.update', {'id': product.id}) }}"
+                                       class="btn btn-sm btn-outline-primary">Редактировать</a>
+
+                                    <form action="{{ path('product.delete', {'id': product.id}) }}" method="post"
+                                          onsubmit="return confirm('Удалить продукт &quot;{{ product.title|e('js')|e('html') }}&quot;?');">
+                                        <input type="hidden" name="_method" value="delete">
+                                        <input type="hidden" name="token" value="{{ csrf_token('product') }}">
+                                        <button class="btn btn-sm btn-outline-danger" type="submit">Удалить</button>
+                                    </form>
+
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+    </main>
+{% endblock %}
