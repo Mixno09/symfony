@@ -1,0 +1,5 @@
+sylius_fixtures:
+    suites:
+        default:
+            fixtures:
+                product: ~

@@ -20,6 +20,9 @@
     "doctrine/common": {
         "version": "v2.11.0"
     },
+    "doctrine/data-fixtures": {
+        "version": "1.4.0"
+    },
     "doctrine/dbal": {
         "version": "v2.9.2"
     },
@@ -155,6 +158,9 @@
     },
     "swiftmailer/swiftmailer": {
         "version": "v6.2.1"
+    },
+    "sylius/fixtures-bundle": {
+        "version": "v1.4.1"
     },
     "symfony/apache-pack": {
         "version": "1.0",
@@ -533,6 +539,9 @@
         "version": "3.4.0"
     },
     "zendframework/zend-eventmanager": {
+        "version": "3.2.1"
+    },
+    "zendframework/zend-stdlib": {
         "version": "3.2.1"
     }
 }

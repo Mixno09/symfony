@@ -40,6 +40,7 @@ services:
         arguments:
             $file: '%kernel.cache_dir%/products.data'
 
-    App\Command\SeedFileProductCommand:
+    App\Fixture\ProductFixture:
         bind:
             App\Service\FileManager: '@file_manager.product'
+        tags: ['sylius_fixtures.fixture']
