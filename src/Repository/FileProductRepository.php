@@ -26,10 +26,11 @@ class FileProductRepository implements ProductRepositoryInterface, PaginatorAwar
      */
     public function __construct(string $file)
     {
+        $this->file = $file;
+
         if (! is_file($file)) {
             $this->persist([]);
         }
-        $this->file = $file;
     }
 
     /**

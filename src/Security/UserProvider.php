@@ -2,6 +2,8 @@
 
 namespace App\Security;
 
+use App\Entity\User;
+use App\Repository\UserRepositoryInterface;
 use Symfony\Component\Security\Core\Exception\UnsupportedUserException;
 use Symfony\Component\Security\Core\Exception\UsernameNotFoundException;
 use Symfony\Component\Security\Core\User\UserInterface;
@@ -9,6 +11,20 @@ use Symfony\Component\Security\Core\User\UserProviderInterface;
 
 class UserProvider implements UserProviderInterface
 {
+    /**
+     * @var \App\Repository\UserRepositoryInterface
+     */
+    private $userRepository;
+
+    /**
+     * UserProvider constructor.
+     * @param \App\Repository\UserRepositoryInterface $userRepository
+     */
+    public function __construct(UserRepositoryInterface $userRepository)
+    {
+        $this->userRepository = $userRepository;
+    }
+
     /**
      * Symfony calls this method if you use features like switch_user
      * or remember_me.
@@ -22,11 +38,11 @@ class UserProvider implements UserProviderInterface
      */
     public function loadUserByUsername($username)
     {
-        // Load a User object from your data source or throw UsernameNotFoundException.
-        // The $username argument may not actually be a username:
-        // it is whatever value is being returned by the getUsername()
-        // method in your User class.
-        throw new \Exception('TODO: fill in loadUserByUsername() inside ' . __FILE__);
+        $user = $this->userRepository->getByEmail($username);
+        if ($user instanceof UserInterface) {
+            return $user;
+        }
+        throw new UsernameNotFoundException();
     }
 
     /**
@@ -48,9 +64,12 @@ class UserProvider implements UserProviderInterface
             throw new UnsupportedUserException(sprintf('Invalid user class "%s".', get_class($user)));
         }
 
-        // Return a User object after making sure its data is "fresh".
-        // Or throw a UsernameNotFoundException if the user no longer exists.
-        throw new \Exception('TODO: fill in refreshUser() inside ' . __FILE__);
+        $email = $user->getEmail();
+        $user = $this->userRepository->getByEmail($email);
+        if (! $user instanceof User) {
+            throw new UnsupportedUserException();
+        }
+        return $user;
     }
 
     /**

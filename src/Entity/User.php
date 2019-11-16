@@ -1,11 +1,16 @@
 <?php
 
-namespace App\Security;
+namespace App\Entity;
 
 use Symfony\Component\Security\Core\User\UserInterface;
 
 class User implements UserInterface
 {
+    /**
+     * @var int
+     */
+    public $id = 0;
+
     private $email;
 
     private $roles = [];

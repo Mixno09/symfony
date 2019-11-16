@@ -3,3 +3,4 @@ sylius_fixtures:
         default:
             fixtures:
                 product: ~
+                user: ~

@@ -9,10 +9,9 @@ use App\Repository\ProductRepositoryInterface;
 use App\Service\FileManager;
 use Faker\Factory;
 use Sylius\Bundle\FixturesBundle\Fixture\AbstractFixture;
-use Sylius\Bundle\FixturesBundle\Fixture\FixtureInterface;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 
-class ProductFixture extends AbstractFixture implements FixtureInterface
+class ProductFixture extends AbstractFixture
 {
     /**
      * @var \App\Service\FileManager

@@ -44,3 +44,10 @@ services:
         bind:
             App\Service\FileManager: '@file_manager.product'
         tags: ['sylius_fixtures.fixture']
+
+    App\Repository\FileUserRepository:
+        arguments:
+            $file: '%kernel.cache_dir%/users.data'
+
+    App\Fixture\UserFixture:
+        tags: ['sylius_fixtures.fixture']
