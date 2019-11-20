@@ -29,14 +29,16 @@
                 <li class="nav-item">
                     <a class="nav-link" href="">Регистрация</a>
                 </li>
+                {% if not is_granted('IS_AUTHENTICATED_REMEMBERED') %}
                 <li class="nav-item">
                     <a class="nav-link" href="{{ path('app_login') }}">Вход</a>
                 </li>
+                {% endif %}
+                {% if is_granted('IS_AUTHENTICATED_REMEMBERED') %}
                 <li class="nav-item">
-                    <form action="" method="post">
-                        <button class="btn btn-link nav-link" type="submit">Выход</button>
-                    </form>
+                    <a href="{{ path('app_logout') }}" class="nav-link">Выход</a>
                 </li>
+                {% endif %}
             </ul>
             <a href="" class="btn btn-outline-success my-2 my-sm-0 mx-2">Управление
                 пользователями</a>

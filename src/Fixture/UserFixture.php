@@ -37,12 +37,11 @@ class UserFixture extends AbstractFixture
     {
         $count = 10;
         $faker = Factory::create('ru_RU');
-        $user = new User();
-        $this->passwordEncoder->encodePassword($user, 'password');
-        $password = $user->getPassword();
         while ($count > 0) {
             $user = new User();
+            $faker->unique();
             $user->setEmail($faker->safeEmail);
+            $password = $this->passwordEncoder->encodePassword($user, 'password');
             $user->setPassword($password);
             $this->repository->save($user);
             $count--;

@@ -67,7 +67,7 @@ class UserProvider implements UserProviderInterface
         $email = $user->getEmail();
         $user = $this->userRepository->getByEmail($email);
         if (! $user instanceof User) {
-            throw new UnsupportedUserException();
+            throw new UsernameNotFoundException();
         }
         return $user;
     }
