@@ -5,6 +5,7 @@
 # https://symfony.com/doc/current/best_practices/configuration.html#application-related-configuration
 parameters: # константа т.е. папка для загрузки файлов продукта
     upload.product: '%kernel.project_dir%/public/upload/product'
+    database.product: '%kernel.cache_dir%/products.data'
 
 services:
     # default configuration for services in *this* file
@@ -38,7 +39,7 @@ services:
     App\Repository\FileProductRepository:
         tags: ['knp_paginator.injectable']
         arguments:
-            $file: '%kernel.cache_dir%/products.data'
+            $file: '%database.product%'
 
     App\Fixture\ProductFixture:
         bind:
@@ -51,3 +52,10 @@ services:
 
     App\Fixture\UserFixture:
         tags: ['sylius_fixtures.fixture']
+
+    App\Fixture\ProductPurgerListener:
+        tags: ['sylius_fixtures.listener']
+        arguments:
+            $fileDirectory: '%upload.product%'
+            $fileDatabase: '%database.product%'
+

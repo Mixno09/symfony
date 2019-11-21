@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Service;
 
+use Symfony\Component\Filesystem\Filesystem;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 use function transliterator_transliterate;
 
@@ -35,6 +36,6 @@ class FileManager
 
     public function delete(string $file): void
     {
-        unlink($this->targetDirectory . '/' . $file);
+        (new Filesystem())->remove($this->targetDirectory . '/' . $file);
     }
 }

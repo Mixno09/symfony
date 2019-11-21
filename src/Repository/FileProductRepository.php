@@ -27,10 +27,6 @@ class FileProductRepository implements ProductRepositoryInterface, PaginatorAwar
     public function __construct(string $file)
     {
         $this->file = $file;
-
-        if (! is_file($file)) {
-            $this->persist([]);
-        }
     }
 
     /**
@@ -38,6 +34,9 @@ class FileProductRepository implements ProductRepositoryInterface, PaginatorAwar
      */
     private function all(): array
     {
+        if (! is_file($this->file)) {
+            return [];
+        }
         $content = file_get_contents($this->file);
         $products = unserialize($content);
         return $products;
