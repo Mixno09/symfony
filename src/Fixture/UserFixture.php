@@ -36,17 +36,25 @@ class UserFixture extends AbstractFixture
 
     public function load(array $options): void
     {
+        $this->createUser('mixno09@mail.ru');
+
         $count = 10;
         $faker = Factory::create('ru_RU');
         while ($count > 0) {
-            $user = new User();
-            $user->email = $faker->unique()->safeEmail;
-            $userIdentity = UserIdentity::fromUser($user);
-            $password = $this->passwordEncoder->encodePassword($userIdentity, 'password');
-            $user->password = $password;
-            $this->repository->save($user);
+            $email = $faker->unique()->safeEmail;
+            $this->createUser($email);
             $count--;
         }
+    }
+
+    private function createUser(string $email): void
+    {
+        $user = new User();
+        $user->email = $email;
+        $userIdentity = UserIdentity::fromUser($user);
+        $password = $this->passwordEncoder->encodePassword($userIdentity, 'password');
+        $user->password = $password;
+        $this->repository->save($user);
     }
 
     public function getName(): string
