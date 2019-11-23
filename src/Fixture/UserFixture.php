@@ -6,6 +6,7 @@ namespace App\Fixture;
 
 use App\Entity\User;
 use App\Repository\UserRepositoryInterface;
+use App\Security\UserIdentity;
 use Faker\Factory;
 use Sylius\Bundle\FixturesBundle\Fixture\AbstractFixture;
 use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
@@ -39,10 +40,10 @@ class UserFixture extends AbstractFixture
         $faker = Factory::create('ru_RU');
         while ($count > 0) {
             $user = new User();
-            $faker->unique();
-            $user->setEmail($faker->safeEmail);
-            $password = $this->passwordEncoder->encodePassword($user, 'password');
-            $user->setPassword($password);
+            $user->email = $faker->unique()->safeEmail;
+            $userIdentity = UserIdentity::fromUser($user);
+            $password = $this->passwordEncoder->encodePassword($userIdentity, 'password');
+            $user->password = $password;
             $this->repository->save($user);
             $count--;
         }

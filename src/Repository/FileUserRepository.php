@@ -49,7 +49,7 @@ class FileUserRepository implements UserRepositoryInterface
     {
         $users = $this->all();
         foreach ($users as $user) {
-            if (strcasecmp($user->getEmail(), $email) === 0) {
+            if (strcasecmp($user->email, $email) === 0) {
                 return $user;
             }
         }

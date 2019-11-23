@@ -39,10 +39,10 @@ class UserProvider implements UserProviderInterface
     public function loadUserByUsername($username)
     {
         $user = $this->userRepository->getByEmail($username);
-        if ($user instanceof UserInterface) {
-            return $user;
+        if (! $user instanceof User) {
+            throw new UsernameNotFoundException();
         }
-        throw new UsernameNotFoundException();
+        return UserIdentity::fromUser($user);
     }
 
     /**
@@ -58,18 +58,18 @@ class UserProvider implements UserProviderInterface
      *
      * @return UserInterface
      */
-    public function refreshUser(UserInterface $user)
+    public function refreshUser(UserInterface $userIdentity)
     {
-        if (! $user instanceof User) {
-            throw new UnsupportedUserException(sprintf('Invalid user class "%s".', get_class($user)));
+        if (! $userIdentity instanceof UserIdentity) {
+            throw new UnsupportedUserException(sprintf('Invalid user class "%s".', get_class($userIdentity)));
         }
 
-        $email = $user->getEmail();
+        $email = $userIdentity->getUsername();
         $user = $this->userRepository->getByEmail($email);
         if (! $user instanceof User) {
             throw new UsernameNotFoundException();
         }
-        return $user;
+        return UserIdentity::fromUser($user);
     }
 
     /**
@@ -77,6 +77,6 @@ class UserProvider implements UserProviderInterface
      */
     public function supportsClass($class)
     {
-        return User::class === $class;
+        return UserIdentity::class === $class;
     }
 }
