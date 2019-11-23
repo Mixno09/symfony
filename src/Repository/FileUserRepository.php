@@ -16,10 +16,6 @@ class FileUserRepository implements UserRepositoryInterface
     public function __construct(string $file)
     {
         $this->file = $file;
-
-        if (! is_file($file)) {
-            $this->persist([]);
-        }
     }
 
     public function save(User $user)
@@ -61,6 +57,9 @@ class FileUserRepository implements UserRepositoryInterface
      */
     private function all(): array
     {
+        if (! is_file($this->file)) {
+            return [];
+        }
         $content = file_get_contents($this->file);
         $users = unserialize($content);
         return $users;

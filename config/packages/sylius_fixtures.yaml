@@ -6,3 +6,4 @@ sylius_fixtures:
                 user: ~
             listeners:
                 product_purger: ~
+                user_purger: ~

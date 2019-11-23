@@ -6,6 +6,7 @@
 parameters: # константа т.е. папка для загрузки файлов продукта
     upload.product: '%kernel.project_dir%/public/upload/product'
     database.product: '%kernel.cache_dir%/products.data'
+    database.user: '%kernel.cache_dir%/users.data'
 
 services:
     # default configuration for services in *this* file
@@ -48,7 +49,7 @@ services:
 
     App\Repository\FileUserRepository:
         arguments:
-            $file: '%kernel.cache_dir%/users.data'
+            $file: '%database.user%'
 
     App\Fixture\UserFixture:
         tags: ['sylius_fixtures.fixture']
@@ -58,4 +59,9 @@ services:
         arguments:
             $fileDirectory: '%upload.product%'
             $fileDatabase: '%database.product%'
+
+    App\Fixture\UserPurgerListener:
+        tags: ['sylius_fixtures.listener']
+        arguments:
+            $fileDatabase: '%database.user%'
 
