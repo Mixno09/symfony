@@ -48,6 +48,7 @@ services:
         tags: ['sylius_fixtures.fixture']
 
     App\Repository\FileUserRepository:
+        tags: ['knp_paginator.injectable']
         arguments:
             $file: '%database.user%'
 

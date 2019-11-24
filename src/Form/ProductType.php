@@ -20,17 +20,14 @@ class ProductType extends AbstractType
             ->add('title', TextType::class, [
                 'label' => 'Название',
                 'attr' => ['placeholder' => 'Введите название...'],
-                'translation_domain' => false,
             ])
             ->add('description', TextareaType::class, [
                 'label' => 'Описание',
                 'attr' => ['placeholder' => 'Введите описание...'],
-                'translation_domain' => false,
             ])
             ->add('image', FileType::class, [
                 'label' => 'Изображение',
                 'attr' => ['placeholder' => 'Выберите изображение...'],
-                'translation_domain' => false,
                 'mapped' => false, // unmapped означает, что это поле не связано ни с каким свойством объекта
                 'constraints' => [
                     new Assert\NotBlank(['groups' => ['create']]),
@@ -47,7 +44,6 @@ class ProductType extends AbstractType
             ])
             ->add('save', SubmitType::class, [
                 'label' => 'Сохранить',
-                'translation_domain' => false,
             ]);
     }
 
@@ -56,7 +52,6 @@ class ProductType extends AbstractType
         $resolver->setDefaults([
             'method' => 'PUT',
             'data_class' => Product::class,
-            'attr' => ['novalidate' => 'novalidate'], // убирает валидацию html
         ]);
     }
 }

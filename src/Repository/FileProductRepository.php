@@ -111,7 +111,7 @@ class FileProductRepository implements ProductRepositoryInterface, PaginatorAwar
     /**
      * @return \App\Entity\Product[]
      */
-    public function last(int $count): array
+    public function newest(int $count): array
     {
         $products = $this->all();
         $products = array_slice($products, -1 * $count);

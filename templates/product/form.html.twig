@@ -10,7 +10,7 @@
             <div class="container">
                 <div class="row justify-content-md-center">
                     <div class="col-md-6">
-                        {{ form_start(form) }}
+                        {{ form_start(form, {'attr': {'novalidate': 'novalidate'}}) }}
                             {{ form_row(form.title) }}
                             {{ form_row(form.description) }}
                             {% if product|default %}

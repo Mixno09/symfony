@@ -13,7 +13,7 @@ class HomeController extends AbstractController
      */
     public function index(ProductRepositoryInterface $repository)
     {
-        $products = $repository->last(9);
+        $products = $repository->newest(9);
         return $this->render('home.html.twig', [
             'products' => $products,
         ]);

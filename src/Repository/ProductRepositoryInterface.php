@@ -20,5 +20,5 @@ interface ProductRepositoryInterface
     /**
      * @return \App\Entity\Product[]
      */
-    public function last(int $count): array;
+    public function newest(int $count): array;
 }
