@@ -7,14 +7,19 @@ use App\Form\UserType;
 use App\Repository\UserRepositoryInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpKernel\Exception\HttpException;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
 
+/**
+ * @Route("/user", name="user")
+ */
 class UserController extends AbstractController
 {
     /**
-     * @Route("/user", name="user", methods={"GET"})
+     * @Route("", name="", methods={"GET"})
      */
-    public function index(UserRepositoryInterface $userRepository, Request $request)
+    public function index(Request $request, UserRepositoryInterface $userRepository)
     {
         $page = $request->query->getInt('page', 1);
         $pagination = $userRepository->paginate($page, 9);
@@ -24,9 +29,9 @@ class UserController extends AbstractController
     }
 
     /**
-     * @Route("/user/{id}", name="user_update", methods={"GET", "PUT"}, requirements={"id"="\d+"})
+     * @Route("/{id}", name="_update", methods={"GET", "PUT"}, requirements={"id"="\d+"})
      */
-    public function update(int $id, UserRepositoryInterface $userRepository)
+    public function update(int $id, Request $request, UserPasswordEncoderInterface $passwordEncoder, UserRepositoryInterface $userRepository)
     {
         $user = $userRepository->find($id);
         if (! $user instanceof User) {
@@ -34,9 +39,35 @@ class UserController extends AbstractController
         }
 
         $form = $this->createForm(UserType::class, $user);
+        $form->handleRequest($request);
+        if ($form->isSubmitted() && $form->isValid()) {
+            $password = $form->get('plainPassword')->getData();
+            if (is_string($password)) {
+                $user->updatePassword($password, $passwordEncoder);
+            }
+            $userRepository->save($user);
+            return $this->redirectToRoute('user');
+        }
 
         return $this->render('user/form.html.twig', [
             'form' => $form->createView(),
         ]);
+    }
+
+    /**
+     * @Route("/{id}", name="_remove", methods={"DELETE"}, requirements={"id"="\d+"})
+     */
+    public function remove(int $id, Request $request, UserRepositoryInterface $userRepository)
+    {
+        $token = $request->request->get('token');
+        if (! $this->isCsrfTokenValid('user', $token)) {
+            throw new HttpException(419);
+        }
+        $user = $userRepository->find($id);
+        if (! $user instanceof User) {
+            throw $this->createNotFoundException();
+        }
+        $userRepository->delete($id);
+        return $this->redirectToRoute('user');
     }
 }

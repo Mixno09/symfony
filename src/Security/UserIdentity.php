@@ -86,6 +86,6 @@ class UserIdentity implements UserInterface
 
     public static function fromUser(User $user): self
     {
-        return new self($user->email, [], $user->password);
+        return new self($user->email, [], $user->getPassword());
     }
 }

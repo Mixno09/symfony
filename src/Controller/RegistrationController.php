@@ -31,10 +31,9 @@ class RegistrationController extends AbstractController
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            $userIdentity = UserIdentity::fromUser($user);
             $password = $form->get('plainPassword')->getData();
             // encode the plain password
-            $user->password = $passwordEncoder->encodePassword($userIdentity, $password);
+            $user->updatePassword($password, $passwordEncoder);
 
             $userRepository->save($user);
             // do anything else you need here, like send an email

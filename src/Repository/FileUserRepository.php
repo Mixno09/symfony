@@ -26,7 +26,7 @@ class FileUserRepository implements UserRepositoryInterface, PaginatorAwareInter
         $this->file = $file;
     }
 
-    public function save(User $user)
+    public function save(User $user): void
     {
         $users = $this->all();
         if ($user->id === 0) {
@@ -93,8 +93,6 @@ class FileUserRepository implements UserRepositoryInterface, PaginatorAwareInter
      * Sets the KnpPaginator instance.
      *
      * @param Paginator $paginator
-     *
-     * @return mixed
      */
     public function setPaginator(Paginator $paginator)
     {
@@ -110,5 +108,17 @@ class FileUserRepository implements UserRepositoryInterface, PaginatorAwareInter
             }
         }
         return null;
+    }
+
+    public function delete(int $id): void
+    {
+        $users = $this->all();
+        foreach ($users as $index => $user) {
+            if ($user->id === $id) {
+                unset($users[$index]);
+                break;
+            }
+        }
+        $this->persist($users);
     }
 }
