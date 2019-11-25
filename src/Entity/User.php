@@ -5,9 +5,13 @@ declare(strict_types=1);
 namespace App\Entity;
 
 use App\Security\UserIdentity;
+use App\Validation\UniqueUserEmail;
 use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
 use Symfony\Component\Validator\Constraints as Assert;
 
+/**
+ * @UniqueUserEmail()
+ */
 class User
 {
     /**
@@ -20,7 +24,6 @@ class User
      * @Assert\NotBlank
      * @Assert\Email(mode="strict")
      */
-    // TODO  сделать проверку на уникальный email
     public $email = '';
 
     /**

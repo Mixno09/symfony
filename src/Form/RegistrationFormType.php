@@ -20,7 +20,7 @@ class RegistrationFormType extends AbstractType
         $builder
             ->add('email', EmailType::class, [
                 'label' => 'Email',
-            ]) // TODO email должно быть уникальным
+            ])
             ->add('agreeTerms', CheckboxType::class, [
                 'label' => 'Я принимаю условия',
                 'mapped' => false,
