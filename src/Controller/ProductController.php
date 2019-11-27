@@ -36,7 +36,10 @@ class ProductController extends AbstractController
     public function create(Request $request, FileManager $fileManager, ProductRepositoryInterface $repository)
     {
         $product = new Product();
-        $form = $this->createForm(ProductType::class, $product, ['validation_groups' => ['create', 'Default']]);
+        $form = $this->createForm(ProductType::class, $product, [
+            'validation_groups' => ['create', 'Default'],
+            'method' => 'POST',
+        ]);
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
             $image = $form->get('image')->getData();
@@ -60,7 +63,7 @@ class ProductController extends AbstractController
         if (! $product instanceof Product) {
             throw $this->createNotFoundException();
         }
-        $form = $this->createForm(ProductType::class, $product);
+        $form = $this->createForm(ProductType::class, $product, ['method' => 'PUT']);
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
             $image = $form->get('image')->getData();

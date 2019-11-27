@@ -50,7 +50,6 @@ class ProductType extends AbstractType
     public function configureOptions(OptionsResolver $resolver)
     {
         $resolver->setDefaults([
-            'method' => 'PUT',
             'data_class' => Product::class,
         ]);
     }
