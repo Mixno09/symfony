@@ -26,20 +26,23 @@
                                 <th scope="row">{{ user.id }}</th>
                                 <td>{{ user.email }}</td>
                                 <td>
-                                    <?php foreach ($user['permissions'] as $permission) : ?>
-                                    <span class="badge badge-primary"><?= escape(Authorization\permission_to_text($permission)) ?></span>
-                                    <?php endforeach; ?>
+                                    {% for role in user.roles %}
+                                        <span class="badge badge-primary">{{ role|trans({}, 'user') }}</span>
+                                    {% endfor %}
                                 </td>
 
                                 <td>
                                     <a href="{{ path('user_update', {'id': user.id}) }}"
-                                       class="btn btn-sm <?php if (can('user_update')) : ?>btn-outline-primary<?php else : ?>btn-outline-secondary disabled<?php endif; ?>"
+                                       class="btn btn-sm {% if is_granted('ROLE_USER_UPDATE') %} btn-outline-primary {% else %} btn-outline-secondary disabled {% endif %}"
                                     >Редактировать</a>
-                                    <form class="d-inline" action="{{ path('user_remove', {'id': user.id}) }}" method="post"
+                                    <form class="d-inline" action="{{ path('user_remove', {'id': user.id}) }}"
+                                          method="post"
                                           onsubmit="return confirm('Удалить пользователя?');">
                                         <input type="hidden" name="_method" value="delete">
                                         <input type="hidden" name="token" value="{{ csrf_token('user') }}">
-                                        <button class="d-inline btn btn-sm <?php if (can('user_destroy')) : ?>btn-outline-danger<?php else : ?>btn-outline-secondary disabled<?php endif; ?>" type="submit">Удалить</button>
+                                        <button class="d-inline btn btn-sm {% if is_granted('ROLE_USER_DESTROY') %} btn-outline-danger {% else %} btn-outline-secondary disabled {% endif %}"
+                                                type="submit">Удалить
+                                        </button>
                                     </form>
                                 </td>
                             </tr>

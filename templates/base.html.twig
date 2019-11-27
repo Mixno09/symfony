@@ -26,25 +26,29 @@
                 <li class="nav-item">
                     <a class="nav-link" href="{{ path('catalog') }}">Продукты</a>
                 </li>
-                {% if not is_granted('IS_AUTHENTICATED_REMEMBERED') %}
+                {% if not is_granted('ROLE_USER') %}
                 <li class="nav-item">
                     <a class="nav-link" href="{{ path('app_register') }}">Регистрация</a>
                 </li>
                 {% endif %}
-                {% if not is_granted('IS_AUTHENTICATED_REMEMBERED') %}
+                {% if not is_granted('ROLE_USER') %}
                 <li class="nav-item">
                     <a class="nav-link" href="{{ path('app_login') }}">Вход</a>
                 </li>
                 {% endif %}
-                {% if is_granted('IS_AUTHENTICATED_REMEMBERED') %}
+                {% if is_granted('ROLE_USER') %}
                 <li class="nav-item">
                     <a href="{{ path('app_logout') }}" class="nav-link">Выход</a>
                 </li>
                 {% endif %}
             </ul>
+            {% if is_granted("ROLE_USERS") %}
             <a href="{{ path('user') }}" class="btn btn-outline-success my-2 my-sm-0 mx-2">Управление
                 пользователями</a>
+            {% endif %}
+            {% if is_granted("ROLE_PRODUCT_STORE") %}
             <a href="{{ path('product.create') }}" class="btn btn-outline-success my-2 my-sm-0">Добавить товар</a>
+            {% endif %}
         </div>
     </nav>
 </header>

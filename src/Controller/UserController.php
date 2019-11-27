@@ -5,6 +5,7 @@ namespace App\Controller;
 use App\Entity\User;
 use App\Form\UserType;
 use App\Repository\UserRepositoryInterface;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\Exception\HttpException;
@@ -30,6 +31,7 @@ class UserController extends AbstractController
 
     /**
      * @Route("/{id}", name="_update", methods={"GET", "PUT"}, requirements={"id"="\d+"})
+     * @IsGranted("ROLE_PRODUCT_UPDATE")
      */
     public function update(int $id, Request $request, UserPasswordEncoderInterface $passwordEncoder, UserRepositoryInterface $userRepository)
     {
@@ -56,6 +58,7 @@ class UserController extends AbstractController
 
     /**
      * @Route("/{id}", name="_remove", methods={"DELETE"}, requirements={"id"="\d+"})
+     * @IsGranted("ROLE_USER_DESTROY")
      */
     public function remove(int $id, Request $request, UserRepositoryInterface $userRepository)
     {

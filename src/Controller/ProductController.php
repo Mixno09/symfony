@@ -6,6 +6,7 @@ use App\Entity\Product;
 use App\Form\ProductType;
 use App\Repository\ProductRepositoryInterface;
 use App\Service\FileManager;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Symfony\Component\HttpFoundation\Request;
@@ -30,6 +31,7 @@ class ProductController extends AbstractController
 
     /**
      * @Route("/product/create", name="product.create", methods={"GET", "POST"})
+     * @IsGranted("ROLE_PRODUCT_STORE")
      */
     public function create(Request $request, FileManager $fileManager, ProductRepositoryInterface $repository)
     {
@@ -50,6 +52,7 @@ class ProductController extends AbstractController
 
     /**
      * @Route("/product/{id}/update", name="product.update", methods={"GET", "PUT"}, requirements={"id"="\d+"})
+     * @IsGranted("ROLE_PRODUCT_UPDATE")
      */
     public function update(int $id, ProductRepositoryInterface $repository, Request $request, FileManager $fileManager)
     {
@@ -81,6 +84,7 @@ class ProductController extends AbstractController
 
     /**
      * @Route("/product/{id}", name="product.delete", methods={"DELETE"}, requirements={"id"="\d+"})
+     * @IsGranted("ROLE_PRODUCT_DESTROY")
      */
     public function remove(int $id, Request $request, ProductRepositoryInterface $productRepository, FileManager $fileManager)
     {

@@ -1,0 +1,7 @@
+ROLE_PRODUCT_UPDATE: 'Редактировать продукт'
+ROLE_PRODUCT_STORE: 'Создать продукт'
+ROLE_PRODUCT_DESTROY: 'Удалить продукт'
+ROLE_USERS: 'Управление пользователями'
+ROLE_USER_UPDATE: 'Редактировать пользователя'
+ROLE_USER_DESTROY: 'Удалить пользователя'
+ROLE_ADMIN: 'Администратор'

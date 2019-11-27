@@ -26,6 +26,13 @@ class User
      */
     public $email = '';
 
+    public $admin = false;
+
+    /**
+     * @var string[]
+     */
+    private $roles = [];
+
     /**
      * @var string The hashed password
      */
@@ -44,5 +51,25 @@ class User
     public function getPassword(): string
     {
         return $this->password;
+    }
+
+    /**
+     * @return string[]
+     */
+    public function getRoles(): array
+    {
+        $roles = $this->roles;
+        if ($this->admin) {
+            $roles[] = 'ROLE_ADMIN';
+        }
+        return $roles;
+    }
+
+    /**
+     * @param string[] $roles
+     */
+    public function setRoles(array $roles): void
+    {
+        $this->roles = $roles;
     }
 }
