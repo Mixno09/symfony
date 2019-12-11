@@ -66,3 +66,24 @@ services:
         arguments:
             $fileDatabase: '%database.user%'
 
+    PDO:
+        class: 'PDO'
+        arguments:
+            $dsn: '%env(PDO_DNS)%'
+            $username: '%env(PDO_USERNAME)%'
+            $passwd: '%env(PDO_PASSWD)%'
+            $options:
+                !php/const PDO::ATTR_ERRMODE: !php/const PDO::ERRMODE_EXCEPTION
+                !php/const PDO::MYSQL_ATTR_INIT_COMMAND: 'SET NAMES utf8;'
+                !php/const PDO::ATTR_EMULATE_PREPARES: false
+                !php/const PDO::ATTR_STRINGIFY_FETCHES: false
+
+    App\Repository\PDOProductRepository:
+        tags: ['knp_paginator.injectable']
+
+    App\Repository\ProductRepositoryInterface: '@App\Repository\PDOProductRepository'
+
+    App\Repository\PDOUserRepository:
+        tags: ['knp_paginator.injectable']
+
+    App\Repository\UserRepositoryInterface: '@App\Repository\PDOUserRepository'

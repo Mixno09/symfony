@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace App\Fixture;
 
+use App\Repository\PDOUserRepository;
+use PDO;
 use Sylius\Bundle\FixturesBundle\Listener\AbstractListener;
 use Sylius\Bundle\FixturesBundle\Listener\BeforeSuiteListenerInterface;
 use Sylius\Bundle\FixturesBundle\Listener\SuiteEvent;
@@ -12,6 +14,10 @@ use Symfony\Component\Filesystem\Filesystem;
 class UserPurgerListener extends AbstractListener implements BeforeSuiteListenerInterface
 {
     /**
+     * @var \PDO
+     */
+    private $pdo;
+    /**
      * @var string
      */
     private $fileDatabase;
@@ -19,10 +25,12 @@ class UserPurgerListener extends AbstractListener implements BeforeSuiteListener
     /**
      * UserPurgerListener constructor.
      * @param string $fileDatabase
+     * @param \PDO $pdo
      */
-    public function __construct(string $fileDatabase)
+    public function __construct(string $fileDatabase, PDO $pdo)
     {
         $this->fileDatabase = $fileDatabase;
+        $this->pdo = $pdo;
     }
 
     public function getName(): string
@@ -34,5 +42,7 @@ class UserPurgerListener extends AbstractListener implements BeforeSuiteListener
     {
         $filesystem = new Filesystem();
         $filesystem->remove($this->fileDatabase);
+        $sql = 'TRUNCATE ' . PDOUserRepository::TABLE;
+        $this->pdo->exec($sql);
     }
 }

@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace App\Fixture;
 
+use App\Repository\PDOProductRepository;
+use PDO;
 use Sylius\Bundle\FixturesBundle\Listener\AbstractListener;
 use Sylius\Bundle\FixturesBundle\Listener\BeforeSuiteListenerInterface;
 use Sylius\Bundle\FixturesBundle\Listener\SuiteEvent;
@@ -22,14 +24,21 @@ class ProductPurgerListener extends AbstractListener implements BeforeSuiteListe
     private $fileDatabase;
 
     /**
+     * @var \PDO
+     */
+    private $pdo;
+
+    /**
      * ProductPurgerListener constructor.
      * @param string $fileDirectory
      * @param string $fileDatabase
+     * @param \PDO $pdo
      */
-    public function __construct(string $fileDirectory, string $fileDatabase)
+    public function __construct(string $fileDirectory, string $fileDatabase, PDO $pdo)
     {
         $this->fileDirectory = $fileDirectory;
         $this->fileDatabase = $fileDatabase;
+        $this->pdo = $pdo;
     }
 
     public function getName(): string
@@ -42,5 +51,7 @@ class ProductPurgerListener extends AbstractListener implements BeforeSuiteListe
         $filesystem = new Filesystem();
         $filesystem->remove($this->fileDirectory);
         $filesystem->remove($this->fileDatabase);
+        $sql = 'TRUNCATE ' . PDOProductRepository::TABLE;
+        $this->pdo->exec($sql);
     }
 }
