@@ -51,7 +51,7 @@ class ProductPurgerListener extends AbstractListener implements BeforeSuiteListe
         $filesystem = new Filesystem();
         $filesystem->remove($this->fileDirectory);
         $filesystem->remove($this->fileDatabase);
-        $sql = 'TRUNCATE ' . PDOProductRepository::TABLE;
+        $sql = 'DELETE FROM ' . PDOProductRepository::PRODUCT_TABLE;
         $this->pdo->exec($sql);
     }
 }

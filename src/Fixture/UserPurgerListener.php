@@ -42,7 +42,7 @@ class UserPurgerListener extends AbstractListener implements BeforeSuiteListener
     {
         $filesystem = new Filesystem();
         $filesystem->remove($this->fileDatabase);
-        $sql = 'TRUNCATE ' . PDOUserRepository::TABLE;
+        $sql = 'DELETE FROM ' . PDOUserRepository::TABLE;
         $this->pdo->exec($sql);
     }
 }

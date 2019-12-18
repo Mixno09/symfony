@@ -14,20 +14,34 @@
                         <img src="{{ asset(product.image, 'product') }}" alt=""
                              class="img-thumbnail mb-3">
                         {% if is_granted("ROLE_PRODUCT_UPDATE") %}
-                        <a href="{{ path('product.update', { 'id': product.id }) }}"
-                           class="btn btn-sm btn-outline-primary">Редактировать</a>
+                            <a href="{{ path('product.update', { 'id': product.id }) }}"
+                               class="btn btn-sm btn-outline-primary mb-3">Редактировать</a>
                         {% endif %}
                         {% if is_granted("ROLE_PRODUCT_DESTROY") %}
-                        <form class="d-inline" action="{{ path('product.delete', {'id': product.id}) }}" method="post"
-                              onsubmit="return confirm('Удалить продукт?');">
-                            <input type="hidden" name="_method" value="delete">
-                            <input type="hidden" name="token" value="{{ csrf_token('product') }}">
-                            <button class="btn btn-sm btn-outline-danger float-right" type="submit">Удалить</button>
-                        </form>
+                            <form class="d-inline" action="{{ path('product.delete', {'id': product.id}) }}"
+                                  method="post"
+                                  onsubmit="return confirm('Удалить продукт?');">
+                                <input type="hidden" name="_method" value="delete">
+                                <input type="hidden" name="token" value="{{ csrf_token('product') }}">
+                                <button class="btn btn-sm btn-outline-danger float-right mb-3" type="submit">Удалить
+                                </button>
+                            </form>
                         {% endif %}
                     </div>
                     <div class="col-md-8">
                         <p>{{ product.description }}</p>
+                    </div>
+                </div>
+                <div class="row justify-content-md-center">
+                    <div class="col-md-8 col">
+                        {% if is_granted("ROLE_USER") %}
+                            <a href="{{ path('product_review', {'productId': product.id}) }}"
+                               class="btn btn-block btn-outline-primary">
+                                Оставить отзыв
+                            </a>
+                        {% else %}
+                            <span class="btn btn-block btn-outline-primary disabled">Чтобы оставить отзыв войдите или зарегистрируйтесь!</span>
+                        {% endif %}
                     </div>
                 </div>
             </div>

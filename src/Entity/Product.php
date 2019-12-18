@@ -27,5 +27,14 @@ class Product
      * @var string
      */
     public $image = '';
+    /**
+     * @var \App\Entity\Review[]
+     */
+    private $reviews = [];
+
+    public function addReview(Review $review): void
+    {
+        $this->reviews[] = $review;
+    }
 
 }
