@@ -72,4 +72,9 @@ class User
     {
         $this->roles = $roles;
     }
+
+    public function equals(self $user): bool
+    {
+        return ($this->id === $user->id);
+    }
 }

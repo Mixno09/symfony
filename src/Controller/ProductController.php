@@ -18,9 +18,9 @@ class ProductController extends AbstractController
     /**
      * @Route("/product/{id}", name="product", methods={"GET"}, requirements={"id"="\d+"})
      */
-    public function index(int $id, ProductRepositoryInterface $repository)
+    public function index(int $id, ProductRepositoryInterface $productRepository)
     {
-        $product = $repository->find($id);
+        $product = $productRepository->find($id);
         if (! $product instanceof Product) {
             throw $this->createNotFoundException();
         }

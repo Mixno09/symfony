@@ -24,6 +24,9 @@ class ProductReviewController extends AbstractController
         if (! $product instanceof Product) {
             throw $this->createNotFoundException();
         }
+
+        $this->denyAccessUnlessGranted('create_review', $product);
+
         $userIdentity = $this->getUser();
         if (! $userIdentity instanceof UserIdentity) {
             throw $this->createAccessDeniedException();
@@ -44,7 +47,37 @@ class ProductReviewController extends AbstractController
             $productRepository->save($product);
             return $this->redirectToRoute('product', ['id' => $product->id]);
         }
-        return $this->render('product_review/index.html.twig', [
+        return $this->render('product_review/form.html.twig', [
+            'product' => $product,
+            'form' => $form->createView(),
+        ]);
+    }
+
+    /**
+     * @Route("/product/{productId}/review/{reviewId}", name="product_review_update", requirements={"productId"="\d+", "reviewId"="\d+"}, methods={"GET", "PUT"})
+     */
+    public function update(int $productId, int $reviewId, Request $request, ProductRepositoryInterface $productRepository)
+    {
+        $product = $productRepository->find($productId);
+        if (! $product instanceof Product) {
+            throw $this->createNotFoundException();
+        }
+        $review = $product->getReview($reviewId);
+        if (! $review instanceof Review) {
+            throw $this->createNotFoundException();
+        }
+        $this->denyAccessUnlessGranted('update_review', $review);
+
+        $form = $this->createForm(ReviewType::class, ['text' => $review->text], ['method' => 'PUT']);
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted() && $form->isValid()) {
+            $text = $form->get('text')->getData();
+            $review->update($text);
+            $productRepository->save($product);
+            return $this->redirectToRoute('product', ['id' => $product->id]);
+        }
+        return $this->render('product_review/form.html.twig', [
             'product' => $product,
             'form' => $form->createView(),
         ]);

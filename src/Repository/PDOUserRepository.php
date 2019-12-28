@@ -105,7 +105,7 @@ class PDOUserRepository implements UserRepositoryInterface, PaginatorAwareInterf
         $statement->bindValue(':password', $data['password'], PDO::PARAM_STR);
         $statement->execute();
 
-        $id = $this->pdo->lastInsertId();
+        $id = (int) $this->pdo->lastInsertId();
         $user->id = $id;
     }
 

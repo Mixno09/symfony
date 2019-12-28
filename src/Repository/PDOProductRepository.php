@@ -7,6 +7,8 @@ namespace App\Repository;
 use App\Entity\Product;
 use App\Entity\Review;
 use App\Entity\User;
+use DateTimeImmutable;
+use DateTimeZone;
 use Knp\Bundle\PaginatorBundle\Definition\PaginatorAwareInterface;
 use Knp\Component\Pager\Event\Subscriber\Paginate\Callback\CallbackPagination;
 use Knp\Component\Pager\Pagination\PaginationInterface;
@@ -56,7 +58,7 @@ class PDOProductRepository implements ProductRepositoryInterface, PaginatorAware
         $statement->bindValue(':image', $product->image, PDO::PARAM_STR);
         $statement->execute();
 
-        $id = $this->pdo->lastInsertId();
+        $id = (int) $this->pdo->lastInsertId();
         $product->id = $id;
     }
 
@@ -97,7 +99,7 @@ class PDOProductRepository implements ProductRepositoryInterface, PaginatorAware
             $sql = 'SELECT * FROM ' . self::PRODUCT_TABLE . ' ORDER BY id ASC LIMIT ' . $limit . ' OFFSET ' . $offset;
             $statement = $this->pdo->query($sql);
             $items = $statement->fetchAll(PDO::FETCH_CLASS, Product::class);
-            $this->loadReviews($items);
+            $this->loadReviews(...$items);
             return $items;
         };
         $target = new CallbackPagination($count, $items);
@@ -121,7 +123,7 @@ class PDOProductRepository implements ProductRepositoryInterface, PaginatorAware
         $sql = 'SELECT * FROM ' . self::PRODUCT_TABLE . ' ORDER BY id DESC LIMIT ' . $count;
         $statement = $this->pdo->query($sql);
         $newest = $statement->fetchAll(PDO::FETCH_CLASS, Product::class);
-        $this->loadReviews($newest);
+        $this->loadReviews(...$newest);
         return $newest;
     }
 
@@ -153,20 +155,26 @@ class PDOProductRepository implements ProductRepositoryInterface, PaginatorAware
 
     private function insertReview(Review $review, int $productId): void
     {
-        $sql = 'INSERT INTO ' . self::REVIEW_TABLE . ' (product_id, user_id, `text`) VALUES (:product_id, :user_id, :text)';
+        $sql = 'INSERT INTO ' . self::REVIEW_TABLE . ' (product_id, user_id, `text`, `date`) VALUES (:product_id, :user_id, :text, :date)';
         $statement = $this->pdo->prepare($sql);
         $statement->bindValue(':product_id', $productId, PDO::PARAM_INT);
         $statement->bindValue(':user_id', $review->author->id, PDO::PARAM_INT);
         $statement->bindValue(':text', $review->text, PDO::PARAM_STR);
+        $date = $review->date->setTimezone(new DateTimeZone('UTC'));
+        $statement->bindValue(':date', $date->format('Y-m-d H:i:s'), PDO::PARAM_STR);
         $statement->execute();
 
-        $id = $this->pdo->lastInsertId();
+        $id = (int) $this->pdo->lastInsertId();
         $review->id = $id;
     }
 
     private function updateReview(Review $review): void
     {
-
+        $sql = 'UPDATE ' . self::REVIEW_TABLE . ' SET `text` = :text WHERE id = :id';
+        $statement = $this->pdo->prepare($sql);
+        $statement->bindValue(':text', $review->text, PDO::PARAM_STR);
+        $statement->bindValue(':id', $review->id, PDO::PARAM_INT);
+        $statement->execute();
     }
 
     private function deleteReviews(array $reviews, int $productId): void
@@ -174,6 +182,11 @@ class PDOProductRepository implements ProductRepositoryInterface, PaginatorAware
 
     }
 
+    /**
+     * @param \App\Entity\Product ...$products
+     * @throws \ReflectionException
+     * @throws \Exception
+     */
     private function loadReviews(Product ...$products): void
     {
         if (count($products) === 0) {
@@ -182,10 +195,11 @@ class PDOProductRepository implements ProductRepositoryInterface, PaginatorAware
 
         $productId = array_column($products, 'id');
         $sql =
-            'SELECT r.id, r.product_id, r.text, u.id AS u_id, u.email AS u_email, u.admin AS u_admin, u.roles AS u_roles, u.password AS u_password ' .
+            'SELECT r.id, r.product_id, r.text, r.date, u.id AS u_id, u.email AS u_email, u.admin AS u_admin, u.roles AS u_roles, u.password AS u_password ' .
             'FROM ' . self::REVIEW_TABLE . ' AS r ' .
             'INNER JOIN ' . PDOUserRepository::TABLE . ' AS u ON r.user_id = u.id ' .
-            'WHERE r.product_id IN (' . implode(',', $productId) . ')';
+            'WHERE r.product_id IN (' . implode(',', $productId) . ')' .
+            'ORDER BY r.date DESC';
         $statement = $this->pdo->query($sql);
         $data = $statement->fetchAll(PDO::FETCH_ASSOC);
 
@@ -194,6 +208,8 @@ class PDOProductRepository implements ProductRepositoryInterface, PaginatorAware
             $user = $this->hydrateUser($value);
             $review = new Review($user, $value['text']);
             $review->id = $value['id'];
+            $date = new DateTimeImmutable($value['date'], new DateTimeZone('UTC'));
+            $review->date = $date->setTimezone(new DateTimeZone(date_default_timezone_get()));
             $productId = $value['product_id'];
             $productReviewsMap[$productId][] = $review;
         }

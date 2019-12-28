@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Entity;
 
+use DomainException;
 use Symfony\Component\Validator\Constraints as Assert;
 
 class Product
@@ -34,7 +35,39 @@ class Product
 
     public function addReview(Review $review): void
     {
+        $userReview = $this->getUserReview($review->author);
+        if ($userReview instanceof Review) {
+            throw new DomainException("Отзыв уже оставлен пользователем id = {$review->author->id}");
+        }
+
         $this->reviews[] = $review;
     }
 
+    /**
+     * @return \App\Entity\Review[]
+     */
+    public function getReviews(): array
+    {
+        return $this->reviews;
+    }
+
+    public function getUserReview(User $user): ?Review
+    {
+        foreach ($this->reviews as $review) {
+            if ($user->equals($review->author)) {
+                return $review;
+            }
+        }
+        return null;
+    }
+
+    public function getReview(int $id): ?Review
+    {
+        foreach ($this->reviews as $review) {
+            if ($review->id === $id) {
+                return $review;
+            }
+        }
+        return null;
+    }
 }
