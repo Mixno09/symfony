@@ -16,6 +16,7 @@ class ProductReviewVoter extends Voter
 {
     private const UPDATE = 'update_review';
     private const CREATE = 'create_review';
+    private const DELETE = 'delete_review';
 
     /**
      * @var \App\Repository\UserRepositoryInterface
@@ -36,7 +37,7 @@ class ProductReviewVoter extends Voter
      */
     protected function supports($attribute, $subject)
     {
-        if ($subject instanceof Review && $attribute === self::UPDATE) {
+        if ($subject instanceof Review && in_array($attribute, [self::UPDATE, self::DELETE])) {
             return true;
         }
         if ($subject instanceof Product && $attribute === self::CREATE) {
@@ -50,8 +51,8 @@ class ProductReviewVoter extends Voter
      */
     protected function voteOnAttribute($attribute, $subject, TokenInterface $token)
     {
-        if ($attribute === self::UPDATE) {
-            return $this->canUpdate($subject, $token);
+        if (in_array($attribute, [self::UPDATE, self::DELETE])) {
+            return $this->canUpdateOrDelete($subject, $token);
         }
 
         if ($attribute === self::CREATE) {
@@ -61,7 +62,7 @@ class ProductReviewVoter extends Voter
         throw new LogicException('This code should not be reached!');
     }
 
-    private function canUpdate(Review $subject, TokenInterface $token): bool
+    private function canUpdateOrDelete(Review $subject, TokenInterface $token): bool
     {
         $user = $this->getUser($token);
         if (! $user instanceof User) {

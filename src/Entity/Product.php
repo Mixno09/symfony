@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace App\Entity;
 
 use DomainException;
+use InvalidArgumentException;
 use Symfony\Component\Validator\Constraints as Assert;
 
 class Product
@@ -69,5 +70,16 @@ class Product
             }
         }
         return null;
+    }
+
+    public function deleteReview(int $reviewId): void
+    {
+        foreach ($this->reviews as $index => $review) {
+            if ($review->id === $reviewId) {
+                unset($this->reviews[$index]);
+                return;
+            }
+        }
+        throw new InvalidArgumentException("Не удалось удалить отзыв с id = {$reviewId} у продукта с id = {$this->id}");
     }
 }

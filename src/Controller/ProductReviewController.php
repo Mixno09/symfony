@@ -11,6 +11,7 @@ use App\Repository\UserRepositoryInterface;
 use App\Security\UserIdentity;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpKernel\Exception\HttpException;
 use Symfony\Component\Routing\Annotation\Route;
 
 class ProductReviewController extends AbstractController
@@ -81,5 +82,31 @@ class ProductReviewController extends AbstractController
             'product' => $product,
             'form' => $form->createView(),
         ]);
+    }
+
+    /**
+     * @Route("/product/{productId}/review/{reviewId}", name="product_review_delete", requirements={"productId"="\d+", "reviewId"="\d+"}, methods={"DELETE"})
+     */
+    public function delete(int $productId, int $reviewId, Request $request, ProductRepositoryInterface $productRepository)
+    {
+        $product = $productRepository->find($productId);
+        if (! $product instanceof Product) {
+            throw $this->createNotFoundException();
+        }
+        $review = $product->getReview($reviewId);
+        if (! $review instanceof Review) {
+            throw $this->createNotFoundException();
+        }
+
+        $this->denyAccessUnlessGranted('delete_review', $review);
+        $token = $request->request->get('token');
+        if (! $this->isCsrfTokenValid('product_review', $token)) {
+            throw new HttpException(419);
+        }
+
+        $product->deleteReview($review->id);
+        $productRepository->save($product);
+
+        return $this->redirectToRoute('product', ['id' => $product->id]);
     }
 }

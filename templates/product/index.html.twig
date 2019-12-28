@@ -54,10 +54,26 @@
                                         <span class="float-right">{{ review.date.format('d.m.y H:i:s') }}</span>
                                     </div>
                                     <div class="card-body">{{ review.text|escape('html')|replace({"\n": '<br>'})|raw }}</div>
-                                    {% if is_granted('update_review', review) %}
+                                    {% if is_granted('update_review', review) or is_granted('delete_review', review) %}
                                         <div class="card-footer">
-                                            <a href="{{ path('product_review_update', {'productId': product.id, 'reviewId': review.id}) }}"
-                                               class="btn btn-sm btn-outline-primary">Редактировать</a>
+                                            {% if is_granted('update_review', review) %}
+                                                <a href="{{ path('product_review_update', {'productId': product.id, 'reviewId': review.id}) }}"
+                                                   class="btn btn-sm btn-outline-primary">Редактировать</a>
+                                            {% endif %}
+                                            {% if is_granted('delete_review', review) %}
+                                                <form class="d-inline"
+                                                      action="{{ path('product_review_delete', {'productId': product.id, 'reviewId': review.id}) }}"
+                                                      method="post"
+                                                      onsubmit="return confirm('Удалить отзыв?');">
+                                                    <input type="hidden" name="_method" value="delete">
+                                                    <input type="hidden" name="token"
+                                                           value="{{ csrf_token('product_review') }}">
+                                                    <button class="btn btn-sm btn-outline-danger float-right"
+                                                            type="submit">
+                                                        Удалить
+                                                    </button>
+                                                </form>
+                                            {% endif %}
                                         </div>
                                     {% endif %}
                                 </div>
