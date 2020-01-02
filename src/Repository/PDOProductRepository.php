@@ -109,6 +109,8 @@ class PDOProductRepository implements ProductRepositoryInterface, PaginatorAware
 
     public function delete(int $id): void
     {
+        $this->deleteReviews([], $id);
+
         $sql = 'DELETE FROM ' . self::PRODUCT_TABLE . ' WHERE id = :id';
         $statement = $this->pdo->prepare($sql);
         $statement->bindValue(':id', $id, PDO::PARAM_INT);
@@ -183,7 +185,7 @@ class PDOProductRepository implements ProductRepositoryInterface, PaginatorAware
      */
     private function deleteReviews(array $reviews, int $productId): void
     {
-        $reviewId = array_reduce(
+        $reviewId = array_reduce( //создаем массив id-шников отзывов
             $reviews,
             function (array $carry, Review $review) {
                 $carry[] = $review->id;

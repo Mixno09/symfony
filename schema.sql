@@ -31,7 +31,7 @@ CREATE TABLE reviews
     `date`     DATETIME     NOT NULL,
     PRIMARY KEY (id),
     FOREIGN KEY (product_id) REFERENCES products (id),
-    FOREIGN KEY (user_id) REFERENCES users (id),
+    FOREIGN KEY (user_id) REFERENCES users (id) ON DELETE CASCADE,
     CONSTRAINT UNIQUE (product_id, user_id)
 ) ENGINE InnoDB;
 

@@ -4,6 +4,8 @@ sylius_fixtures:
             fixtures:
                 product: ~
                 user: ~
+                review: ~
             listeners:
-                product_purger: ~
+                review_purger: ~
                 user_purger: ~
+                product_purger: ~

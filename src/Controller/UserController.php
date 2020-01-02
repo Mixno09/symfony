@@ -19,6 +19,7 @@ class UserController extends AbstractController
 {
     /**
      * @Route("", name="", methods={"GET"})
+     * @IsGranted("ROLE_USERS")
      */
     public function index(Request $request, UserRepositoryInterface $userRepository)
     {

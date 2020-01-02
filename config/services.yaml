@@ -87,3 +87,9 @@ services:
         tags: ['knp_paginator.injectable']
 
     App\Repository\UserRepositoryInterface: '@App\Repository\PDOUserRepository'
+
+    App\Fixture\ReviewFixture:
+        tags: ['sylius_fixtures.fixture']
+
+    App\Fixture\ReviewPurgerListener:
+        tags: ['sylius_fixtures.listener']
