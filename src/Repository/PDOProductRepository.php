@@ -15,6 +15,7 @@ use Knp\Component\Pager\Pagination\PaginationInterface;
 use Knp\Component\Pager\Paginator;
 use PDO;
 use ReflectionClass;
+use Throwable;
 
 class PDOProductRepository implements ProductRepositoryInterface, PaginatorAwareInterface
 {
@@ -41,12 +42,19 @@ class PDOProductRepository implements ProductRepositoryInterface, PaginatorAware
 
     public function save(Product $product): void
     {
-        if ($product->id === 0) {
-            $this->insert($product);
-        } else {
-            $this->update($product);
+        $this->pdo->beginTransaction();
+        try {
+            if ($product->id === 0) {
+                $this->insert($product);
+            } else {
+                $this->update($product);
+            }
+            $this->persistReviews($product);
+        } catch (Throwable $exception) {
+            $this->pdo->rollBack();
+            throw $exception;
         }
-        $this->persistReviews($product);
+        $this->pdo->commit();
     }
 
     private function insert(Product $product): void
@@ -109,12 +117,19 @@ class PDOProductRepository implements ProductRepositoryInterface, PaginatorAware
 
     public function delete(int $id): void
     {
-        $this->deleteReviews([], $id);
+        $this->pdo->beginTransaction();
 
-        $sql = 'DELETE FROM ' . self::PRODUCT_TABLE . ' WHERE id = :id';
-        $statement = $this->pdo->prepare($sql);
-        $statement->bindValue(':id', $id, PDO::PARAM_INT);
-        $statement->execute();
+        try {
+            $this->deleteReviews([], $id);
+            $sql = 'DELETE FROM ' . self::PRODUCT_TABLE . ' WHERE id = :id';
+            $statement = $this->pdo->prepare($sql);
+            $statement->bindValue(':id', $id, PDO::PARAM_INT);
+            $statement->execute();
+        } catch (Throwable $exception) {
+            $this->pdo->rollBack();
+            throw $exception;
+        }
+        $this->pdo->commit();
     }
 
     /**
