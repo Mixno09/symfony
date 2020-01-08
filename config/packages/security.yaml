@@ -45,3 +45,5 @@ security:
           - ROLE_USER_UPDATE
           - ROLE_USER_DESTROY
           - ROLE_USER
+          - ROLE_REVIEW_UPDATE
+          - ROLE_REVIEW_DESTROY

@@ -42,6 +42,8 @@ class UserType extends AbstractType
                     'ROLE_USERS' => 'ROLE_USERS',
                     'ROLE_USER_UPDATE' => 'ROLE_USER_UPDATE',
                     'ROLE_USER_DESTROY' => 'ROLE_USER_DESTROY',
+                    'ROLE_REVIEW_UPDATE' => 'ROLE_REVIEW_UPDATE',
+                    'ROLE_REVIEW_DESTROY' => 'ROLE_REVIEW_DESTROY',
                 ],
                 'expanded' => true,
                 'multiple' => true,

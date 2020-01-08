@@ -32,7 +32,7 @@ class UserController extends AbstractController
 
     /**
      * @Route("/{id}", name="_update", methods={"GET", "PUT"}, requirements={"id"="\d+"})
-     * @IsGranted("ROLE_PRODUCT_UPDATE")
+     * @IsGranted("ROLE_USER_UPDATE")
      */
     public function update(int $id, Request $request, UserPasswordEncoderInterface $passwordEncoder, UserRepositoryInterface $userRepository)
     {
