@@ -81,15 +81,21 @@ services:
     App\Repository\PDOProductRepository:
         tags: ['knp_paginator.injectable']
 
-    App\Repository\ProductRepositoryInterface: '@App\Repository\PDOProductRepository'
+    App\Repository\ProductRepositoryInterface: '@App\Repository\DBALProductRepository'
 
     App\Repository\PDOUserRepository:
         tags: ['knp_paginator.injectable']
 
-    App\Repository\UserRepositoryInterface: '@App\Repository\PDOUserRepository'
+    App\Repository\UserRepositoryInterface: '@App\Repository\DBALUserRepository'
 
     App\Fixture\ReviewFixture:
         tags: ['sylius_fixtures.fixture']
 
     App\Fixture\ReviewPurgerListener:
         tags: ['sylius_fixtures.listener']
+
+    App\Repository\DBALUserRepository:
+        tags: ['knp_paginator.injectable']
+
+    App\Repository\DBALProductRepository:
+        tags: ['knp_paginator.injectable']

@@ -7,6 +7,7 @@
         "ext-iconv": "*",
         "ext-intl": "*",
         "ext-json": "*",
+        "ext-pdo": "*",
         "fzaninotto/faker": "^1.8",
         "knplabs/knp-paginator-bundle": "^4.0",
         "sensio/framework-extra-bundle": "^5.5",
@@ -23,7 +24,7 @@
         "symfony/http-client": "4.3.*",
         "symfony/intl": "4.3.*",
         "symfony/monolog-bundle": "^3.1",
-        "symfony/orm-pack": "*",
+        "symfony/orm-pack": "^1.0",
         "symfony/process": "4.3.*",
         "symfony/security-bundle": "4.3.*",
         "symfony/security-csrf": "4.3.*",
@@ -33,8 +34,7 @@
         "symfony/twig-bundle": "4.3.*",
         "symfony/validator": "4.3.*",
         "symfony/web-link": "4.3.*",
-        "symfony/yaml": "4.3.*",
-        "ext-pdo": "*"
+        "symfony/yaml": "4.3.*"
     },
     "require-dev": {
         "symfony/debug-pack": "*",
