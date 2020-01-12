@@ -6,6 +6,7 @@ namespace App\Repository;
 
 use App\Entity\User;
 use Doctrine\DBAL\Connection;
+use Doctrine\DBAL\Query\QueryBuilder;
 use Doctrine\DBAL\Types\Types;
 use Knp\Bundle\PaginatorBundle\Definition\PaginatorAwareInterface;
 use Knp\Component\Pager\Event\Subscriber\Paginate\Callback\CallbackPagination;
@@ -15,7 +16,7 @@ use ReflectionClass;
 
 class DBALUserRepository implements UserRepositoryInterface, PaginatorAwareInterface
 {
-    public const TABLE = 'users';
+    public const USER_TABLE = 'users';
 
     /**
      * @var \Knp\Component\Pager\Paginator
@@ -37,48 +38,59 @@ class DBALUserRepository implements UserRepositoryInterface, PaginatorAwareInter
 
     public function find(int $id): ?User
     {
-        $sql = 'SELECT * FROM ' . self::TABLE . ' WHERE id = :id';
-        $data = $this->connection->fetchAssoc($sql, ['id' => $id], ['id' => Types::INTEGER]);
-        if (! is_array($data)) {
+        $query = $this->createQuery();
+        $query->where('u.id = ' . $query->createNamedParameter($id, Types::INTEGER));
+        $data = $this->connection->fetchAll(
+            $query->getSQL(),
+            $query->getParameters(),
+            $query->getParameterTypes()
+        );
+        $users = $this->hydrate($data);
+        $user = reset($users);
+        if (! $user instanceof User) {
             return null;
         }
-        $data['admin'] = $this->connection->convertToPHPValue($data['admin'], Types::BOOLEAN);
-        $data['roles'] = $this->connection->convertToPHPValue($data['roles'], Types::JSON);
-        $user = $this->hydrate($data);
         return $user;
     }
 
     public function getByEmail(string $email): ?User
     {
-        $sql = 'SELECT * FROM ' . self::TABLE . ' WHERE email = :email';
-        $data = $this->connection->fetchAssoc($sql, ['email' => $email], ['email' => Types::STRING]);
-        if (! is_array($data)) {
+        $query = $this->createQuery();
+        $query->where('u.email = ' . $query->createNamedParameter($email, Types::STRING));
+        $data = $this->connection->fetchAll(
+            $query->getSQL(),
+            $query->getParameters(),
+            $query->getParameterTypes()
+        );
+        $users = $this->hydrate($data);
+        $user = reset($users);
+        if (! $user instanceof User) {
             return null;
         }
-
-        $data['admin'] = $this->connection->convertToPHPValue($data['admin'], Types::BOOLEAN);
-        $data['roles'] = $this->connection->convertToPHPValue($data['roles'], Types::JSON);
-
-        $user = $this->hydrate($data);
         return $user;
     }
 
     public function paginate(int $page = 1, int $limit = 10, array $options = []): PaginationInterface
     {
         $count = function () {
-            $sql = 'SELECT count(*) FROM ' . self::TABLE;
-            $count = $this->connection->fetchColumn($sql);
+            $query = $this->createQuery();
+            $query->select('count(*)');
+            $count = $this->connection->fetchColumn(
+                $query->getSQL()
+            );
             return $count;
         };
         $items = function ($offset, $limit) {
-            $sql = 'SELECT * FROM ' . self::TABLE . ' ORDER BY id ASC LIMIT ' . $limit . ' OFFSET ' . $offset;
-            $items = [];
-            foreach ($this->connection->fetchAll($sql) as $data) {
-                $data['admin'] = $this->connection->convertToPHPValue($data['admin'], Types::BOOLEAN);
-                $data['roles'] = $this->connection->convertToPHPValue($data['roles'], Types::JSON);
-                $items[] = $this->hydrate($data);
-            }
+            $query = $this->createQuery();
+            $query
+                ->orderBy('id')
+                ->setFirstResult($offset)
+                ->setMaxResults($limit);
+            $data = $this->connection->fetchAll(
+                $query->getSQL()
+            );
 
+            $items = $this->hydrate($data);
             return $items;
         };
         $target = new CallbackPagination($count, $items);
@@ -100,7 +112,7 @@ class DBALUserRepository implements UserRepositoryInterface, PaginatorAwareInter
         $data = $this->extract($user);
 
         $this->connection->insert(
-            self::TABLE,
+            self::USER_TABLE,
             [
                 'email' => $data['email'],
                 'admin' => $data['admin'],
@@ -115,7 +127,7 @@ class DBALUserRepository implements UserRepositoryInterface, PaginatorAwareInter
             ]
         );
 
-        $id = (int) $this->connection->lastInsertId();
+        $id = (int)$this->connection->lastInsertId();
         $user->id = $id;
     }
 
@@ -123,7 +135,7 @@ class DBALUserRepository implements UserRepositoryInterface, PaginatorAwareInter
     {
         $data = $this->extract($user);
         $this->connection->update(
-            self::TABLE,
+            self::USER_TABLE,
             [
                 'email' => $data['email'],
                 'admin' => $data['admin'],
@@ -145,23 +157,34 @@ class DBALUserRepository implements UserRepositoryInterface, PaginatorAwareInter
 
     public function delete(int $id): void
     {
-        $this->connection->delete(self::TABLE, ['id' => $id], ['id' => Types::INTEGER]);
+        $this->connection->delete(self::USER_TABLE, ['id' => $id], ['id' => Types::INTEGER]);
     }
 
-    private function hydrate(array $data): User
+    /**
+     * @param array $data
+     * @return \App\Entity\User[]
+     * @throws \ReflectionException
+     */
+    private function hydrate(array $data): array
     {
-        $user = new User();
-        $user->id = $data['id'];
-        $user->email = $data['email'];
-        $user->admin = $data['admin'];
+        $users = [];
+        foreach ($data as $value) {
+            $user = new User();
+            $user->id = $value['id'];
+            $user->email = $value['email'];
+            $user->admin = $this->connection->convertToPHPValue($value['admin'], Types::BOOLEAN);;
 
-        $reflectionClass = new ReflectionClass(User::class);
-        $reflectionProperty = $reflectionClass->getProperty('password');
-        $reflectionProperty->setAccessible(true);
-        $reflectionProperty->setValue($user, $data['password']);
+            $reflectionClass = new ReflectionClass(User::class);
+            $reflectionProperty = $reflectionClass->getProperty('password');
+            $reflectionProperty->setAccessible(true);
+            $reflectionProperty->setValue($user, $value['password']);
 
-        $user->setRoles($data['roles']);
-        return $user;
+            $value['roles'] = $this->connection->convertToPHPValue($value['roles'], Types::JSON);
+            $user->setRoles($value['roles']);
+
+            $users[] = $user;
+        }
+        return $users;
     }
 
     private function extract(User $user): array
@@ -191,5 +214,14 @@ class DBALUserRepository implements UserRepositoryInterface, PaginatorAwareInter
     public function setPaginator(Paginator $paginator)
     {
         $this->paginator = $paginator;
+    }
+
+    private function createQuery(): QueryBuilder
+    {
+        $query = $this->connection->createQueryBuilder();
+        $query
+            ->select('*')
+            ->from(self::USER_TABLE, 'u');
+        return $query;
     }
 }
