@@ -5,6 +5,8 @@ declare(strict_types=1);
 namespace App\Repository;
 
 use App\Entity\User;
+use Doctrine\Common\Cache\ArrayCache;
+use Doctrine\DBAL\Cache\QueryCacheProfile;
 use Doctrine\DBAL\Connection;
 use Doctrine\DBAL\Query\QueryBuilder;
 use Doctrine\DBAL\Types\Types;
@@ -26,6 +28,10 @@ class DBALUserRepository implements UserRepositoryInterface, PaginatorAwareInter
      * @var \Doctrine\DBAL\Connection
      */
     private $connection;
+    /**
+     * @var \Doctrine\Common\Cache\Cache
+     */
+    private $cache;
 
     /**
      * DBALUserRepository constructor.
@@ -34,6 +40,7 @@ class DBALUserRepository implements UserRepositoryInterface, PaginatorAwareInter
     public function __construct(Connection $connection)
     {
         $this->connection = $connection;
+        $this->cache = new ArrayCache();
     }
 
     public function find(int $id): ?User
@@ -57,11 +64,16 @@ class DBALUserRepository implements UserRepositoryInterface, PaginatorAwareInter
     {
         $query = $this->createQuery();
         $query->where('u.email = ' . $query->createNamedParameter($email, Types::STRING));
-        $data = $this->connection->fetchAll(
+
+        $statement = $this->connection->executeCacheQuery(
             $query->getSQL(),
             $query->getParameters(),
-            $query->getParameterTypes()
+            $query->getParameterTypes(),
+            new QueryCacheProfile(0, $email, $this->cache)
         );
+        $data = $statement->fetchAll();
+        $statement->closeCursor();
+
         $users = $this->hydrate($data);
         $user = reset($users);
         if (! $user instanceof User) {
