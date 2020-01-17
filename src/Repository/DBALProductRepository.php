@@ -42,19 +42,14 @@ class DBALProductRepository implements ProductRepositoryInterface, PaginatorAwar
 
     public function save(Product $product): void
     {
-        $this->connection->beginTransaction();
-        try {
+        $this->connection->transactional(function () use ($product) {
             if ($product->id === 0) {
                 $this->insert($product);
             } else {
                 $this->update($product);
             }
             $this->persistReviews($product);
-        } catch (Throwable $exception) {
-            $this->connection->rollBack();
-            throw $exception;
-        }
-        $this->connection->commit();
+        });
     }
 
     private function insert(Product $product): void
@@ -147,16 +142,10 @@ class DBALProductRepository implements ProductRepositoryInterface, PaginatorAwar
 
     public function delete(int $id): void
     {
-        $this->connection->beginTransaction();
-
-        try {
+        $this->connection->transactional(function () use ($id) {
             $this->deleteReviews([], $id);
             $this->connection->delete(self::PRODUCT_TABLE, ['id' => $id], ['id' => Types::INTEGER]);
-        } catch (Throwable $exception) {
-            $this->connection->rollBack();
-            throw $exception;
-        }
-        $this->connection->commit();
+        });
     }
 
     /**
