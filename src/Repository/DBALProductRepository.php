@@ -322,10 +322,11 @@ class DBALProductRepository implements ProductRepositoryInterface, PaginatorAwar
         }
         foreach ($products as $product) {
             $productId = $product->id;
-            $reviews = [];
-            if (array_key_exists($productId, $productReviewsMap)) {
-                $reviews = $productReviewsMap[$productId];
+            if (! array_key_exists($productId, $productReviewsMap)) {
+                continue;
             }
+            $reviews = $productReviewsMap[$productId];
+
             $reflectionClass = new ReflectionClass(Product::class);
             $reflectionProperty = $reflectionClass->getProperty('reviews');
             $reflectionProperty->setAccessible(true);
