@@ -217,7 +217,7 @@ class DBALProductRepository implements ProductRepositoryInterface, PaginatorAwar
                 'product_id' => Types::INTEGER,
                 'user_id' => Types::INTEGER,
                 'text' => Types::STRING,
-                'data' => Types::DATETIMETZ_IMMUTABLE,
+                'date' => Types::DATETIMETZ_IMMUTABLE,
             ]
         );
 
