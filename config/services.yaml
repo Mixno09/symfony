@@ -3,10 +3,7 @@
 
 # Put parameters here that don't need to change on each machine where the app is deployed
 # https://symfony.com/doc/current/best_practices/configuration.html#application-related-configuration
-parameters: # константа т.е. папка для загрузки файлов продукта
-    upload.product: '%kernel.project_dir%/public/upload/product'
-    database.product: '%kernel.cache_dir%/products.data'
-    database.user: '%kernel.cache_dir%/users.data'
+parameters:
 
 services:
     # default configuration for services in *this* file
@@ -28,74 +25,3 @@ services:
 
     # add more service definitions when explicit configuration is needed
     # please note that last definitions always *replace* previous ones
-    App\Controller\ProductController:         # указываем контроллеру продуктов кокой сервис загрузки передается в конструктор
-        bind:
-            App\Service\FileManager: '@file_manager.product'
-
-    file_manager.product:   # регистрация сервиса (идентификатор)
-        class: 'App\Service\FileManager'
-        arguments:
-            $targetDirectory: '%upload.product%'
-
-    App\Repository\FileProductRepository:
-        tags: ['knp_paginator.injectable']
-        arguments:
-            $file: '%database.product%'
-
-    App\Fixture\ProductFixture:
-        bind:
-            App\Service\FileManager: '@file_manager.product'
-        tags: ['sylius_fixtures.fixture']
-
-    App\Repository\FileUserRepository:
-        tags: ['knp_paginator.injectable']
-        arguments:
-            $file: '%database.user%'
-
-    App\Fixture\UserFixture:
-        tags: ['sylius_fixtures.fixture']
-
-    App\Fixture\ProductPurgerListener:
-        tags: ['sylius_fixtures.listener']
-        arguments:
-            $fileDirectory: '%upload.product%'
-            $fileDatabase: '%database.product%'
-
-    App\Fixture\UserPurgerListener:
-        tags: ['sylius_fixtures.listener']
-        arguments:
-            $fileDatabase: '%database.user%'
-
-    PDO:
-        class: 'PDO'
-        arguments:
-            $dsn: '%env(PDO_DNS)%'
-            $username: '%env(PDO_USERNAME)%'
-            $passwd: '%env(PDO_PASSWD)%'
-            $options:
-                !php/const PDO::ATTR_ERRMODE: !php/const PDO::ERRMODE_EXCEPTION
-                !php/const PDO::MYSQL_ATTR_INIT_COMMAND: 'SET NAMES utf8;'
-                !php/const PDO::ATTR_EMULATE_PREPARES: false
-                !php/const PDO::ATTR_STRINGIFY_FETCHES: false
-
-    App\Repository\PDOProductRepository:
-        tags: ['knp_paginator.injectable']
-
-    App\Repository\ProductRepositoryInterface: '@App\Repository\DBALProductRepository'
-
-    App\Repository\PDOUserRepository:
-        tags: ['knp_paginator.injectable']
-
-    App\Repository\UserRepositoryInterface: '@App\Repository\DBALUserRepository'
-
-    App\Fixture\ReviewFixture:
-        tags: ['sylius_fixtures.fixture']
-
-    App\Fixture\ReviewPurgerListener:
-        tags: ['sylius_fixtures.listener']
-
-    App\Repository\DBALUserRepository:
-        tags: ['knp_paginator.injectable']
-
-    App\Repository\DBALProductRepository:
-        tags: ['knp_paginator.injectable']

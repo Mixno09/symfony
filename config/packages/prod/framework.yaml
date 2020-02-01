@@ -1,4 +1,0 @@
-framework:
-  assets:
-    version: '1'
-    version_format: '%%s?v=%%s'
