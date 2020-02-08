@@ -2,8 +2,8 @@
 
 namespace App\Tests\Entity;
 
+use App\Entity\ImageInterface;
 use App\Entity\Product;
-use App\Service\ImageInterface;
 use PHPUnit\Framework\TestCase;
 
 class ProductTest extends TestCase
