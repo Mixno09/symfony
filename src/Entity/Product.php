@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Entity;
 
+use App\Entity\ValueObject\Asset;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
@@ -30,7 +31,7 @@ final class Product
      */
     private $description;
     /**
-     * @var \App\Entity\ImageInterface
+     * @var \App\Entity\ValueObject\Asset
      */
     private $image;
 
@@ -38,9 +39,9 @@ final class Product
      * Product constructor.
      * @param string $title
      * @param string $description
-     * @param \App\Entity\ImageInterface $image
+     * @param \App\Entity\ValueObject\Asset $image
      */
-    public function __construct(string $title, string $description, ImageInterface $image)
+    public function __construct(string $title, string $description, Asset $image)
     {
         $this->title = $title;
         $this->description = $description;
@@ -64,9 +65,9 @@ final class Product
     }
 
     /**
-     * @return \App\Entity\ImageInterface
+     * @return \App\Entity\ValueObject\Asset
      */
-    public function getImage(): ImageInterface
+    public function getImage(): Asset
     {
         return $this->image;
     }

@@ -2,7 +2,7 @@
 
 namespace App\Tests\Entity;
 
-use App\Entity\ImageInterface;
+use App\Entity\ValueObject\Asset;
 use App\Entity\Product;
 use PHPUnit\Framework\TestCase;
 
@@ -12,8 +12,8 @@ class ProductTest extends TestCase
     {
         $titleExpected = 'title';
         $descriptionExpected = 'desc';
-        /** @var \App\Service\Image $imageExpected */
-        $imageExpected = $this->createMock(ImageInterface::class);
+        /** @var \App\Entity\ValueObject\Asset $imageExpected */
+        $imageExpected = $this->createMock(Asset::class);
 
         $product = new Product($titleExpected, $descriptionExpected, $imageExpected);
         $titleActual = $product->getTitle();
