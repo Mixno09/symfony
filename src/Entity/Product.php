@@ -31,6 +31,7 @@ final class Product
      */
     private $description;
     /**
+     * @ORM\Column(type="asset")
      * @var \App\Entity\ValueObject\Asset
      */
     private $image;

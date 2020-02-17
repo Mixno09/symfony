@@ -2,8 +2,8 @@
 
 namespace App\Tests\Entity;
 
-use App\Entity\ValueObject\Asset;
 use App\Entity\Product;
+use App\Tests\Entity\ValueObject\AssetFactory;
 use PHPUnit\Framework\TestCase;
 
 class ProductTest extends TestCase
@@ -12,8 +12,7 @@ class ProductTest extends TestCase
     {
         $titleExpected = 'title';
         $descriptionExpected = 'desc';
-        /** @var \App\Entity\ValueObject\Asset $imageExpected */
-        $imageExpected = $this->createMock(Asset::class);
+        $imageExpected = AssetFactory::newAsset();
 
         $product = new Product($titleExpected, $descriptionExpected, $imageExpected);
         $titleActual = $product->getTitle();

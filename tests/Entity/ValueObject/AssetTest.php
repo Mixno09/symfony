@@ -2,17 +2,19 @@
 
 namespace App\Tests\Entity\ValueObject;
 
-use App\Entity\ValueObject\Image;
+use App\Entity\ValueObject\Asset;
 use PHPUnit\Framework\TestCase;
 
-class ImageTest extends TestCase
+class AssetTest extends TestCase
 {
     /**
      * @dataProvider accessorsProvider
+     * @param $pathExpected
+     * @param $packageNameExpected
      */
     public function testAccessors($pathExpected, $packageNameExpected)
     {
-        $image = new Image($pathExpected, $packageNameExpected);
+        $image = new Asset($pathExpected, $packageNameExpected);
         $pathActual = $image->getPath();
         $packageNameActual = $image->getPackageName();
 

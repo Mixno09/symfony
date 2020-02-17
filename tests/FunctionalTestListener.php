@@ -46,6 +46,6 @@ class FunctionalTestListener implements TestListener
 
     private function checkSuite(TestSuite $suite): bool
     {
-        return ($suite->getName() === 'Functional');
+        return ($suite->getName() === 'functional');
     }
 }
