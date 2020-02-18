@@ -3,7 +3,7 @@
 namespace App\Tests\Entity;
 
 use App\Entity\Product;
-use App\Tests\Entity\ValueObject\AssetFactory;
+use App\DataFixtures\ValueObject\AssetFactory;
 use PHPUnit\Framework\TestCase;
 
 class ProductTest extends TestCase

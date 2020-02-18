@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace App\Tests\Entity\ValueObject;
+namespace App\DataFixtures\ValueObject;
 
 use App\Entity\ValueObject\Asset;
 

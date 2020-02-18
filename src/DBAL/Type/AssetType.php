@@ -2,8 +2,9 @@
 
 declare(strict_types=1);
 
-namespace App\Entity\ValueObject;
+namespace App\DBAL\Type;
 
+use App\Entity\ValueObject\Asset;
 use Doctrine\DBAL\Platforms\AbstractPlatform;
 use Doctrine\DBAL\Types\JsonType;
 use InvalidArgumentException;
