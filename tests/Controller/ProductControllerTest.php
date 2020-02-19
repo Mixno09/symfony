@@ -2,13 +2,18 @@
 
 namespace App\Tests\Controller;
 
-use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
+use App\DataFixtures\ShowProductTestFixtures;
+use Liip\FunctionalTestBundle\Test\WebTestCase;
+use Liip\TestFixturesBundle\Test\FixturesTrait;
 
 class ProductControllerTest extends WebTestCase
 {
+    use FixturesTrait;
+
     public function testShowProduct()
     {
-        $client = static::createClient();
+        $this->loadFixtures([ShowProductTestFixtures::class]);
+        $client = $this->createClient();
 
         $client->request('GET', '/product/1');
         $response = $client->getResponse();
