@@ -10,15 +10,26 @@ class ProductControllerTest extends WebTestCase
 {
     use FixturesTrait;
 
+    public function testProductNotFound()
+    {
+        $client = $this->createClient();
+
+        $client->request('GET', '/product/1');
+
+        $this->assertStatusCode(404, $client);
+    }
+
     public function testShowProduct()
     {
         $this->loadFixtures([ShowProductTestFixtures::class]);
         $client = $this->createClient();
 
-        $client->request('GET', '/product/1');
-        $response = $client->getResponse();
+        $crawler = $client->request('GET', '/product/1');
 
-        $this->assertEquals(200, $response->getStatusCode());
-        $this->markTestIncomplete(); // не законченные тесты
+        $this->assertStatusCode(200, $client);
+        $this->assertSelectorTextSame('main h1.text-center.mb-5', 'product');
+        $this->assertSelectorTextSame('main p', 'desc');
+        $image = $crawler->filter('main img.img-thumbnail.mb-3')->attr('src');
+        $this->assertSame('/image.jpg', $image);
     }
 }

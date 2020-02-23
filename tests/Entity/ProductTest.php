@@ -19,8 +19,8 @@ class ProductTest extends TestCase
         $descriptionActual = $product->getDescription();
         $imageActual = $product->getImage();
 
-        $this->assertEquals($titleExpected, $titleActual);
-        $this->assertEquals($descriptionExpected, $descriptionActual);
-        $this->assertEquals($imageExpected, $imageActual);
+        $this->assertSame($titleExpected, $titleActual);
+        $this->assertSame($descriptionExpected, $descriptionActual);
+        $this->assertSame($imageExpected, $imageActual);
     }
 }
