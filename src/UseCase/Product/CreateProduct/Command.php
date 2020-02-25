@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace App\UseCase\Product\CreateProduct;
 
-use App\Entity\ValueObject\Asset;
+use Symfony\Component\HttpFoundation\File\UploadedFile;
 
 final class Command
 {
@@ -17,7 +17,7 @@ final class Command
      */
     private $description;
     /**
-     * @var \App\Entity\ValueObject\Asset
+     * @var \Symfony\Component\HttpFoundation\File\UploadedFile
      */
     private $image;
 
@@ -25,9 +25,9 @@ final class Command
      * Command constructor.
      * @param string $title
      * @param string $description
-     * @param \App\Entity\ValueObject\Asset $image
+     * @param \Symfony\Component\HttpFoundation\File\UploadedFile $image
      */
-    public function __construct(string $title, string $description, Asset $image)
+    public function __construct(string $title, string $description, UploadedFile $image)
     {
         $this->title = $title;
         $this->description = $description;
@@ -51,9 +51,9 @@ final class Command
     }
 
     /**
-     * @return \App\Entity\ValueObject\Asset
+     * @return \Symfony\Component\HttpFoundation\File\UploadedFile
      */
-    public function getImage(): Asset
+    public function getImage(): UploadedFile
     {
         return $this->image;
     }
