@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace App\UseCase\Product\CreateProduct;
 
 use App\Entity\Product;
+use App\Entity\ValueObject\Product\Title;
 use App\Service\AssetManager;
 use Doctrine\ORM\EntityManagerInterface;
 
@@ -36,14 +37,10 @@ final class Handler
      */
     public function execute(Command $command): int
     {
-        $image = $this->assetManager->upload(
-            $command->getImage()
-        );
-
         $product = new Product(
-            $command->getTitle(),
-            $command->getDescription(),
-            $image
+            Title::fromString($command->title),
+            $command->description,
+            $this->assetManager->upload($command->image)
         );
         $this->entityManager->persist($product);
         $this->entityManager->flush();

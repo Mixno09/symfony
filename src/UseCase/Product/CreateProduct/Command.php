@@ -4,57 +4,35 @@ declare(strict_types=1);
 
 namespace App\UseCase\Product\CreateProduct;
 
-use Symfony\Component\HttpFoundation\File\UploadedFile;
+use Symfony\Component\Validator\Constraints as Assert;
+use App\Entity\ValueObject\Product\Title;
 
 final class Command
 {
     /**
      * @var string
+     * @Assert\NotBlank
+     * @Assert\Length(min = Title::MIN_LENGTH, max = Title::MAX_LENGTH)
      */
-    private $title;
+    public $title;
     /**
      * @var string
+     * @Assert\NotBlank
+     * @Assert\Length(min = 5)
      */
-    private $description;
+    public $description;
     /**
      * @var \Symfony\Component\HttpFoundation\File\UploadedFile
+     * @Assert\NotBlank
+     * @Assert\Image(
+     *     minWidth = 400,
+     *     maxWidth = 800,
+     *     minHeight = 400,
+     *     maxHeight = 800,
+     *     minRatio = 1,
+     *     maxRatio = 1,
+     *     mimeTypes = "image/jpeg"
+     * )
      */
-    private $image;
-
-    /**
-     * Command constructor.
-     * @param string $title
-     * @param string $description
-     * @param \Symfony\Component\HttpFoundation\File\UploadedFile $image
-     */
-    public function __construct(string $title, string $description, UploadedFile $image)
-    {
-        $this->title = $title;
-        $this->description = $description;
-        $this->image = $image;
-    }
-
-    /**
-     * @return string
-     */
-    public function getTitle(): string
-    {
-        return $this->title;
-    }
-
-    /**
-     * @return string
-     */
-    public function getDescription(): string
-    {
-        return $this->description;
-    }
-
-    /**
-     * @return \Symfony\Component\HttpFoundation\File\UploadedFile
-     */
-    public function getImage(): UploadedFile
-    {
-        return $this->image;
-    }
+    public $image;
 }

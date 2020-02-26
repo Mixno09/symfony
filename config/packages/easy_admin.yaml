@@ -10,7 +10,7 @@ easy_admin:
                 title: 'Список продуктов'
                 fields:
                     - id
-                    - { property: 'title', label: 'Заголовок' }
+                    - { property: 'title.toString', label: 'Заголовок' }
                     - { property: 'image.path', label: 'Картинка', type: 'image', base_path: '/upload/product/' }
                 actions:
                     - { name: 'new', label: 'Добавить продукт' }
