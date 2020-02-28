@@ -5,9 +5,11 @@ declare(strict_types=1);
 namespace App\UseCase\Product\CreateProduct;
 
 use App\Entity\Product;
+use App\Entity\ValueObject\Product\Description;
 use App\Entity\ValueObject\Product\Title;
 use App\Service\AssetManager;
 use Doctrine\ORM\EntityManagerInterface;
+use Throwable;
 
 final class Handler
 {
@@ -34,16 +36,24 @@ final class Handler
     /**
      * @param \App\UseCase\Product\CreateProduct\Command $command
      * @return int
+     * @throws \Throwable
      */
     public function execute(Command $command): int
     {
-        $product = new Product(
-            Title::fromString($command->title),
-            $command->description,
-            $this->assetManager->upload($command->image)
-        );
-        $this->entityManager->persist($product);
-        $this->entityManager->flush();
+        $image = $this->assetManager->upload($command->image);
+
+        try {
+            $product = new Product(
+                Title::fromString($command->title),
+                Description::fromString($command->description),
+                $image
+            );
+            $this->entityManager->persist($product);
+            $this->entityManager->flush();
+        } catch (Throwable $exception) {
+            $this->assetManager->delete($image);
+            throw $exception;
+        }
         return $product->getId();
     }
 }

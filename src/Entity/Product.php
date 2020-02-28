@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace App\Entity;
 
 use App\Entity\ValueObject\Asset;
+use App\Entity\ValueObject\Product\Description;
 use App\Entity\ValueObject\Product\Title;
 use Doctrine\ORM\Mapping as ORM;
 
@@ -27,8 +28,8 @@ final class Product
      */
     private $title;
     /**
-     * @ORM\Column(type="text")
-     * @var string
+     * @ORM\Column(type="product_description")
+     * @var \App\Entity\ValueObject\Product\Description
      */
     private $description;
     /**
@@ -40,10 +41,10 @@ final class Product
     /**
      * Product constructor.
      * @param \App\Entity\ValueObject\Product\Title $title
-     * @param string $description
+     * @param \App\Entity\ValueObject\Product\Description $description
      * @param \App\Entity\ValueObject\Asset $image
      */
-    public function __construct(Title $title, string $description, Asset $image)
+    public function __construct(Title $title, Description $description, Asset $image)
     {
         $this->title = $title;
         $this->description = $description;
@@ -67,9 +68,9 @@ final class Product
     }
 
     /**
-     * @return string
+     * @return \App\Entity\ValueObject\Product\Description
      */
-    public function getDescription(): string
+    public function getDescription(): Description
     {
         return $this->description;
     }

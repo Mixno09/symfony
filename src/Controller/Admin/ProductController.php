@@ -7,6 +7,7 @@ namespace App\Controller\Admin;
 use App\UseCase\Product\CreateProduct\Command;
 use App\UseCase\Product\CreateProduct\Handler;
 use EasyCorp\Bundle\EasyAdminBundle\Controller\EasyAdminController;
+use InvalidArgumentException;
 
 class ProductController extends EasyAdminController
 {
@@ -35,7 +36,7 @@ class ProductController extends EasyAdminController
             $this->handler->execute($command);
             return;
         }
-        throw new \InvalidArgumentException(sprintf(
+        throw new InvalidArgumentException(sprintf(
             'Аргумент $command должен быть экземпляром класса %s',
             Command::class
         ));

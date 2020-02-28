@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace App\Service;
 
 use App\Entity\ValueObject\Asset;
+use InvalidArgumentException;
 use Symfony\Component\Filesystem\Filesystem;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 use function transliterator_transliterate;
@@ -43,9 +44,16 @@ final class AssetManager
     /**
      * @param \App\Entity\ValueObject\Asset $asset
      * @throws \Symfony\Component\Filesystem\Exception\IOException
+     * @throws \InvalidArgumentException
      */
     public function delete(Asset $asset): void
     {
+        if ($asset->getPackageName() !== $this->packageName) {
+            throw new InvalidArgumentException(sprintf(
+                'Значение packageName у $asset должно быть %s',
+                $this->packageName ?? 'null'
+            ));
+        }
         (new Filesystem())->remove($this->targetDirectory . '/' . $asset->getPath());
     }
 }

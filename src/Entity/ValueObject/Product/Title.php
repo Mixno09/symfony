@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace App\Entity\ValueObject\Product;
 
+use InvalidArgumentException;
+
 class Title
 {
     public const MIN_LENGTH = 5;
@@ -17,13 +19,14 @@ class Title
     /**
      * Title constructor.
      * @param string $value
+     * @throws \InvalidArgumentException
      */
     private function __construct(string $value)
     {
         $length = mb_strlen($value);
         if ($length < self::MIN_LENGTH || $length > self::MAX_LENGTH) {
-            throw new \InvalidArgumentException(sprintf(
-                'Длина строки должна быть от %s до %s символов',
+            throw new InvalidArgumentException(sprintf(
+                'Длина строки должна быть от %d до %d символов',
                 self::MIN_LENGTH,
                 self::MAX_LENGTH
             ));
@@ -34,6 +37,7 @@ class Title
     /**
      * @param string $title
      * @return static
+     * @throws \InvalidArgumentException
      */
     public static function fromString(string $title): self
     {

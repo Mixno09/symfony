@@ -17,7 +17,7 @@ easy_admin:
             form:
                 fields:
                     - { property: 'title', label: 'Заголовок' }
-                    - { property: 'description', label: 'Описание' }
+                    - { property: 'description', label: 'Описание', type: 'textarea' }
                     - { property: 'image', label: 'Картинка', type: 'file' }
 #        - App\Entity\Category
 #        - App\Entity\User
