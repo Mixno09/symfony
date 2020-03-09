@@ -21,7 +21,7 @@ final class Product
      * @ORM\Column(type="integer")
      * @var int
      */
-    private $id;
+    private $id = 0;
     /**
      * @ORM\Column(type="product_title", length=255)
      * @var \App\Entity\ValueObject\Product\Title
@@ -49,6 +49,16 @@ final class Product
         $this->title = $title;
         $this->description = $description;
         $this->image = $image;
+    }
+
+    public function update(Title $title, Description $description, Asset $image = null): void
+    {
+        $this->title = $title;
+        $this->description = $description;
+
+        if ($image instanceof Asset) {
+            $this->image = $image;
+        }
     }
 
     /**

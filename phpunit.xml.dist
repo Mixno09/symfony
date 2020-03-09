@@ -16,12 +16,8 @@
     </php>
 
     <testsuites>
-        <testsuite name="unit">
+        <testsuite name="Project Test Suite">
             <directory>tests</directory>
-            <exclude>tests/Controller</exclude>
-        </testsuite>
-        <testsuite name="functional">
-            <directory>tests/Controller</directory>
         </testsuite>
     </testsuites>
 
@@ -33,10 +29,5 @@
 
     <listeners>
         <listener class="Symfony\Bridge\PhpUnit\SymfonyTestsListener" />
-        <listener class="App\Tests\FunctionalTestListener" />
     </listeners>
-
-    <extensions>
-        <extension class="DAMA\DoctrineTestBundle\PHPUnit\PHPUnitExtension"/>
-    </extensions>
 </phpunit>

@@ -8,12 +8,12 @@ use PHPUnit\Framework\TestCase;
 
 class TitleTest extends TestCase
 {
-    public function testAccessors()
+    public function testCastToString()
     {
         $expectedValue = 'title';
 
-        $title = Title::fromString($expectedValue);
-        $actualValue = $title->toString();
+        $title = new Title($expectedValue);
+        $actualValue = (string) $title;
 
         $this->assertSame($expectedValue, $actualValue);
     }
@@ -25,7 +25,7 @@ class TitleTest extends TestCase
     public function testInvalidValue(string $value)
     {
         $this->expectException(InvalidArgumentException::class);
-        Title::fromString($value);
+        new Title($value);
     }
 
     public function invalidValueProvider()

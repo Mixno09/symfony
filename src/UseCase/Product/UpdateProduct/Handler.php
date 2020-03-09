@@ -2,13 +2,16 @@
 
 declare(strict_types=1);
 
-namespace App\UseCase\Product\CreateProduct;
+namespace App\UseCase\Product\UpdateProduct;
 
 use App\Entity\Product;
+use App\Entity\ValueObject\Asset;
 use App\Entity\ValueObject\Product\Description;
 use App\Entity\ValueObject\Product\Title;
 use App\Service\AssetManager;
 use Doctrine\ORM\EntityManagerInterface;
+use LogicException;
+use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Throwable;
 
 final class Handler
@@ -34,26 +37,39 @@ final class Handler
     }
 
     /**
-     * @param \App\UseCase\Product\CreateProduct\Command $command
-     * @return int
+     * @param \App\UseCase\Product\UpdateProduct\Command $command
      * @throws \Throwable
      */
-    public function execute(Command $command): int
+    public function execute(Command $command): void
     {
-        $image = $this->assetManager->upload($command->image);
+        $product = $this->entityManager->find(Product::class, $command->id);
+        if (! $product instanceof Product) {
+            throw new LogicException("Продукта с ID={$command->id} не существует");
+        }
+
+        $image = null;
+        $oldImage = null;
+        if ($command->image instanceof UploadedFile) {
+            $image = $this->assetManager->upload($command->image);
+            $oldImage = $product->getImage();
+        }
 
         try {
-            $product = new Product(
+            $product->update(
                 new Title($command->title),
                 new Description($command->description),
                 $image
             );
-            $this->entityManager->persist($product);
             $this->entityManager->flush();
         } catch (Throwable $exception) {
-            $this->assetManager->delete($image);
+            if ($image instanceof Asset) {
+                $this->assetManager->delete($image);
+            }
             throw $exception;
         }
-        return $product->getId();
+
+        if ($oldImage instanceof Asset) {
+            $this->assetManager->delete($oldImage);
+        }
     }
 }

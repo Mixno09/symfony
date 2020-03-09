@@ -16,13 +16,13 @@ class DescriptionType extends TextType
         if (! $value instanceof Description) {
             throw new InvalidArgumentException('Value must be instance of ' . Description::class);
         }
-        $value = $value->toString();
+        $value = (string) $value;
         return parent::convertToDatabaseValue($value, $platform);
     }
 
     public function convertToPHPValue($value, AbstractPlatform $platform)
     {
         $value = parent::convertToPHPValue($value, $platform);
-        return Description::fromString($value);
+        return new Description($value);
     }
 }

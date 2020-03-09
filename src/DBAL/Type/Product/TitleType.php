@@ -16,13 +16,13 @@ class TitleType extends StringType
         if (! $value instanceof Title) {
             throw new InvalidArgumentException('Value must be instance of ' . Title::class);
         }
-        $value = $value->toString();
+        $value = (string) $value;
         return parent::convertToDatabaseValue($value, $platform);
     }
 
     public function convertToPHPValue($value, AbstractPlatform $platform)
     {
         $value = parent::convertToPHPValue($value, $platform);
-        return Title::fromString($value);
+        return new Title($value);
     }
 }

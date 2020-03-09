@@ -21,7 +21,7 @@ class Title
      * @param string $value
      * @throws \InvalidArgumentException
      */
-    private function __construct(string $value)
+    public function __construct(string $value)
     {
         $length = mb_strlen($value);
         if ($length < self::MIN_LENGTH || $length > self::MAX_LENGTH) {
@@ -35,19 +35,9 @@ class Title
     }
 
     /**
-     * @param string $title
-     * @return static
-     * @throws \InvalidArgumentException
-     */
-    public static function fromString(string $title): self
-    {
-        return new self($title);
-    }
-
-    /**
      * @return string
      */
-    public function toString(): string
+    public function __toString()
     {
         return $this->value;
     }

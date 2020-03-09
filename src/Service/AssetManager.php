@@ -34,8 +34,15 @@ final class AssetManager
      */
     public function upload(UploadedFile $uploadedFile): Asset
     {
-        $originalFilename = pathinfo($uploadedFile->getClientOriginalName(), PATHINFO_FILENAME);
-        $safeFilename = transliterator_transliterate('Any-Latin; Latin-ASCII; [^A-Za-z0-9_] remove; Lower()', $originalFilename);
+        $originalFilename = '';
+        $path = $uploadedFile->getClientOriginalName();
+        if (is_string($path)) {
+            $originalFilename = pathinfo($path, PATHINFO_FILENAME);
+        }
+        $safeFilename = transliterator_transliterate(
+            'Any-Latin; Latin-ASCII; [^A-Za-z0-9_] remove; Lower()',
+            $originalFilename
+        );
         $filename = $safeFilename . '-' . uniqid() . '.' . $uploadedFile->guessExtension();
         $uploadedFile->move($this->targetDirectory, $filename);
         return new Asset($filename, $this->packageName);

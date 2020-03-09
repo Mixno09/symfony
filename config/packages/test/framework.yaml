@@ -2,8 +2,3 @@ framework:
     test: true
     session:
         storage_id: session.storage.mock_file
-
-# Настройка для разрешения конфликтующих операций с базами данных пакета LiipTestFixturesBundle
-# с DAMADoctrineTestBundle
-liip_test_fixtures:
-    keep_database_and_schema: true # отключение автоматического изменения базы данных и схемы
