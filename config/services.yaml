@@ -39,3 +39,7 @@ services:
     App\UseCase\Product\UpdateProduct\Handler:
         bind:
             App\Service\AssetManager: '@asset_manager.product'
+
+    App\UseCase\Product\DeleteProduct\Handler:
+        bind:
+            App\Service\AssetManager: '@asset_manager.product'

@@ -4,13 +4,18 @@ declare(strict_types=1);
 
 namespace App\Entity\ValueObject;
 
+use Doctrine\ORM\Mapping as ORM;
+
+/** @ORM\Embeddable */
 final class Asset
 {
     /**
+     * @ORM\Column(type="string")
      * @var string
      */
     private $path;
     /**
+     * @ORM\Column(type="string", nullable=true)
      * @var string|null
      */
     private $packageName;

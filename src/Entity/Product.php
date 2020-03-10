@@ -23,17 +23,17 @@ final class Product
      */
     private $id = 0;
     /**
-     * @ORM\Column(type="product_title", length=255)
+     * @ORM\Embedded(class="App\Entity\ValueObject\Product\Title")
      * @var \App\Entity\ValueObject\Product\Title
      */
     private $title;
     /**
-     * @ORM\Column(type="product_description")
+     * @ORM\Embedded(class="App\Entity\ValueObject\Product\Description")
      * @var \App\Entity\ValueObject\Product\Description
      */
     private $description;
     /**
-     * @ORM\Column(type="asset")
+     * @ORM\Embedded(class="App\Entity\ValueObject\Asset")
      * @var \App\Entity\ValueObject\Asset
      */
     private $image;

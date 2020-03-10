@@ -6,6 +6,8 @@ namespace App\Controller\Admin;
 
 use App\UseCase\Product\CreateProduct\Command as CreateProductCommand;
 use App\UseCase\Product\CreateProduct\Handler as CreateProductHandler;
+use App\UseCase\Product\DeleteProduct\Command as DeleteProductCommand;
+use App\UseCase\Product\DeleteProduct\Handler as DeleteProductHandler;
 use App\UseCase\Product\UpdateProduct\Command as UpdateProductCommand;
 use App\UseCase\Product\UpdateProduct\Handler as UpdateProductHandler;
 use EasyCorp\Bundle\EasyAdminBundle\Controller\EasyAdminController;
@@ -24,14 +26,25 @@ class ProductController extends EasyAdminController
     private $updateProductHandler;
 
     /**
+     * @var \App\UseCase\Product\DeleteProduct\Handler
+     */
+    private $deleteProductHandler;
+
+    /**
      * ProductController constructor.
      * @param \App\UseCase\Product\CreateProduct\Handler $createProductHandler
      * @param \App\UseCase\Product\UpdateProduct\Handler $updateProductHandler
+     * @param \App\UseCase\Product\DeleteProduct\Handler $deleteProductHandler
      */
-    public function __construct(CreateProductHandler $createProductHandler, UpdateProductHandler $updateProductHandler)
+    public function __construct(
+        CreateProductHandler $createProductHandler,
+        UpdateProductHandler $updateProductHandler,
+        DeleteProductHandler $deleteProductHandler
+    )
     {
         $this->createProductHandler = $createProductHandler;
         $this->updateProductHandler = $updateProductHandler;
+        $this->deleteProductHandler = $deleteProductHandler;
     }
 
     protected function createNewEntity()
@@ -74,5 +87,13 @@ class ProductController extends EasyAdminController
             ));
         }
         $this->updateProductHandler->execute($command);
+    }
+
+    protected function removeEntity($entity)
+    {
+        /** @var \App\Entity\Product $entity */
+        $command = new DeleteProductCommand();
+        $command->id = $entity->getId();
+        $this->deleteProductHandler->execute($command);
     }
 }

@@ -10,19 +10,39 @@ use PHPUnit\Framework\TestCase;
 
 class ProductTest extends TestCase
 {
-    public function testAccessors()
+    public function testCreateProduct()
     {
-        $titleExpected = new Title('title');
-        $descriptionExpected = new Description('description');
-        $imageExpected = new Asset('image.jpg');
+        $title = new Title('title');
+        $description = new Description('description');
+        $image = new Asset('image.jpg');
 
-        $product = new Product($titleExpected, $descriptionExpected, $imageExpected);
-        $titleActual = $product->getTitle();
-        $descriptionActual = $product->getDescription();
-        $imageActual = $product->getImage();
+        $product = new Product($title, $description, $image);
 
-        $this->assertSame($titleExpected, $titleActual);
-        $this->assertSame($descriptionExpected, $descriptionActual);
-        $this->assertSame($imageExpected, $imageActual);
+        $this->assertSame($title, $product->getTitle());
+        $this->assertSame($description, $product->getDescription());
+        $this->assertSame($image, $product->getImage());
+    }
+
+    public function testUpdateProduct()
+    {
+        $image = new Asset('image.jpg');
+        $product = new Product(
+            new Title('title'),
+            new Description('description'),
+            $image
+        );
+        $title = new Title('title');
+        $description = new Description('description');
+
+        $product->update($title, $description);
+
+        $this->assertSame($title, $product->getTitle());
+        $this->assertSame($description, $product->getDescription());
+        $this->assertSame($image, $product->getImage());
+
+        $image = new Asset('image.jpg');
+        $product->update($title, $description, $image);
+
+        $this->assertSame($image, $product->getImage());
     }
 }

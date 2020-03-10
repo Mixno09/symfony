@@ -12,7 +12,7 @@ class AssetTest extends TestCase
      * @param $pathExpected
      * @param $packageNameExpected
      */
-    public function testAccessors($pathExpected, $packageNameExpected)
+    public function testCreateAsset($pathExpected, $packageNameExpected)
     {
         $image = new Asset($pathExpected, $packageNameExpected);
         $pathActual = $image->getPath();

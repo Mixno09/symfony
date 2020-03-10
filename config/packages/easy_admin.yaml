@@ -10,13 +10,13 @@ easy_admin:
                 title: 'Список продуктов'
                 fields:
                     - id
-                    - { property: 'title', label: 'Заголовок' }
+                    - { property: 'title', label: 'Заголовок', type: 'string' }
                     - { property: 'image.path', label: 'Картинка', type: 'image', base_path: '/upload/product/' }
                 actions:
                     - { name: 'new', label: 'Добавить продукт' }
             form:
                 fields:
-                    - { property: 'title', label: 'Заголовок' }
+                    - { property: 'title', label: 'Заголовок', type: 'text' }
                     - { property: 'description', label: 'Описание', type: 'textarea' }
                     - { property: 'image', label: 'Картинка', type: 'file' }
 #        - App\Entity\Category

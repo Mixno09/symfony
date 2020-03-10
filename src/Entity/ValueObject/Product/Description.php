@@ -4,12 +4,15 @@ declare(strict_types=1);
 
 namespace App\Entity\ValueObject\Product;
 
+use Doctrine\ORM\Mapping as ORM;
 use InvalidArgumentException;
 
+/** @ORM\Embeddable */
 class Description
 {
     public const MIN_LENGTH = 5;
     /**
+     * @ORM\Column(type="text")
      * @var string
      */
     private $value;
