@@ -6,8 +6,8 @@ namespace App\UseCase\Product\UpdateProduct;
 
 use App\Entity\Product;
 use App\Entity\ValueObject\Asset;
-use App\Entity\ValueObject\Product\Description;
-use App\Entity\ValueObject\Product\Title;
+use App\Entity\ValueObject\ProductDescription;
+use App\Entity\ValueObject\ProductTitle;
 use App\Service\AssetManager;
 use Doctrine\ORM\EntityManagerInterface;
 use LogicException;
@@ -56,8 +56,8 @@ final class Handler
 
         try {
             $product->update(
-                new Title($command->title),
-                new Description($command->description),
+                new ProductTitle($command->title),
+                new ProductDescription($command->description),
                 $image
             );
             $this->entityManager->flush();

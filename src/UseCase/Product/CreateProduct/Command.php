@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace App\UseCase\Product\CreateProduct;
 
 use Symfony\Component\Validator\Constraints as Assert;
-use App\Entity\ValueObject\Product\Title;
 
 final class Command
 {

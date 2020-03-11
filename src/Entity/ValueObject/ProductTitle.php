@@ -2,13 +2,13 @@
 
 declare(strict_types=1);
 
-namespace App\Entity\ValueObject\Product;
+namespace App\Entity\ValueObject;
 
 use Doctrine\ORM\Mapping as ORM;
 use InvalidArgumentException;
 
 /** @ORM\Embeddable */
-class Title
+class ProductTitle
 {
     public const MIN_LENGTH = 5;
     public const MAX_LENGTH = 255;

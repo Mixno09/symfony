@@ -1,0 +1,15 @@
+{% extends 'admin/layout.html.twig' %}
+
+{% block title %}Создание продукта{% endblock %}
+
+{% block h1 %}Создание продукта{% endblock %}
+
+{% block content %}
+{{ form_start(form) }}
+    {{ form_row(form.title) }}
+    {{ form_row(form.description) }}
+    {{ form_row(form.image) }}
+    <button type="submit" class="btn btn-success btn-lg">Создать</button>
+    <a href="" class="btn btn-light btn-lg">Отмена</a>
+{{ form_end(form) }}
+{% endblock %}

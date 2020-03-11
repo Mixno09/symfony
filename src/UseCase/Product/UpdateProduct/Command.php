@@ -6,7 +6,6 @@ namespace App\UseCase\Product\UpdateProduct;
 
 use App\Entity\Product;
 use Symfony\Component\Validator\Constraints as Assert;
-use App\Entity\ValueObject\Product\Title;
 
 final class Command
 {

@@ -4,16 +4,16 @@ namespace App\Tests\Entity;
 
 use App\Entity\Product;
 use App\Entity\ValueObject\Asset;
-use App\Entity\ValueObject\Product\Description;
-use App\Entity\ValueObject\Product\Title;
+use App\Entity\ValueObject\ProductDescription;
+use App\Entity\ValueObject\ProductTitle;
 use PHPUnit\Framework\TestCase;
 
 class ProductTest extends TestCase
 {
     public function testCreateProduct()
     {
-        $title = new Title('title');
-        $description = new Description('description');
+        $title = new ProductTitle('title');
+        $description = new ProductDescription('description');
         $image = new Asset('image.jpg');
 
         $product = new Product($title, $description, $image);
@@ -27,12 +27,12 @@ class ProductTest extends TestCase
     {
         $image = new Asset('image.jpg');
         $product = new Product(
-            new Title('title'),
-            new Description('description'),
+            new ProductTitle('title'),
+            new ProductDescription('description'),
             $image
         );
-        $title = new Title('title');
-        $description = new Description('description');
+        $title = new ProductTitle('title');
+        $description = new ProductDescription('description');
 
         $product->update($title, $description);
 

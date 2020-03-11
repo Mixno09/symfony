@@ -5,8 +5,8 @@ declare(strict_types=1);
 namespace App\Entity;
 
 use App\Entity\ValueObject\Asset;
-use App\Entity\ValueObject\Product\Description;
-use App\Entity\ValueObject\Product\Title;
+use App\Entity\ValueObject\ProductDescription;
+use App\Entity\ValueObject\ProductTitle;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
@@ -23,13 +23,13 @@ final class Product
      */
     private $id = 0;
     /**
-     * @ORM\Embedded(class="App\Entity\ValueObject\Product\Title")
-     * @var \App\Entity\ValueObject\Product\Title
+     * @ORM\Embedded(class="App\Entity\ValueObject\ProductTitle")
+     * @var \App\Entity\ValueObject\ProductTitle
      */
     private $title;
     /**
-     * @ORM\Embedded(class="App\Entity\ValueObject\Product\Description")
-     * @var \App\Entity\ValueObject\Product\Description
+     * @ORM\Embedded(class="App\Entity\ValueObject\ProductDescription")
+     * @var \App\Entity\ValueObject\ProductDescription
      */
     private $description;
     /**
@@ -40,18 +40,18 @@ final class Product
 
     /**
      * Product constructor.
-     * @param \App\Entity\ValueObject\Product\Title $title
-     * @param \App\Entity\ValueObject\Product\Description $description
+     * @param \App\Entity\ValueObject\ProductTitle $title
+     * @param \App\Entity\ValueObject\ProductDescription $description
      * @param \App\Entity\ValueObject\Asset $image
      */
-    public function __construct(Title $title, Description $description, Asset $image)
+    public function __construct(ProductTitle $title, ProductDescription $description, Asset $image)
     {
         $this->title = $title;
         $this->description = $description;
         $this->image = $image;
     }
 
-    public function update(Title $title, Description $description, Asset $image = null): void
+    public function update(ProductTitle $title, ProductDescription $description, Asset $image = null): void
     {
         $this->title = $title;
         $this->description = $description;
@@ -70,17 +70,17 @@ final class Product
     }
 
     /**
-     * @return \App\Entity\ValueObject\Product\Title
+     * @return \App\Entity\ValueObject\ProductTitle
      */
-    public function getTitle(): Title
+    public function getTitle(): ProductTitle
     {
         return $this->title;
     }
 
     /**
-     * @return \App\Entity\ValueObject\Product\Description
+     * @return \App\Entity\ValueObject\ProductDescription
      */
-    public function getDescription(): Description
+    public function getDescription(): ProductDescription
     {
         return $this->description;
     }

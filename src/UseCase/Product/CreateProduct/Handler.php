@@ -5,8 +5,8 @@ declare(strict_types=1);
 namespace App\UseCase\Product\CreateProduct;
 
 use App\Entity\Product;
-use App\Entity\ValueObject\Product\Description;
-use App\Entity\ValueObject\Product\Title;
+use App\Entity\ValueObject\ProductDescription;
+use App\Entity\ValueObject\ProductTitle;
 use App\Service\AssetManager;
 use Doctrine\ORM\EntityManagerInterface;
 use Throwable;
@@ -44,8 +44,8 @@ final class Handler
 
         try {
             $product = new Product(
-                new Title($command->title),
-                new Description($command->description),
+                new ProductTitle($command->title),
+                new ProductDescription($command->description),
                 $image
             );
             $this->entityManager->persist($product);
