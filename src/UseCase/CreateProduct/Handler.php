@@ -2,16 +2,13 @@
 
 declare(strict_types=1);
 
-namespace App\UseCase\Product\UpdateProduct;
+namespace App\UseCase\CreateProduct;
 
 use App\Entity\Product;
-use App\Entity\ValueObject\Asset;
 use App\Entity\ValueObject\ProductDescription;
 use App\Entity\ValueObject\ProductTitle;
 use App\Service\AssetManager;
 use Doctrine\ORM\EntityManagerInterface;
-use LogicException;
-use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Throwable;
 
 final class Handler
@@ -37,39 +34,26 @@ final class Handler
     }
 
     /**
-     * @param \App\UseCase\Product\UpdateProduct\Command $command
+     * @param \App\UseCase\CreateProduct\Command $command
+     * @return int
      * @throws \Throwable
      */
-    public function execute(Command $command): void
+    public function execute(Command $command): int
     {
-        $product = $this->entityManager->find(Product::class, $command->id);
-        if (! $product instanceof Product) {
-            throw new LogicException("Продукта с ID={$command->id} не существует");
-        }
-
-        $image = null;
-        $oldImage = null;
-        if ($command->image instanceof UploadedFile) {
-            $image = $this->assetManager->upload($command->image);
-            $oldImage = $product->getImage();
-        }
+        $image = $this->assetManager->upload($command->image);
 
         try {
-            $product->update(
+            $product = new Product(
                 new ProductTitle($command->title),
                 new ProductDescription($command->description),
                 $image
             );
+            $this->entityManager->persist($product);
             $this->entityManager->flush();
         } catch (Throwable $exception) {
-            if ($image instanceof Asset) {
-                $this->assetManager->delete($image);
-            }
+            $this->assetManager->delete($image);
             throw $exception;
         }
-
-        if ($oldImage instanceof Asset) {
-            $this->assetManager->delete($oldImage);
-        }
+        return $product->getId();
     }
 }

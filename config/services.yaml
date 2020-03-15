@@ -32,14 +32,14 @@ services:
         arguments:
             $targetDirectory: '%upload.product%'
 
-    App\UseCase\Product\CreateProduct\Handler:
+    App\UseCase\CreateProduct\Handler:
         bind:
             App\Service\AssetManager: '@asset_manager.product'
 
-    App\UseCase\Product\UpdateProduct\Handler:
+    App\UseCase\UpdateProduct\Handler:
         bind:
             App\Service\AssetManager: '@asset_manager.product'
 
-    App\UseCase\Product\DeleteProduct\Handler:
+    App\UseCase\DeleteProduct\Handler:
         bind:
             App\Service\AssetManager: '@asset_manager.product'

@@ -2,22 +2,24 @@
 
 declare(strict_types=1);
 
-namespace App\UseCase\Product\CreateProduct;
+namespace App\UseCase\CreateProduct;
 
 use Symfony\Component\Validator\Constraints as Assert;
+use App\Entity\ValueObject\ProductTitle;
+use App\Entity\ValueObject\ProductDescription;
 
 final class Command
 {
     /**
      * @var string
      * @Assert\NotBlank
-     * @Assert\Length(min = Title::MIN_LENGTH, max = Title::MAX_LENGTH)
+     * @Assert\Length(min = ProductTitle::MIN_LENGTH, max = ProductTitle::MAX_LENGTH)
      */
     public $title;
     /**
      * @var string
      * @Assert\NotBlank
-     * @Assert\Length(min = 5)
+     * @Assert\Length(min = ProductDescription::MIN_LENGTH)
      */
     public $description;
     /**

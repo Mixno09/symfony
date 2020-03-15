@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace App\UseCase\Product\DeleteProduct;
+namespace App\UseCase\DeleteProduct;
 
 use App\Entity\Product;
 use App\Service\AssetManager;
@@ -32,7 +32,7 @@ final class Handler
     }
 
     /**
-     * @param \App\UseCase\Product\DeleteProduct\Command $command
+     * @param \App\UseCase\DeleteProduct\Command $command
      * @throws \Throwable
      */
     public function execute(Command $command): void
