@@ -7,8 +7,7 @@ namespace App\Service;
 use App\Entity\ValueObject\Asset;
 use InvalidArgumentException;
 use Symfony\Component\Filesystem\Filesystem;
-use Symfony\Component\HttpFoundation\File\UploadedFile;
-use function transliterator_transliterate;
+use Symfony\Component\HttpFoundation\File\File;
 
 final class AssetManager
 {
@@ -20,32 +19,30 @@ final class AssetManager
      * @var string|null
      */
     private $packageName;
+    /**
+     * @var \Symfony\Component\Filesystem\Filesystem
+     */
+    private $filesystem;
 
     public function __construct(string $targetDirectory, string $packageName = null)
     {
         $this->targetDirectory = $targetDirectory;
         $this->packageName = $packageName;
+        $this->filesystem = new Filesystem();
     }
 
     /**
-     * @param \Symfony\Component\HttpFoundation\File\UploadedFile $uploadedFile
+     * @param \Symfony\Component\HttpFoundation\File\File $file
      * @return \App\Entity\ValueObject\Asset
-     * @throws \Symfony\Component\HttpFoundation\File\Exception\FileException
      */
-    public function upload(UploadedFile $uploadedFile): Asset
+    public function upload(File $file): Asset
     {
-        $originalFilename = '';
-        $path = $uploadedFile->getClientOriginalName();
-        if (is_string($path)) {
-            $originalFilename = pathinfo($path, PATHINFO_FILENAME);
-        }
-        $safeFilename = transliterator_transliterate(
-            'Any-Latin; Latin-ASCII; [^A-Za-z0-9_] remove; Lower()',
-            $originalFilename
-        );
-        $filename = $safeFilename . '-' . uniqid() . '.' . $uploadedFile->guessExtension();
-        $uploadedFile->move($this->targetDirectory, $filename);
-        return new Asset($filename, $this->packageName);
+        do {
+            $targetFile = $this->targetDirectory . '/' . uniqid('', true) . '.' . $file->guessExtension();
+        } while ($this->filesystem->exists($targetFile));
+
+        $this->filesystem->copy($file->getRealPath(), $targetFile);
+        return new Asset($targetFile, $this->packageName);
     }
 
     /**
@@ -61,6 +58,6 @@ final class AssetManager
                 $this->packageName ?? 'null'
             ));
         }
-        (new Filesystem())->remove($this->targetDirectory . '/' . $asset->getPath());
+        $this->filesystem->remove($this->targetDirectory . '/' . $asset->getPath());
     }
 }

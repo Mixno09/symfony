@@ -28,7 +28,7 @@ final class Command
      */
     public $description;
     /**
-     * @var \Symfony\Component\HttpFoundation\File\UploadedFile|null
+     * @var \Symfony\Component\HttpFoundation\File\File|null
      * @Assert\Image(
      *     minWidth = 400,
      *     maxWidth = 800,

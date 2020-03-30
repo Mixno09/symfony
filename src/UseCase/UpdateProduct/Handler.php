@@ -11,7 +11,7 @@ use App\Entity\ValueObject\ProductTitle;
 use App\Service\AssetManager;
 use Doctrine\ORM\EntityManagerInterface;
 use LogicException;
-use Symfony\Component\HttpFoundation\File\UploadedFile;
+use Symfony\Component\HttpFoundation\File\File;
 use Throwable;
 
 final class Handler
@@ -49,7 +49,7 @@ final class Handler
 
         $image = null;
         $oldImage = null;
-        if ($command->image instanceof UploadedFile) {
+        if ($command->image instanceof File) {
             $image = $this->assetManager->upload($command->image);
             $oldImage = $product->getImage();
         }
