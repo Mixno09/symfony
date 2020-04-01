@@ -31,6 +31,7 @@ services:
         class: App\Service\AssetManager
         arguments:
             $targetDirectory: '%upload.product%'
+            $packageName: 'product'
 
     App\UseCase\CreateProduct\Handler:
         bind:

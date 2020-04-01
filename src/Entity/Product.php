@@ -51,6 +51,11 @@ final class Product
         $this->image = $image;
     }
 
+    /**
+     * @param \App\Entity\ValueObject\ProductTitle $title
+     * @param \App\Entity\ValueObject\ProductDescription $description
+     * @param \App\Entity\ValueObject\Asset|null $image
+     */
     public function update(ProductTitle $title, ProductDescription $description, Asset $image = null): void
     {
         $this->title = $title;

@@ -38,11 +38,12 @@ final class AssetManager
     public function upload(File $file): Asset
     {
         do {
-            $targetFile = $this->targetDirectory . '/' . uniqid('', true) . '.' . $file->guessExtension();
+            $path = uniqid('', true) . '.' . $file->guessExtension();
+            $targetFile = $this->targetDirectory . '/' . $path;
         } while ($this->filesystem->exists($targetFile));
 
         $this->filesystem->copy($file->getRealPath(), $targetFile);
-        return new Asset($targetFile, $this->packageName);
+        return new Asset($path, $this->packageName);
     }
 
     /**

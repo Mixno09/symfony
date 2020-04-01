@@ -1,0 +1,26 @@
+{% extends 'admin/layout.html.twig' %}
+
+{% block title %}Редактирование продукта{% endblock %}
+
+{% block h1 %}Редактирование продукта{% endblock %}
+
+{% block content %}
+    <div class="row">
+        <div class="offset-md-3 col-md-6">
+            {{ form_start(form) }}
+            {{ form_row(form.title) }}
+            {{ form_row(form.description) }}
+            {{ form_row(form.image) }}
+            <div class="form-group">
+                <img src="{{ asset(product.image.path, product.image.packageName) }}"
+                     class="img-thumbnail"
+                     alt=""
+                     width="200px"
+                     height="200px">
+            </div>
+            <button type="submit" class="btn btn-success btn-lg">Сохранить</button>
+            <a href="" class="btn btn-light btn-lg">Отмена</a>
+            {{ form_end(form) }}
+        </div>
+    </div>
+{% endblock %}
