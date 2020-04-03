@@ -1,5 +1,7 @@
 {% extends 'admin/layout.html.twig' %}
 
+{% form_theme form 'bootstrap_4_layout.html.twig' %}
+
 {% block title %}Редактирование продукта{% endblock %}
 
 {% block h1 %}Редактирование продукта{% endblock %}
@@ -19,7 +21,7 @@
                      height="200px">
             </div>
             <button type="submit" class="btn btn-success btn-lg">Сохранить</button>
-            <a href="" class="btn btn-light btn-lg">Отмена</a>
+            <a href="{{ path('product_index') }}" class="btn btn-light btn-lg">Отмена</a>
             {{ form_end(form) }}
         </div>
     </div>
