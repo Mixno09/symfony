@@ -44,3 +44,7 @@ services:
     App\UseCase\DeleteProduct\Handler:
         bind:
             App\Service\AssetManager: '@asset_manager.product'
+
+    App\DataFixtures\ProductFixtures:
+        bind:
+            App\Service\AssetManager: '@asset_manager.product'

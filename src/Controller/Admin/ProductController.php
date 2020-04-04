@@ -21,14 +21,22 @@ final class ProductController extends AbstractController
 {
     /**
      * @Route("/admin/product", name="product_index", methods={"GET"})
+     * @param \Symfony\Component\HttpFoundation\Request $request
      * @param \Doctrine\ORM\EntityManagerInterface $entityManager
      * @param \Knp\Component\Pager\PaginatorInterface $paginator
      * @return \Symfony\Component\HttpFoundation\Response
      */
-    public function index(EntityManagerInterface $entityManager, PaginatorInterface $paginator): Response
-    {
+    public function index(
+        Request $request,
+        EntityManagerInterface $entityManager,
+        PaginatorInterface $paginator
+    ): Response {
         $query = $entityManager->createQuery('SELECT p FROM ' . Product::class . ' p');
-        $pagination = $paginator->paginate($query);
+        $pagination = $paginator->paginate(
+            $query,
+            $request->query->getInt('page', 1),
+            5
+        );
 
         return $this->render('admin/product/index.html.twig', [
             'pagination' => $pagination,
