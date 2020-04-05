@@ -6,12 +6,11 @@ namespace App\Controller\Admin;
 
 use App\Entity\Product;
 use App\Form\Admin\ProductType;
+use App\Repository\ProductRepository;
 use App\UseCase\CreateProduct\Command as CreateCommand;
 use App\UseCase\CreateProduct\Handler as CreateHandler;
 use App\UseCase\UpdateProduct\Command as UpdateCommand;
 use App\UseCase\UpdateProduct\Handler as UpdateHandler;
-use Doctrine\ORM\EntityManagerInterface;
-use Knp\Component\Pager\PaginatorInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -22,20 +21,13 @@ final class ProductController extends AbstractController
     /**
      * @Route("/admin/product", name="product_index", methods={"GET"})
      * @param \Symfony\Component\HttpFoundation\Request $request
-     * @param \Doctrine\ORM\EntityManagerInterface $entityManager
-     * @param \Knp\Component\Pager\PaginatorInterface $paginator
+     * @param \App\Repository\ProductRepository $repository
      * @return \Symfony\Component\HttpFoundation\Response
      */
-    public function index(
-        Request $request,
-        EntityManagerInterface $entityManager,
-        PaginatorInterface $paginator
-    ): Response {
-        $query = $entityManager->createQuery('SELECT p FROM ' . Product::class . ' p');
-        $pagination = $paginator->paginate(
-            $query,
-            $request->query->getInt('page', 1),
-            5
+    public function index(Request $request, ProductRepository $repository): Response
+    {
+        $pagination = $repository->pagination(
+            $request->query->getInt('page', 1)
         );
 
         return $this->render('admin/product/index.html.twig', [

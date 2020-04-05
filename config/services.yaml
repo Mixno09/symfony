@@ -48,3 +48,6 @@ services:
     App\DataFixtures\ProductFixtures:
         bind:
             App\Service\AssetManager: '@asset_manager.product'
+
+    App\Repository\ProductRepository:
+        tags: ['knp_paginator.injectable']
