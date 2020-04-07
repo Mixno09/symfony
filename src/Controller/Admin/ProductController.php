@@ -9,6 +9,8 @@ use App\Form\Admin\ProductType;
 use App\Repository\ProductRepository;
 use App\UseCase\CreateProduct\Command as CreateCommand;
 use App\UseCase\CreateProduct\Handler as CreateHandler;
+use App\UseCase\DeleteProduct\Command as DeleteCommand;
+use App\UseCase\DeleteProduct\Handler as DeleteHandler;
 use App\UseCase\UpdateProduct\Command as UpdateCommand;
 use App\UseCase\UpdateProduct\Handler as UpdateHandler;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -27,7 +29,8 @@ final class ProductController extends AbstractController
     public function index(Request $request, ProductRepository $repository): Response
     {
         $pagination = $repository->pagination(
-            $request->query->getInt('page', 1)
+            $request->query->getInt('page', 1),
+            6
         );
 
         return $this->render('admin/product/index.html.twig', [
@@ -83,6 +86,36 @@ final class ProductController extends AbstractController
         return $this->render('admin/product/update.html.twig', [
             'form' => $form->createView(),
             'product' => $product,
+        ]);
+    }
+
+    /**
+     * @Route("/admin/product/{id}/delete", name="product_delete", methods={"GET", "POST"}, requirements={"id"="\d+"})
+     * @param int $id
+     * @param \Symfony\Component\HttpFoundation\Request $request
+     * @param \App\UseCase\DeleteProduct\Handler $handler
+     * @return \Symfony\Component\HttpFoundation\Response
+     * @throws \Throwable
+     */
+    public function delete(int $id, Request $request, DeleteHandler $handler): Response
+    {
+        $entityManager = $this->getDoctrine()->getManager();
+        $product = $entityManager->find(Product::class, $id);
+        if (! $product instanceof Product) {
+            throw $this->createNotFoundException("Продукта с ID={$id} не существует");
+        }
+
+        $form = $this->createFormBuilder()->getForm();
+        $form->handleRequest($request);
+        if ($form->isSubmitted() && $form->isValid()) {
+            $command = new DeleteCommand($id);
+            $handler->execute($command);
+            return $this->redirectToRoute('product_index');
+        }
+
+        return $this->render('admin/product/delete.html.twig', [
+            'product' => $product,
+            'form' => $form->createView(),
         ]);
     }
 }
