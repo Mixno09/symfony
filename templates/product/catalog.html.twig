@@ -1,0 +1,35 @@
+{% extends 'layout.html.twig' %}
+
+{% block title %}Каталог{% endblock %}
+
+{% block body %}
+    <main role="main">
+        <div class="album py-5">
+            <div class="container">
+                <div class="row">
+                    {% for product in pagination %}
+                        {# @var product \App\Entity\Product #}
+                        <div class="col-md-4">
+                            <div class="card mb-4 shadow-sm">
+                                <a href="{{ path('product', {'id': product.id}) }}">
+                                    <img src="{{ asset(product.image.path, product.image.packageName) }}" alt=""
+                                         class="bd-placeholder-img card-img-top">
+                                </a>
+                                <div class="card-body">
+                                    <a href="{{ path('product', {'id': product.id}) }}">
+                                        <h5 class="card-title">{{ product.title|u.truncate(24, '...') }}</h5>
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                    {% endfor %}
+                </div>
+                <div class="row justify-content-md-center">
+                    <div class="col-md-auto">
+                        {{ knp_pagination_render(pagination) }}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+{% endblock %}

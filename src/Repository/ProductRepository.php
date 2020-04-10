@@ -35,6 +35,20 @@ final class ProductRepository extends ServiceEntityRepository implements Paginat
     }
 
     /**
+     * @param int $count
+     * @return \App\Entity\Product[]
+     */
+    public function newest(int $count = 9): array
+    {
+        $query = $this
+            ->createQueryBuilder('p')
+            ->orderBy('p.id', 'DESC')
+            ->setMaxResults($count)
+            ->getQuery();
+        return $query->getResult();
+    }
+
+    /**
      * @inheritDoc
      */
     public function setPaginator(Paginator $paginator): PaginatorAwareInterface

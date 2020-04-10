@@ -108,7 +108,8 @@ final class ProductController extends AbstractController
         $form = $this->createFormBuilder()->getForm();
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
-            $command = new DeleteCommand($id);
+            $command = new DeleteCommand();
+            $command->id = $id;
             $handler->execute($command);
             return $this->redirectToRoute('product_index');
         }
