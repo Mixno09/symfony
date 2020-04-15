@@ -9,9 +9,10 @@ use App\Entity\ValueObject\ProductDescription;
 use App\Entity\ValueObject\ProductTitle;
 use App\Service\AssetManager;
 use Doctrine\ORM\EntityManagerInterface;
+use Symfony\Component\Messenger\Handler\MessageHandlerInterface;
 use Throwable;
 
-final class Handler
+final class Handler implements MessageHandlerInterface
 {
     /**
      * @var \Doctrine\ORM\EntityManagerInterface
@@ -38,7 +39,7 @@ final class Handler
      * @return int
      * @throws \Throwable
      */
-    public function execute(Command $command): int
+    public function __invoke(Command $command): int
     {
         $image = $this->assetManager->upload($command->image);
 

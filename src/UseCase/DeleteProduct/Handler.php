@@ -8,8 +8,9 @@ use App\Entity\Product;
 use App\Service\AssetManager;
 use Doctrine\ORM\EntityManagerInterface;
 use RuntimeException;
+use Symfony\Component\Messenger\Handler\MessageHandlerInterface;
 
-final class Handler
+final class Handler implements MessageHandlerInterface
 {
     /**
      * @var \Doctrine\ORM\EntityManagerInterface
@@ -35,7 +36,7 @@ final class Handler
      * @param \App\UseCase\DeleteProduct\Command $command
      * @throws \Throwable
      */
-    public function execute(Command $command): void
+    public function __invoke(Command $command): void
     {
         $product = $this->entityManager->find(Product::class, $command->id);
         if (! $product instanceof Product) {

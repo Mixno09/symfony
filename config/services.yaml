@@ -51,3 +51,7 @@ services:
 
     App\Repository\ProductRepository:
         tags: ['knp_paginator.injectable']
+
+    App\Controller\TestController:
+        bind:
+            Symfony\Component\Messenger\MessageBusInterface: '@messenger.bus.test'
