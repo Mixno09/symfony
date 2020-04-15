@@ -12,9 +12,10 @@ use App\Service\AssetManager;
 use Doctrine\ORM\EntityManagerInterface;
 use LogicException;
 use Symfony\Component\HttpFoundation\File\File;
+use Symfony\Component\Messenger\Handler\MessageHandlerInterface;
 use Throwable;
 
-final class Handler
+final class Handler implements MessageHandlerInterface
 {
     /**
      * @var \Doctrine\ORM\EntityManagerInterface
@@ -40,7 +41,7 @@ final class Handler
      * @param \App\UseCase\UpdateProduct\Command $command
      * @throws \Throwable
      */
-    public function execute(Command $command): void
+    public function __invoke(Command $command): void
     {
         $product = $this->entityManager->find(Product::class, $command->id);
         if (! $product instanceof Product) {
