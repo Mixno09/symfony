@@ -15,8 +15,8 @@
             <table class="table table-bordered table-hover">
                 <thead>
                 <tr class="d-flex">
-                    <th scope="col" class="col-md-1">ID</th>
-                    <th scope="col" class="col-md-6">Название</th>
+                    <th scope="col" class="col-md-2">ID</th>
+                    <th scope="col" class="col-md-5">Название</th>
                     <th scope="col" class="col-md-1">Картинка</th>
                     <th scope="col" class="col-md-4">Действия</th>
                 </tr>
@@ -25,8 +25,8 @@
                 {% for product in pagination %}
                     {# @var \App\Entity\Product product #}
                     <tr class="d-flex">
-                        <th scope="row" class="col-md-1">{{ product.id }}</th>
-                        <td class="col-md-6">{{ product.title|u.truncate(64, '...') }}</td>
+                        <th scope="row" class="col-md-2">{{ product.id }}</th>
+                        <td class="col-md-5">{{ product.title|u.truncate(64, '...') }}</td>
                         <td class="col-md-1">
                             <img src="{{ asset(product.image.path, product.image.packageName) }}"
                                  alt="Нет изображения"

@@ -8,6 +8,7 @@ use App\Entity\ValueObject\Asset;
 use App\Entity\ValueObject\ProductDescription;
 use App\Entity\ValueObject\ProductTitle;
 use Doctrine\ORM\Mapping as ORM;
+use Ramsey\Uuid\UuidInterface;
 
 /**
  * @ORM\Entity
@@ -17,11 +18,11 @@ final class Product
 {
     /**
      * @ORM\Id
-     * @ORM\GeneratedValue(strategy="AUTO")
-     * @ORM\Column(type="integer")
-     * @var int
+     * @ORM\GeneratedValue(strategy="NONE")
+     * @ORM\Column(type="uuid")
+     * @var \Ramsey\Uuid\UuidInterface
      */
-    private $id = 0;
+    private $id;
     /**
      * @ORM\Embedded(class="App\Entity\ValueObject\ProductTitle")
      * @var \App\Entity\ValueObject\ProductTitle
@@ -40,12 +41,14 @@ final class Product
 
     /**
      * Product constructor.
+     * @param UuidInterface $id
      * @param \App\Entity\ValueObject\ProductTitle $title
      * @param \App\Entity\ValueObject\ProductDescription $description
      * @param \App\Entity\ValueObject\Asset $image
      */
-    public function __construct(ProductTitle $title, ProductDescription $description, Asset $image)
+    public function __construct(UuidInterface $id, ProductTitle $title, ProductDescription $description, Asset $image)
     {
+        $this->id = $id;
         $this->title = $title;
         $this->description = $description;
         $this->image = $image;
@@ -67,9 +70,9 @@ final class Product
     }
 
     /**
-     * @return int
+     * @return UuidInterface
      */
-    public function getId(): int
+    public function getId(): UuidInterface
     {
         return $this->id;
     }

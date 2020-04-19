@@ -7,6 +7,7 @@ namespace App\UseCase\DeleteProduct;
 use App\Entity\Product;
 use App\Service\AssetManager;
 use Doctrine\ORM\EntityManagerInterface;
+use Ramsey\Uuid\Uuid;
 use RuntimeException;
 use Symfony\Component\Messenger\Handler\MessageHandlerInterface;
 
@@ -38,9 +39,10 @@ final class Handler implements MessageHandlerInterface
      */
     public function __invoke(Command $command): void
     {
-        $product = $this->entityManager->find(Product::class, $command->id);
+        $id = Uuid::fromString($command->id);
+        $product = $this->entityManager->find(Product::class, $id);
         if (! $product instanceof Product) {
-            throw new RuntimeException("Продукт с ID={$command->id} не существует");
+            throw new RuntimeException("Продукт с ID={$id} не существует");
         }
         $this->entityManager->remove($product);
         $this->entityManager->flush();

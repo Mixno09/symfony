@@ -51,3 +51,7 @@ services:
 
     App\Repository\ProductRepository:
         tags: ['knp_paginator.injectable']
+
+    App\ArgumentResolver\UuidValueResolver:
+        tags:
+            - { name: controller.argument_value_resolver, priority: 150 }

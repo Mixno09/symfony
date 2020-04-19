@@ -9,6 +9,7 @@ use App\Entity\ValueObject\ProductDescription;
 use App\Entity\ValueObject\ProductTitle;
 use App\Service\AssetManager;
 use Doctrine\ORM\EntityManagerInterface;
+use Ramsey\Uuid\Uuid;
 use Symfony\Component\Messenger\Handler\MessageHandlerInterface;
 use Throwable;
 
@@ -36,15 +37,16 @@ final class Handler implements MessageHandlerInterface
 
     /**
      * @param \App\UseCase\CreateProduct\Command $command
-     * @return int
+     * @return void
      * @throws \Throwable
      */
-    public function __invoke(Command $command): int
+    public function __invoke(Command $command): void
     {
         $image = $this->assetManager->upload($command->image);
 
         try {
             $product = new Product(
+                Uuid::fromString($command->id),
                 new ProductTitle($command->title),
                 new ProductDescription($command->description),
                 $image
@@ -55,6 +57,5 @@ final class Handler implements MessageHandlerInterface
             $this->assetManager->delete($image);
             throw $exception;
         }
-        return $product->getId();
     }
 }

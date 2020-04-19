@@ -9,6 +9,7 @@ use App\Service\AssetManager;
 use Doctrine\Bundle\FixturesBundle\Fixture;
 use Doctrine\Persistence\ObjectManager;
 use Faker\Factory;
+use Ramsey\Uuid\Uuid;
 use Symfony\Component\HttpFoundation\File\File;
 
 class ProductFixtures extends Fixture
@@ -44,6 +45,7 @@ class ProductFixtures extends Fixture
 
     private function createProduct(): Product
     {
+        $id = Uuid::uuid4();
         $title = new ProductTitle(
             $this->faker->realText(
                 $this->faker->numberBetween(ProductTitle::MIN_LENGTH + 10, ProductTitle::MAX_LENGTH)
@@ -58,6 +60,6 @@ class ProductFixtures extends Fixture
             new File(__DIR__ . '/images/product.jpeg')
         );
 
-        return new Product($title, $description, $image);
+        return new Product($id, $title, $description, $image);
     }
 }

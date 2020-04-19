@@ -4,12 +4,16 @@ declare(strict_types=1);
 
 namespace App\UseCase\CreateProduct;
 
-use Symfony\Component\Validator\Constraints as Assert;
-use App\Entity\ValueObject\ProductTitle;
 use App\Entity\ValueObject\ProductDescription;
+use App\Entity\ValueObject\ProductTitle;
+use Symfony\Component\Validator\Constraints as Assert;
 
 final class Command
 {
+    /**
+     * @var string
+     */
+    public $id;
     /**
      * @var string
      * @Assert\NotBlank

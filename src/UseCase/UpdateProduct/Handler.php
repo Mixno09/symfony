@@ -11,6 +11,7 @@ use App\Entity\ValueObject\ProductTitle;
 use App\Service\AssetManager;
 use Doctrine\ORM\EntityManagerInterface;
 use LogicException;
+use Ramsey\Uuid\Uuid;
 use Symfony\Component\HttpFoundation\File\File;
 use Symfony\Component\Messenger\Handler\MessageHandlerInterface;
 use Throwable;
@@ -43,9 +44,10 @@ final class Handler implements MessageHandlerInterface
      */
     public function __invoke(Command $command): void
     {
-        $product = $this->entityManager->find(Product::class, $command->id);
+        $id = Uuid::fromString($command->id);
+        $product = $this->entityManager->find(Product::class, $id);
         if (! $product instanceof Product) {
-            throw new LogicException("Продукта с ID={$command->id} не существует");
+            throw new LogicException("Продукта с ID={$id} не существует");
         }
 
         $image = null;

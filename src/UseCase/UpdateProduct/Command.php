@@ -12,7 +12,7 @@ use App\Entity\ValueObject\ProductDescription;
 final class Command
 {
     /**
-     * @var int
+     * @var string
      */
     public $id;
     /**
@@ -46,7 +46,7 @@ final class Command
      */
     public function populate(Product $product): void
     {
-        $this->id = $product->getId();
+        $this->id = $product->getId()->toString();
         $this->title = (string) $product->getTitle();
         $this->description = (string) $product->getDescription();
     }

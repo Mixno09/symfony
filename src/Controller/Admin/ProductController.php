@@ -10,11 +10,12 @@ use App\Repository\ProductRepository;
 use App\UseCase\CreateProduct\Command as CreateCommand;
 use App\UseCase\DeleteProduct\Command as DeleteCommand;
 use App\UseCase\UpdateProduct\Command as UpdateCommand;
+use Ramsey\Uuid\Uuid;
+use Ramsey\Uuid\UuidInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Messenger\MessageBusInterface;
-use Symfony\Component\Messenger\Stamp\HandledStamp;
 use Symfony\Component\Routing\Annotation\Route;
 
 final class ProductController extends AbstractController
@@ -62,10 +63,9 @@ final class ProductController extends AbstractController
         $form = $this->createForm(ProductType::class, $command);
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
-            $envelope = $this->messageBus->dispatch($command);
-            /** @var \Symfony\Component\Messenger\Stamp\HandledStamp $handledStamp */
-            $handledStamp = $envelope->last(HandledStamp::class);
-            $id = $handledStamp->getResult();
+            $id = Uuid::uuid4();
+            $command->id = $id->toString();
+            $this->messageBus->dispatch($command);
             return $this->redirectToRoute('product_update', ['id' => $id]);
         }
         return $this->render('admin/product/create.html.twig', [
@@ -74,12 +74,12 @@ final class ProductController extends AbstractController
     }
 
     /**
-     * @Route("/admin/product/{id}/update", name="product_update", methods={"GET", "POST"}, requirements={"id"="\d+"})
-     * @param int $id
+     * @Route("/admin/product/{id}/update", name="product_update", methods={"GET", "POST"})
+     * @param \Ramsey\Uuid\UuidInterface $id
      * @param \Symfony\Component\HttpFoundation\Request $request
      * @return \Symfony\Component\HttpFoundation\Response
      */
-    public function update(int $id, Request $request): Response
+    public function update(UuidInterface $id, Request $request): Response
     {
         $entityManager = $this->getDoctrine()->getManager();
         $product = $entityManager->find(Product::class, $id);
@@ -102,12 +102,12 @@ final class ProductController extends AbstractController
     }
 
     /**
-     * @Route("/admin/product/{id}/delete", name="product_delete", methods={"GET", "POST"}, requirements={"id"="\d+"})
-     * @param int $id
+     * @Route("/admin/product/{id}/delete", name="product_delete", methods={"GET", "POST"})
+     * @param \Ramsey\Uuid\UuidInterface $id
      * @param \Symfony\Component\HttpFoundation\Request $request
      * @return \Symfony\Component\HttpFoundation\Response
      */
-    public function delete(int $id, Request $request): Response
+    public function delete(UuidInterface $id, Request $request): Response
     {
         $entityManager = $this->getDoctrine()->getManager();
         $product = $entityManager->find(Product::class, $id);
@@ -119,7 +119,7 @@ final class ProductController extends AbstractController
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
             $command = new DeleteCommand();
-            $command->id = $id;
+            $command->id = $product->getId()->toString();
             $this->messageBus->dispatch($command);
             return $this->redirectToRoute('product_index');
         }

@@ -7,7 +7,7 @@ namespace App\UseCase\DeleteProduct;
 final class Command
 {
     /**
-     * @var int
+     * @var string
      */
     public $id;
 }

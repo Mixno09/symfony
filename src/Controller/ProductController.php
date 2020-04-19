@@ -24,11 +24,11 @@ class ProductController extends AbstractController
     }
 
     /**
-     * @Route("/product/{id}", name="product", methods={"GET"}, requirements={"id"="\d+"})
-     * @param int $id
+     * @Route("/product/{id}", name="product", methods={"GET"})
+     * @param string $id
      * @return \Symfony\Component\HttpFoundation\Response
      */
-    public function __invoke(int $id)
+    public function __invoke(string $id)
     {
         $product = $this->entityManager->find(Product::class, $id);
         if (! $product instanceof Product) {
