@@ -8,14 +8,13 @@ use PHPUnit\Framework\TestCase;
 
 final class ProductDescriptionTest extends TestCase
 {
-    public function testCastToString()
+    public function testCreateDescription()
     {
-        $expectedValue = 'Description';
-        $description = new ProductDescription($expectedValue);
+        $value = 'Description';
 
-        $actualValue = (string) $description;
+        $description = new ProductDescription($value);
 
-        $this->assertSame($expectedValue, $actualValue);
+        $this->assertSame($value, (string) $description);
     }
 
     /**

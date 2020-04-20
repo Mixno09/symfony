@@ -11,12 +11,12 @@
                         {# @var product \App\Entity\Product #}
                         <div class="col-md-4">
                             <div class="card mb-4 shadow-sm">
-                                <a href="{{ path('product', {'id': product.id}) }}">
+                                <a href="{{ path('product', {'slug': product.slug}) }}">
                                     <img src="{{ asset(product.image.path, product.image.packageName) }}" alt=""
                                          class="bd-placeholder-img card-img-top">
                                 </a>
                                 <div class="card-body">
-                                    <a href="{{ path('product', {'id': product.id}) }}">
+                                    <a href="{{ path('product', {'slug': product.slug}) }}">
                                         <h5 class="card-title">{{ product.title|u.truncate(24, '...') }}</h5>
                                     </a>
                                 </div>

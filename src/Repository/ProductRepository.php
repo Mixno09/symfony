@@ -49,6 +49,16 @@ final class ProductRepository extends ServiceEntityRepository implements Paginat
     }
 
     /**
+     * @param string $slug
+     * @return \App\Entity\Product|null
+     */
+    public function findBySlug(string $slug): ?Product
+    {
+        /** @noinspection PhpIncompatibleReturnTypeInspection */
+        return $this->findOneBy(['slug.value' => $slug]);
+    }
+
+    /**
      * @inheritDoc
      */
     public function setPaginator(Paginator $paginator): PaginatorAwareInterface

@@ -8,14 +8,13 @@ use PHPUnit\Framework\TestCase;
 
 class ProductTitleTest extends TestCase
 {
-    public function testCastToString()
+    public function testCreateTitle()
     {
-        $expectedValue = 'title';
+        $value = 'title';
 
-        $title = new ProductTitle($expectedValue);
-        $actualValue = (string) $title;
+        $title = new ProductTitle($value);
 
-        $this->assertSame($expectedValue, $actualValue);
+        $this->assertSame($value, (string) $title);
     }
 
     /**

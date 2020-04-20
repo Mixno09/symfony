@@ -4,6 +4,7 @@ namespace App\DataFixtures;
 
 use App\Entity\Product;
 use App\Entity\ValueObject\ProductDescription;
+use App\Entity\ValueObject\ProductSlug;
 use App\Entity\ValueObject\ProductTitle;
 use App\Service\AssetManager;
 use Doctrine\Bundle\FixturesBundle\Fixture;
@@ -47,19 +48,18 @@ class ProductFixtures extends Fixture
     {
         $id = Uuid::uuid4();
         $title = new ProductTitle(
-            $this->faker->realText(
-                $this->faker->numberBetween(ProductTitle::MIN_LENGTH + 10, ProductTitle::MAX_LENGTH)
-            )
+            $this->faker->realText(ProductTitle::MAX_LENGTH)
+        );
+        $slug = new ProductSlug(
+            $this->faker->unique()->slug(1)
         );
         $description = new ProductDescription(
-            $this->faker->realText(
-                $this->faker->numberBetween(ProductDescription::MIN_LENGTH + 10, ProductDescription::MIN_LENGTH + 500)
-            )
+            $this->faker->realText(ProductDescription::MIN_LENGTH + 200)
         );
         $image = $this->assetManager->upload(
             new File(__DIR__ . '/images/product.jpeg')
         );
 
-        return new Product($id, $title, $description, $image);
+        return new Product($id, $title, $slug, $description, $image);
     }
 }

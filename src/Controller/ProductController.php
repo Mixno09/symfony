@@ -3,6 +3,7 @@
 namespace App\Controller;
 
 use App\Entity\Product;
+use App\Repository\ProductRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Routing\Annotation\Route;
@@ -10,27 +11,27 @@ use Symfony\Component\Routing\Annotation\Route;
 class ProductController extends AbstractController
 {
     /**
-     * @var \Doctrine\ORM\EntityManagerInterface
+     * @var \App\Repository\ProductRepository
      */
-    private $entityManager;
+    private $productRepository;
 
     /**
      * ProductController constructor.
-     * @param \Doctrine\ORM\EntityManagerInterface $entityManager
+     * @param \App\Repository\ProductRepository $productRepository
      */
-    public function __construct(EntityManagerInterface $entityManager)
+    public function __construct(ProductRepository $productRepository)
     {
-        $this->entityManager = $entityManager;
+        $this->productRepository = $productRepository;
     }
 
     /**
-     * @Route("/product/{id}", name="product", methods={"GET"})
-     * @param string $id
+     * @Route("/product/{slug}", name="product", methods={"GET"})
+     * @param string $slug
      * @return \Symfony\Component\HttpFoundation\Response
      */
-    public function __invoke(string $id)
+    public function __invoke(string $slug)
     {
-        $product = $this->entityManager->find(Product::class, $id);
+        $product = $this->productRepository->findBySlug($slug);
         if (! $product instanceof Product) {
             throw $this->createNotFoundException();
         }
