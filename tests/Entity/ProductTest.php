@@ -5,6 +5,7 @@ namespace App\Tests\Entity;
 use App\Entity\Product;
 use App\Entity\ValueObject\Asset;
 use App\Entity\ValueObject\ProductDescription;
+use App\Entity\ValueObject\ProductSlug;
 use App\Entity\ValueObject\ProductTitle;
 use PHPUnit\Framework\TestCase;
 use Ramsey\Uuid\Uuid;
@@ -15,13 +16,15 @@ class ProductTest extends TestCase
     {
         $id = Uuid::uuid4();
         $title = new ProductTitle('title');
+        $slug = new ProductSlug('slug');
         $description = new ProductDescription('description');
         $image = new Asset('image.jpg');
 
-        $product = new Product($id, $title, $description, $image);
+        $product = new Product($id, $title, $slug, $description, $image);
 
         $this->assertSame($id, $product->getId());
         $this->assertSame($title, $product->getTitle());
+        $this->assertSame($slug, $product->getSlug());
         $this->assertSame($description, $product->getDescription());
         $this->assertSame($image, $product->getImage());
     }
@@ -32,6 +35,7 @@ class ProductTest extends TestCase
         $product = new Product(
             Uuid::uuid4(),
             new ProductTitle('title'),
+            new ProductSlug('slug'),
             new ProductDescription('description'),
             $image
         );

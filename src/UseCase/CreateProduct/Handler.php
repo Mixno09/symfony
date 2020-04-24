@@ -6,6 +6,7 @@ namespace App\UseCase\CreateProduct;
 
 use App\Entity\Product;
 use App\Entity\ValueObject\ProductDescription;
+use App\Entity\ValueObject\ProductSlug;
 use App\Entity\ValueObject\ProductTitle;
 use App\Service\AssetManager;
 use Doctrine\ORM\EntityManagerInterface;
@@ -48,6 +49,7 @@ final class Handler implements MessageHandlerInterface
             $product = new Product(
                 Uuid::fromString($command->id),
                 new ProductTitle($command->title),
+                new ProductSlug($command->slug),
                 new ProductDescription($command->description),
                 $image
             );

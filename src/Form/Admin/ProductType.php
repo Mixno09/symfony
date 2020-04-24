@@ -15,6 +15,7 @@ class ProductType extends AbstractType
     {
         $builder
             ->add('title', TextType::class, ['required' => false])
+            ->add('slug', TextType::class, ['required' => false])
             ->add('description', TextareaType::class, ['required' => false])
             ->add('image', FileType::class, ['required' => false])
         ;

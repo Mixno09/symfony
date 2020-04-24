@@ -22,6 +22,10 @@ final class Command
     public $title;
     /**
      * @var string
+     */
+    public $slug;
+    /**
+     * @var string
      * @Assert\NotBlank
      * @Assert\Length(min = ProductDescription::MIN_LENGTH)
      */

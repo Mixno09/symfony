@@ -7,6 +7,7 @@ namespace App\Controller\Admin;
 use App\Entity\Product;
 use App\Form\Admin\ProductType;
 use App\Repository\ProductRepository;
+use App\Service\SlugGenerator;
 use App\UseCase\CreateProduct\Command as CreateCommand;
 use App\UseCase\DeleteProduct\Command as DeleteCommand;
 use App\UseCase\UpdateProduct\Command as UpdateCommand;
@@ -55,10 +56,19 @@ final class ProductController extends AbstractController
     /**
      * @Route("/admin/product/create", name="product_create", methods={"GET", "POST"})
      * @param \Symfony\Component\HttpFoundation\Request $request
+     * @param \App\Service\SlugGenerator $slugGenerator
      * @return \Symfony\Component\HttpFoundation\Response
      */
-    public function create(Request $request): Response
+    public function create(Request $request, SlugGenerator $slugGenerator): Response
     {
+        $data = $request->request->get('product');
+        if (is_array($data) && array_key_exists('slug', $data) && $data['slug'] === '') {
+            if (array_key_exists('title', $data) && is_string($data['title'])) {
+                $data['slug'] = $slugGenerator->generate($data['title']);
+                $request->request->set('product', $data);
+            }
+        }
+
         $command = new CreateCommand();
         $form = $this->createForm(ProductType::class, $command);
         $form->handleRequest($request);

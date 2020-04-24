@@ -23,6 +23,10 @@ final class Command
     public $title;
     /**
      * @var string
+     */
+    public $slug;
+    /**
+     * @var string
      * @Assert\NotBlank
      * @Assert\Length(min = ProductDescription::MIN_LENGTH)
      */
@@ -48,6 +52,7 @@ final class Command
     {
         $this->id = $product->getId()->toString();
         $this->title = (string) $product->getTitle();
+        $this->slug = (string) $product->getSlug();
         $this->description = (string) $product->getDescription();
     }
 }
