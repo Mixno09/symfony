@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace App\Entity\ValueObject;
 
 use Doctrine\ORM\Mapping as ORM;
+use InvalidArgumentException;
 
 /** @ORM\Embeddable */
 final class ProductSlug
@@ -21,6 +22,9 @@ final class ProductSlug
      */
     public function __construct(string $value)
     {
+        if (preg_match('/^(?!-)([a-z0-9]|(?<!-)-)+(?<!-)$/', $value) !== 1) {
+            throw new InvalidArgumentException('Slug указан неверно');
+        }
         $this->value = $value;
     }
 
