@@ -22,10 +22,15 @@ final class ProductSlug
      */
     public function __construct(string $value)
     {
-        if (preg_match('/^(?!-)([a-z0-9]|(?<!-)-)+(?<!-)$/', $value) !== 1) {
+        if (! self::test($value)) {
             throw new InvalidArgumentException('Slug указан неверно');
         }
         $this->value = $value;
+    }
+
+    public static function test(string $value): bool
+    {
+        return (preg_match('/^(?!-)([a-z0-9]|(?<!-)-)+(?<!-)$/', $value) === 1);
     }
 
     public function __toString()

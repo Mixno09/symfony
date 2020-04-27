@@ -6,6 +6,7 @@ namespace App\UseCase\CreateProduct;
 
 use App\Entity\ValueObject\ProductDescription;
 use App\Entity\ValueObject\ProductTitle;
+use App\Validator\Constraints\ProductSlug;
 use Symfony\Component\Validator\Constraints as Assert;
 
 final class Command
@@ -22,6 +23,8 @@ final class Command
     public $title;
     /**
      * @var string
+     * @Assert\NotBlank
+     * @ProductSlug
      */
     public $slug;
     /**
