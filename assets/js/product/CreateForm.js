@@ -1,4 +1,4 @@
-import React, {useState, useCallback} from "react";
+import React, {useState, useCallback, useEffect} from "react";
 import FormTextInput from "../common/FormTextInput";
 import FormTextAria from "../common/FormTextAria";
 import FormImageElement from "../common/FormImageElement";
@@ -13,8 +13,37 @@ export default function CreateProductForm() {
         image: null,
     });
     const [image, setImage] = useState('');
-    const [isProcessed, setIsProcessed] = useState(false);
     const [errors, setErrors] = useState({});
+    const [isProcessed, setIsProcessed] = useState(false);
+    const [isRedirect, setIsRedirect] = useState(false);
+
+    useEffect(() => {
+        if (! isProcessed) {
+            return;
+        }
+
+        (async () => {
+            try {
+                const result = await createProduct(data);
+
+                if (result.type === 'success') {
+                    location.href = ('/admin/product/' + encodeURIComponent(result.id) + '/update');
+                    setErrors({});
+                    setIsRedirect(true);
+                } else if (result.type === 'validation_error') {
+                    setErrors(result.errors);
+                } else {
+                    console.log(result);
+                    alert('Неизвестный формат ответа от сервера. Дополнительная информация в консоли');
+                }
+            } catch (e) {
+                console.log(e);
+                alert('Произошла ошибка. Дополнительная информация в консоли');
+            } finally {
+                setIsProcessed(false);
+            }
+        })();
+    }, [isProcessed]);
 
     const onChangeTitle = useCallback((title) => {
         const slug = generateSlug(title);
@@ -37,30 +66,9 @@ export default function CreateProductForm() {
         setImage(image);
     }, []);
     const onSubmit = useCallback((event) => {
-        setIsProcessed(true);
         event.preventDefault();
-
-        (async () => {
-            try {
-                const result = await createProduct(data);
-
-                if (result.type === 'success') {
-                    location.href = ('/admin/product/' + encodeURIComponent(result.id) + '/update');
-                    setErrors({});
-                } else if (result.type === 'validation_error') {
-                    setErrors(result.errors);
-                } else {
-                    console.log(result);
-                    alert('Неизвестный формат ответа от сервера. Дополнительная информация в консоли');
-                }
-            } catch (e) {
-                console.log(e);
-                alert('Произошла ошибка. Дополнительная информация в консоли');
-            } finally {
-                setIsProcessed(false);
-            }
-        })();
-    }, [data]);
+        setIsProcessed(true);
+    }, []);
 
     return (
         <form onSubmit={onSubmit}>
@@ -96,12 +104,12 @@ export default function CreateProductForm() {
                 onChange={onChangeImage}
             />
             <div className="d-flex align-items-center">
-                <button type="submit" className="btn btn-success btn-lg mr-1" disabled={isProcessed}>Создать</button>
+                <button type="submit" className="btn btn-success btn-lg mr-1" disabled={isProcessed || isRedirect}>Создать</button>
                 <a href={'/admin/product'} className="btn btn-light btn-lg mr-3">Отмена</a>
-                {isProcessed &&
+                { (isProcessed || isRedirect) &&
                     <>
                         <div className="spinner-grow spinner-grow-sm text-info mr-1" />
-                        <span className="text-info">Обработка...</span>
+                        <span className="text-info">{ isProcessed ? 'Обработка...' : 'Переход...' }</span>
                     </>
                 }
             </div>
