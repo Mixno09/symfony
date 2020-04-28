@@ -13,6 +13,8 @@ final class Command
 {
     /**
      * @var string
+     * @Assert\NotBlank
+     * @Assert\Uuid
      */
     public $id;
     /**

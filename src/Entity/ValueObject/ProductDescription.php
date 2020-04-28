@@ -8,7 +8,7 @@ use Doctrine\ORM\Mapping as ORM;
 use InvalidArgumentException;
 
 /** @ORM\Embeddable */
-class ProductDescription
+final class ProductDescription
 {
     public const MIN_LENGTH = 5;
     /**

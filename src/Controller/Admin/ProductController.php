@@ -7,11 +7,8 @@ namespace App\Controller\Admin;
 use App\Entity\Product;
 use App\Form\Admin\ProductType;
 use App\Repository\ProductRepository;
-use App\Service\SlugGenerator;
-use App\UseCase\CreateProduct\Command as CreateCommand;
 use App\UseCase\DeleteProduct\Command as DeleteCommand;
 use App\UseCase\UpdateProduct\Command as UpdateCommand;
-use Ramsey\Uuid\Uuid;
 use Ramsey\Uuid\UuidInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
@@ -54,33 +51,12 @@ final class ProductController extends AbstractController
     }
 
     /**
-     * @Route("/admin/product/create", name="product_create", methods={"GET", "POST"})
-     * @param \Symfony\Component\HttpFoundation\Request $request
-     * @param \App\Service\SlugGenerator $slugGenerator
+     * @Route("/admin/product/create", name="product_create", methods={"GET"})
      * @return \Symfony\Component\HttpFoundation\Response
      */
-    public function create(Request $request, SlugGenerator $slugGenerator): Response
+    public function create(): Response
     {
-        $data = $request->request->get('product');
-        if (is_array($data) && array_key_exists('slug', $data) && $data['slug'] === '') {
-            if (array_key_exists('title', $data) && is_string($data['title'])) {
-                $data['slug'] = $slugGenerator->generate($data['title']);
-                $request->request->set('product', $data);
-            }
-        }
-
-        $command = new CreateCommand();
-        $form = $this->createForm(ProductType::class, $command);
-        $form->handleRequest($request);
-        if ($form->isSubmitted() && $form->isValid()) {
-            $id = Uuid::uuid4();
-            $command->id = $id->toString();
-            $this->messageBus->dispatch($command);
-            return $this->redirectToRoute('product_update', ['id' => $id]);
-        }
-        return $this->render('admin/product/create.html.twig', [
-            'form' => $form->createView(),
-        ]);
+        return $this->render('admin/product/create.html.twig');
     }
 
     /**

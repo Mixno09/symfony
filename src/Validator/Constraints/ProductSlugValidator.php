@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace App\Validator\Constraints;
 
-use App\Entity\ValueObject\ProductSlug as SlugVO;
+use App\Entity\ValueObject\ProductSlug as ValueObject;
 use Symfony\Component\Validator\Constraint;
 use Symfony\Component\Validator\ConstraintValidator;
 use Symfony\Component\Validator\Exception\UnexpectedTypeException;
@@ -25,7 +25,7 @@ final class ProductSlugValidator extends ConstraintValidator
             throw new UnexpectedValueException($value, 'string');
         }
 
-        if (! SlugVO::test($value)) {
+        if (! ValueObject::test($value)) {
             $this->context->buildViolation($constraint->message)->addViolation();
         }
     }
