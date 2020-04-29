@@ -10,7 +10,7 @@ use InvalidArgumentException;
 /** @ORM\Embeddable */
 final class ProductDescription
 {
-    public const MIN_LENGTH = 5;
+    private const MIN_LENGTH = 5;
     /**
      * @ORM\Column(type="text")
      * @var string
@@ -23,9 +23,7 @@ final class ProductDescription
      */
     public function __construct(string $value)
     {
-        $length = mb_strlen($value);
-
-        if ($length < self::MIN_LENGTH) {
+        if (! self::test($value)) {
             throw new InvalidArgumentException(sprintf(
                 'Длина строки должна быть более чем %d символов',
                 self::MIN_LENGTH));
@@ -39,5 +37,15 @@ final class ProductDescription
     public function __toString()
     {
         return $this->value;
+    }
+
+    /**
+     * @param string $value
+     * @return bool
+     */
+    public static function test(string $value): bool
+    {
+        $length = mb_strlen($value);
+        return ($length >= self::MIN_LENGTH);
     }
 }

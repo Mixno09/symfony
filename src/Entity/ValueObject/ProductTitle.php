@@ -10,8 +10,8 @@ use InvalidArgumentException;
 /** @ORM\Embeddable */
 final class ProductTitle
 {
-    public const MIN_LENGTH = 5;
-    public const MAX_LENGTH = 255;
+    private const MIN_LENGTH = 5;
+    private const MAX_LENGTH = 255;
 
     /**
      * @ORM\Column(type="string", length=255)
@@ -26,8 +26,7 @@ final class ProductTitle
      */
     public function __construct(string $value)
     {
-        $length = mb_strlen($value);
-        if ($length < self::MIN_LENGTH || $length > self::MAX_LENGTH) {
+        if (! self::test($value)) {
             throw new InvalidArgumentException(sprintf(
                 'Длина строки должна быть от %d до %d символов',
                 self::MIN_LENGTH,
@@ -43,5 +42,15 @@ final class ProductTitle
     public function __toString()
     {
         return $this->value;
+    }
+
+    /**
+     * @param string $value
+     * @return bool
+     */
+    public static function test(string $value): bool
+    {
+        $length = mb_strlen($value);
+        return ($length >= self::MIN_LENGTH && $length <= self::MAX_LENGTH);
     }
 }

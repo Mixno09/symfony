@@ -4,7 +4,9 @@ declare(strict_types=1);
 
 namespace App\Validator\Constraints;
 
+use App\Entity\Product;
 use App\Entity\ValueObject\ProductSlug as ValueObject;
+use App\Repository\ProductRepository;
 use Symfony\Component\Validator\Constraint;
 use Symfony\Component\Validator\ConstraintValidator;
 use Symfony\Component\Validator\Exception\UnexpectedTypeException;
@@ -12,6 +14,20 @@ use Symfony\Component\Validator\Exception\UnexpectedValueException;
 
 final class ProductSlugValidator extends ConstraintValidator
 {
+    /**
+     * @var \App\Repository\ProductRepository
+     */
+    private $repository;
+
+    /**
+     * ProductSlugValidator constructor.
+     * @param \App\Repository\ProductRepository $repository
+     */
+    public function __construct(ProductRepository $repository)
+    {
+        $this->repository = $repository;
+    }
+
     /**
      * @inheritDoc
      */
@@ -26,7 +42,14 @@ final class ProductSlugValidator extends ConstraintValidator
         }
 
         if (! ValueObject::test($value)) {
-            $this->context->buildViolation($constraint->message)->addViolation();
+            $this->context->buildViolation($constraint->invalidFormatMessage)->addViolation();
+            return;
+        }
+
+        $product = $this->repository->findOneBy(['slug.value' => $value]);
+
+        if ($product instanceof Product) {
+            $this->context->buildViolation($constraint->notUniqueMessage)->addViolation();
         }
     }
 }

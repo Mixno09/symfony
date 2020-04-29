@@ -5,9 +5,8 @@ declare(strict_types=1);
 namespace App\UseCase\UpdateProduct;
 
 use App\Entity\Product;
+use App\Validator\Constraints as AppAssert;
 use Symfony\Component\Validator\Constraints as Assert;
-use App\Entity\ValueObject\ProductTitle;
-use App\Entity\ValueObject\ProductDescription;
 
 final class Command
 {
@@ -18,17 +17,13 @@ final class Command
     /**
      * @var string
      * @Assert\NotBlank
-     * @Assert\Length(min = ProductTitle::MIN_LENGTH, max = ProductTitle::MAX_LENGTH)
+     * @AppAssert\ProductTitle
      */
     public $title;
     /**
      * @var string
-     */
-    public $slug;
-    /**
-     * @var string
      * @Assert\NotBlank
-     * @Assert\Length(min = ProductDescription::MIN_LENGTH)
+     * @AppAssert\ProductDescription
      */
     public $description;
     /**
