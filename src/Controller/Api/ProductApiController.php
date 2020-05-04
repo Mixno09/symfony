@@ -8,7 +8,6 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Messenger\MessageBusInterface;
 use Symfony\Component\Routing\Annotation\Route;
-use Symfony\Component\Validator\ConstraintViolationListInterface;
 use Symfony\Component\Validator\Validator\ValidatorInterface;
 
 class ProductApiController extends AbstractController
@@ -54,31 +53,11 @@ class ProductApiController extends AbstractController
             }
         }
 
-        $errors = $this->validator->validate($command);
-        if (count($errors) > 0) {
-            return $this->json([
-                'type' => 'validation_error',
-                'errors' => $this->errorsToJson($errors),
-            ]);
-        }
-
         $this->messageBus->dispatch($command);
 
         return $this->json([
             'type' => 'success',
         ]);
 
-    }
-
-    private function errorsToJson(ConstraintViolationListInterface $errors): array
-    {
-        $json = [];
-        foreach ($errors as $error) {
-            /** @var \Symfony\Component\Validator\ConstraintViolationInterface $error */
-            $key = $error->getPropertyPath();
-            $message = $error->getMessage();
-            $json[$key][] = $message;
-        }
-        return $json;
     }
 }
