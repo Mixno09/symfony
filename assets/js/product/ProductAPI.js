@@ -6,7 +6,7 @@ export async function createProduct(data) {
     data['id'] = id;
 
     const response = await axios.post(
-        '/api/product',
+        '/api/products',
         makeFormData(data)
     );
 
