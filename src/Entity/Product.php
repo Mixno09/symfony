@@ -9,6 +9,7 @@ use App\Entity\ValueObject\ProductDescription;
 use App\Entity\ValueObject\ProductSlug;
 use App\Entity\ValueObject\ProductTitle;
 use Doctrine\ORM\Mapping as ORM;
+use InvalidArgumentException;
 use Ramsey\Uuid\UuidInterface;
 
 /**
@@ -44,27 +45,46 @@ final class Product
      * @var \App\Entity\ValueObject\Asset
      */
     private $image;
+    /**
+     * @var \App\Entity\Category[]
+     */
+    private $categories;
 
     /**
      * Product constructor.
      * @param UuidInterface $id
      * @param \App\Entity\ValueObject\ProductTitle $title
      * @param \App\Entity\ValueObject\ProductSlug $slug
-     * @param \App\Entity\ValueObject\Asset $image
      * @param \App\Entity\ValueObject\ProductDescription $description
+     * @param \App\Entity\ValueObject\Asset $image
+     * @param \App\Entity\Category[] $categories
      */
     public function __construct(
         UuidInterface $id,
         ProductTitle $title,
         ProductSlug $slug,
         ProductDescription $description,
-        Asset $image
+        Asset $image,
+        array $categories
     ) {
         $this->id = $id;
         $this->title = $title;
         $this->slug = $slug;
         $this->description = $description;
         $this->image = $image;
+
+        if (count($categories) === 0) {
+            throw new InvalidArgumentException('Аргумент $categories не должен быть пустым');
+        }
+        foreach ($categories as $category) {
+            if (! $category instanceof Category) {
+                throw new InvalidArgumentException('Аргумент $categories должен содержать только Category');
+            }
+        }
+        if (count($categories) !== count(array_unique($categories, SORT_REGULAR))) {
+            throw new InvalidArgumentException('Аргумент $categories должен содержать только уникальные Category');
+        }
+        $this->categories = $categories;
     }
 
     /**

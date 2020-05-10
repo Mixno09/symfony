@@ -21,9 +21,8 @@ final class CommandValidationErrorExceptionListener
 
         $errors = $exception->getErrors();
         $response = new JsonResponse([
-            'type' => 'validation_error',
             'errors' => $this->errorsToArray($errors),
-        ]);
+        ], 422);
 
         $event->allowCustomResponseCode();
         $event->setResponse($response);

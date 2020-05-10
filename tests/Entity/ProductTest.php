@@ -22,7 +22,7 @@ class ProductTest extends TestCase
         $description = new ProductDescription('description');
         $image = new Asset('image.jpg');
 
-        $product = new Product($id, $title, $slug, $description, $image);
+        $product = new Product($id, $title, $slug, $description, $image,);
 
         $this->assertSame($id, $product->getId());
         $this->assertSame($title, $product->getTitle());
@@ -35,11 +35,7 @@ class ProductTest extends TestCase
     {
         $image = new Asset('image.jpg');
         $product = new Product(
-            Uuid::uuid4(),
-            new ProductTitle('title'),
-            new ProductSlug('slug'),
-            new ProductDescription('description'),
-            $image
+            Uuid::uuid4(), new ProductTitle('title'), new ProductSlug('slug'), new ProductDescription('description'), $image,
         );
         $title = new ProductTitle('title');
         $description = new ProductDescription('description');

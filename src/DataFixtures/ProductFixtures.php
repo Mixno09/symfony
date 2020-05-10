@@ -2,7 +2,10 @@
 
 namespace App\DataFixtures;
 
+use App\Entity\Category;
 use App\Entity\Product;
+use App\Entity\ValueObject\CategorySlug;
+use App\Entity\ValueObject\CategoryTitle;
 use App\Entity\ValueObject\ProductDescription;
 use App\Entity\ValueObject\ProductSlug;
 use App\Entity\ValueObject\ProductTitle;
@@ -48,18 +51,26 @@ class ProductFixtures extends Fixture
     {
         $id = Uuid::uuid4();
         $title = new ProductTitle(
-            $this->faker->realText(ProductTitle::MAX_LENGTH)
+            $this->faker->realText(255)
         );
         $slug = new ProductSlug(
             $this->faker->unique()->slug(1)
         );
         $description = new ProductDescription(
-            $this->faker->realText(ProductDescription::MIN_LENGTH + 200)
+            $this->faker->realText(205)
         );
         $image = $this->assetManager->upload(
             new File(__DIR__ . '/images/product.jpeg')
         );
+        $category = new Category(
+            $id,
+            new CategoryTitle(
+                $this->faker->realText(255)
+            ),
+            new CategorySlug(
+                $this->faker->unique()->slug(1))
+        );
 
-        return new Product($id, $title, $slug, $description, $image);
+        return new Product($id, $title, $slug, $description, $image, $category);
     }
 }

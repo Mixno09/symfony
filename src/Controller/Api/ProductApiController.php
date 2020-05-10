@@ -12,6 +12,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Messenger\MessageBusInterface;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 
 class ProductApiController extends AbstractController
 {
@@ -51,9 +52,9 @@ class ProductApiController extends AbstractController
 
         $this->messageBus->dispatch($command);
 
-        return $this->json([
-            'type' => 'success',
-        ]);
+        $url = $this->generateUrl('api_product_get', ['id' => $command->id], UrlGeneratorInterface::ABSOLUTE_URL);
+
+        return $this->json(['url' => $url], 201);
     }
 
     /**

@@ -23,7 +23,7 @@ Content-Disposition: form-data; name="description"
 description
 --WebAppBoundary--
 ###
-GET http://symfony.local/api/products/08abef60-3874-4332-8a0e-caa66b8295ba
+GET http://symfony.local/api/products/6f366118-abee-4b29-83e5-f6d2ff7ebbd5
 Accept: application/json
 
 ###
