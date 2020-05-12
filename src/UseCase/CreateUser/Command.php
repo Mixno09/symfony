@@ -6,7 +6,13 @@ namespace App\UseCase\CreateUser;
 
 final class Command
 {
+    /**
+     * @var string
+     */
     public $id;
+    /**
+     * @var string
+     */
     public $email;
 
 }

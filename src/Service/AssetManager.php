@@ -11,18 +11,9 @@ use Symfony\Component\HttpFoundation\File\File;
 
 final class AssetManager
 {
-    /**
-     * @var string
-     */
-    private $targetDirectory;
-    /**
-     * @var string|null
-     */
-    private $packageName;
-    /**
-     * @var \Symfony\Component\Filesystem\Filesystem
-     */
-    private $filesystem;
+    private string $targetDirectory;
+    private ?string $packageName;
+    private Filesystem $filesystem;
 
     public function __construct(string $targetDirectory, string $packageName = null)
     {

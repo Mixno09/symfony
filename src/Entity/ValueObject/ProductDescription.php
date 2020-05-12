@@ -7,15 +7,16 @@ namespace App\Entity\ValueObject;
 use Doctrine\ORM\Mapping as ORM;
 use InvalidArgumentException;
 
-/** @ORM\Embeddable */
+/**
+ * @ORM\Embeddable
+ */
 final class ProductDescription
 {
     private const MIN_LENGTH = 5;
     /**
      * @ORM\Column(type="text")
-     * @var string
      */
-    private $value;
+    private string $value;
 
     /**
      * Description constructor.

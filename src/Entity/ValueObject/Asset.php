@@ -11,14 +11,12 @@ final class Asset
 {
     /**
      * @ORM\Column(type="string")
-     * @var string
      */
-    private $path;
+    private string $path;
     /**
      * @ORM\Column(type="string", nullable=true)
-     * @var string|null
      */
-    private $packageName;
+    private ?string $packageName;
 
     /**
      * Image constructor.

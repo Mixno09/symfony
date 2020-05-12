@@ -8,10 +8,7 @@ use InvalidArgumentException;
 
 final class CategoryTitle
 {
-    /**
-     * @var string
-     */
-    private $value;
+    private string $value;
 
     /**
      * CategoryTitle constructor.

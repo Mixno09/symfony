@@ -7,14 +7,15 @@ namespace App\Entity\ValueObject;
 use Doctrine\ORM\Mapping as ORM;
 use InvalidArgumentException;
 
-/** @ORM\Embeddable */
+/**
+ * @ORM\Embeddable
+ */
 final class ProductSlug
 {
     /**
      * @ORM\Column(type="string", length=64, unique=true)
-     * @var string
      */
-    private $value;
+    private string $value;
 
     /**
      * ProductSlug constructor.

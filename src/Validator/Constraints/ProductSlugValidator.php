@@ -14,10 +14,7 @@ use Symfony\Component\Validator\Exception\UnexpectedValueException;
 
 final class ProductSlugValidator extends ConstraintValidator
 {
-    /**
-     * @var \App\Repository\ProductRepository
-     */
-    private $repository;
+    private ProductRepository $repository;
 
     /**
      * ProductSlugValidator constructor.

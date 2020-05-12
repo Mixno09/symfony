@@ -12,10 +12,7 @@ use Symfony\Component\Routing\Annotation\Route;
 
 final class CatalogController extends AbstractController
 {
-    /**
-     * @var \App\Repository\ProductRepository
-     */
-    private $repository;
+    private ProductRepository $repository;
 
     /**
      * CatalogController constructor.

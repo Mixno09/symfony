@@ -16,10 +16,7 @@ use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 
 class ProductApiController extends AbstractController
 {
-    /**
-     * @var \Symfony\Component\Messenger\MessageBusInterface
-     */
-    private $messageBus;
+    private MessageBusInterface $messageBus;
 
     /**
      * ProductController constructor.

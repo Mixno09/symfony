@@ -8,10 +8,7 @@ use InvalidArgumentException;
 
 final class CategorySlug
 {
-    /**
-     * @var string
-     */
-    private $value;
+    private string $value;
 
     /**
      * CategorySlug constructor.

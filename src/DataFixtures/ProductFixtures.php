@@ -13,20 +13,14 @@ use App\Service\AssetManager;
 use Doctrine\Bundle\FixturesBundle\Fixture;
 use Doctrine\Persistence\ObjectManager;
 use Faker\Factory;
+use Faker\Generator;
 use Ramsey\Uuid\Uuid;
 use Symfony\Component\HttpFoundation\File\File;
 
 class ProductFixtures extends Fixture
 {
-    /**
-     * @var \Faker\Generator
-     */
-    private $faker;
-
-    /**
-     * @var \App\Service\AssetManager
-     */
-    private $assetManager;
+    private Generator $faker;
+    private AssetManager $assetManager;
 
     /**
      * ProductFixtures constructor.
@@ -71,6 +65,6 @@ class ProductFixtures extends Fixture
                 $this->faker->unique()->slug(1))
         );
 
-        return new Product($id, $title, $slug, $description, $image, $category);
+        return new Product($id, $title, $slug, $description, $image, [$category]);
     }
 }

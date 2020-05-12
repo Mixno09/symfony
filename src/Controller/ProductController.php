@@ -4,16 +4,12 @@ namespace App\Controller;
 
 use App\Entity\Product;
 use App\Repository\ProductRepository;
-use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Routing\Annotation\Route;
 
 class ProductController extends AbstractController
 {
-    /**
-     * @var \App\Repository\ProductRepository
-     */
-    private $productRepository;
+    private ProductRepository $productRepository;
 
     /**
      * ProductController constructor.

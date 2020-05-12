@@ -7,7 +7,9 @@ namespace App\Entity\ValueObject;
 use Doctrine\ORM\Mapping as ORM;
 use InvalidArgumentException;
 
-/** @ORM\Embeddable */
+/**
+ * @ORM\Embeddable
+ */
 final class ProductTitle
 {
     private const MIN_LENGTH = 5;
@@ -15,9 +17,8 @@ final class ProductTitle
 
     /**
      * @ORM\Column(type="string", length=255)
-     * @var string
      */
-    private $value;
+    private string $value;
 
     /**
      * Title constructor.

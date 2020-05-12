@@ -11,10 +11,7 @@ use Throwable;
 
 final class CommandValidationErrorException extends RuntimeException implements UnrecoverableExceptionInterface
 {
-    /**
-     * @var ConstraintViolationListInterface
-     */
-    private $errors;
+    private ConstraintViolationListInterface $errors;
 
     public function __construct(ConstraintViolationListInterface $errors, $message = "", $code = 0, Throwable $previous = null)
     {

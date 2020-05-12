@@ -11,7 +11,7 @@ use Symfony\Component\Validator\Constraint;
  */
 final class ProductTitle extends Constraint
 {
-    public $message = 'Значение должно быть более 5 символов и менее 255';
+    public string $message = 'Значение должно быть более 5 символов и менее 255';
 
     public function validatedBy()
     {

@@ -22,33 +22,28 @@ final class Product
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="NONE")
      * @ORM\Column(type="uuid")
-     * @var \Ramsey\Uuid\UuidInterface
      */
-    private $id;
+    private UuidInterface $id;
     /**
      * @ORM\Embedded(class="App\Entity\ValueObject\ProductTitle")
-     * @var \App\Entity\ValueObject\ProductTitle
      */
-    private $title;
+    private ProductTitle $title;
     /**
      * @ORM\Embedded(class="App\Entity\ValueObject\ProductSlug")
-     * @var \App\Entity\ValueObject\ProductSlug
      */
-    private $slug;
+    private ProductSlug $slug;
     /**
      * @ORM\Embedded(class="App\Entity\ValueObject\ProductDescription")
-     * @var \App\Entity\ValueObject\ProductDescription
      */
-    private $description;
+    private ProductDescription $description;
     /**
      * @ORM\Embedded(class="App\Entity\ValueObject\Asset")
-     * @var \App\Entity\ValueObject\Asset
      */
-    private $image;
+    private Asset $image;
     /**
      * @var \App\Entity\Category[]
      */
-    private $categories;
+    private array $categories;
 
     /**
      * Product constructor.

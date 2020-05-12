@@ -12,10 +12,7 @@ use Symfony\Component\Validator\Validator\ValidatorInterface;
 
 final class CommandValidatorMiddleware implements MiddlewareInterface
 {
-    /**
-     * @var \Symfony\Component\Validator\Validator\ValidatorInterface
-     */
-    private $validator;
+    private ValidatorInterface $validator;
 
     /**
      * ErrorsJsonMiddleware constructor.

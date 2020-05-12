@@ -18,10 +18,7 @@ use Symfony\Component\Routing\Annotation\Route;
 
 final class ProductController extends AbstractController
 {
-    /**
-     * @var \Symfony\Component\Messenger\MessageBusInterface
-     */
-    private $messageBus;
+    private MessageBusInterface $messageBus;
 
     /**
      * ProductController constructor.

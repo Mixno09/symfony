@@ -8,10 +8,7 @@ use Symfony\Component\Routing\Annotation\Route;
 
 class HomeController extends AbstractController
 {
-    /**
-     * @var \App\Repository\ProductRepository
-     */
-    private $repository;
+    private ProductRepository $repository;
 
     /**
      * HomeController constructor.

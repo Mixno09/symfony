@@ -10,18 +10,9 @@ use Ramsey\Uuid\UuidInterface;
 
 final class Category
 {
-    /**
-     * @var \Ramsey\Uuid\UuidInterface
-     */
-    private $id;
-    /**
-     * @var \App\Entity\ValueObject\CategoryTitle
-     */
-    private $title;
-    /**
-     * @var \App\Entity\ValueObject\CategorySlug
-     */
-    private $slug;
+    private UuidInterface $id;
+    private CategoryTitle $title;
+    private CategorySlug $slug;
 
     /**
      * Category constructor.

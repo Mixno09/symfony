@@ -18,14 +18,8 @@ use Throwable;
 
 final class Handler implements MessageHandlerInterface
 {
-    /**
-     * @var \Doctrine\ORM\EntityManagerInterface
-     */
-    private $entityManager;
-    /**
-     * @var \App\Service\AssetManager
-     */
-    private $assetManager;
+    private EntityManagerInterface $entityManager;
+    private AssetManager $assetManager;
 
     /**
      * Handler constructor.
