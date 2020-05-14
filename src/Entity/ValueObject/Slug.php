@@ -10,7 +10,7 @@ use InvalidArgumentException;
 /**
  * @ORM\Embeddable
  */
-final class ProductSlug
+final class Slug
 {
     /**
      * @ORM\Column(type="string", length=64, unique=true)

@@ -4,21 +4,21 @@ declare(strict_types=1);
 
 namespace App\Validator\Constraints;
 
-use App\Entity\ValueObject\ProductTitle as ValueObject;
+use App\Entity\ValueObject\Title as ValueObject;
 use Symfony\Component\Validator\Constraint;
 use Symfony\Component\Validator\ConstraintValidator;
 use Symfony\Component\Validator\Exception\UnexpectedTypeException;
 use Symfony\Component\Validator\Exception\UnexpectedValueException;
 
-final class ProductTitleValidator extends ConstraintValidator
+final class TitleValidator extends ConstraintValidator
 {
     /**
      * @inheritDoc
      */
     public function validate($value, Constraint $constraint)
     {
-        if (! $constraint instanceof ProductTitle) {
-            throw new UnexpectedTypeException($constraint, ProductTitle::class);
+        if (! $constraint instanceof Title) {
+            throw new UnexpectedTypeException($constraint, Title::class);
         }
 
         if (! is_string($value)) {

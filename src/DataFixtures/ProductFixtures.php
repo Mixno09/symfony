@@ -2,11 +2,10 @@
 
 namespace App\DataFixtures;
 
-use App\Entity\Category;
 use App\Entity\Product;
 use App\Entity\ValueObject\ProductDescription;
-use App\Entity\ValueObject\ProductSlug;
-use App\Entity\ValueObject\ProductTitle;
+use App\Entity\ValueObject\Slug;
+use App\Entity\ValueObject\Title;
 use App\Service\AssetManager;
 use Doctrine\Bundle\FixturesBundle\Fixture;
 use Doctrine\Common\DataFixtures\DependentFixtureInterface;
@@ -18,6 +17,8 @@ use Symfony\Component\HttpFoundation\File\File;
 
 class ProductFixtures extends Fixture implements DependentFixtureInterface
 {
+    private const PRODUCT_NUMBER = 1000;
+
     private Generator $faker;
     private AssetManager $assetManager;
 
@@ -33,38 +34,36 @@ class ProductFixtures extends Fixture implements DependentFixtureInterface
 
     public function load(ObjectManager $manager)
     {
-        for ($i = 0; $i < 100; $i++) {
-            $product = $this->createProduct();
+        for ($i = 0; $i < self::PRODUCT_NUMBER; $i++) {
+            $product = $this->createProduct($i);
             $manager->persist($product);
         }
         $manager->flush();
     }
 
-    private function createProduct(): Product
+    private function createProduct(int $i): Product
     {
         $id = Uuid::uuid4();
-        $title = new ProductTitle(
-            $this->faker->realText(255)
-        );
-        $slug = new ProductSlug(
-            $this->faker->unique()->slug(1)
-        );
-        $description = new ProductDescription(
-            $this->faker->realText(205)
-        );
+        $title = new Title("Продукт {$i}");
+        $slug = new Slug("product-{$i}");
+        $description = new ProductDescription("Описание продукта {$i}");
         $image = $this->assetManager->upload(
             new File(__DIR__ . '/images/product.jpeg')
         );
         $categories = [];
-        $numbers = $this->faker->randomElements(
-            [0, 1, 2, 3, 4, 5, 6, 7, 8, 9],
-            $this->faker->numberBetween(1, 8)
+        $categories[] = $this->getReference(
+            CategoryFixtures::getReferenceName($i % CategoryFixtures::CATEGORY_NUMBER)
         );
-        foreach ($numbers as $i) {
-            $category = $this->getReference(Category::class . '_' . $i);
-            $categories[] = $category;
+        if ($i % 2 === 0) {
+            $categories[] = $this->getReference(
+                CategoryFixtures::getReferenceName(($i + 1) % CategoryFixtures::CATEGORY_NUMBER)
+            );
         }
-
+        if ($i % 3 === 0) {
+            $categories[] = $this->getReference(
+                CategoryFixtures::getReferenceName(($i + 2) % CategoryFixtures::CATEGORY_NUMBER)
+            );
+        }
         return new Product($id, $title, $slug, $description, $image, $categories);
     }
 

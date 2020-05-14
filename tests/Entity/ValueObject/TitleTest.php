@@ -4,11 +4,11 @@ declare(strict_types=1);
 
 namespace App\Tests\Entity\ValueObject;
 
-use App\Entity\ValueObject\ProductTitle;
+use App\Entity\ValueObject\Title;
 use InvalidArgumentException;
 use PHPUnit\Framework\TestCase;
 
-class ProductTitleTest extends TestCase
+class TitleTest extends TestCase
 {
     /**
      * @dataProvider validValueProvider
@@ -16,7 +16,7 @@ class ProductTitleTest extends TestCase
      */
     public function testCreateTitle(string $value)
     {
-        $title = new ProductTitle($value);
+        $title = new Title($value);
 
         $this->assertSame($value, (string) $title);
     }
@@ -38,7 +38,7 @@ class ProductTitleTest extends TestCase
     public function testInvalidValue(string $value)
     {
         $this->expectException(InvalidArgumentException::class);
-        new ProductTitle($value);
+        new Title($value);
     }
 
     public function invalidValueProvider()
@@ -56,7 +56,7 @@ class ProductTitleTest extends TestCase
      */
     public function testTestReturnTrue(string $value)
     {
-        $test = ProductTitle::test($value);
+        $test = Title::test($value);
 
         $this->assertTrue($test);
     }
@@ -67,7 +67,7 @@ class ProductTitleTest extends TestCase
      */
     public function testTestReturnFalse(string $value)
     {
-        $test = ProductTitle::test($value);
+        $test = Title::test($value);
 
         $this->assertFalse($test);
     }

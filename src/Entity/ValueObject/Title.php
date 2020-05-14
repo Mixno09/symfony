@@ -10,7 +10,7 @@ use InvalidArgumentException;
 /**
  * @ORM\Embeddable
  */
-final class ProductTitle
+final class Title
 {
     private const MIN_LENGTH = 5;
     private const MAX_LENGTH = 255;

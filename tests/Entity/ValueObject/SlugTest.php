@@ -4,11 +4,11 @@ declare(strict_types=1);
 
 namespace App\Tests\Entity\ValueObject;
 
-use App\Entity\ValueObject\ProductSlug;
+use App\Entity\ValueObject\Slug;
 use InvalidArgumentException;
 use PHPUnit\Framework\TestCase;
 
-class ProductSlugTest extends TestCase
+class SlugTest extends TestCase
 {
     /**
      * @dataProvider createSlugProvider
@@ -16,7 +16,7 @@ class ProductSlugTest extends TestCase
      */
     public function testCreateSlug(string $value)
     {
-        $slug = new ProductSlug($value);
+        $slug = new Slug($value);
 
         $this->assertSame($value, (string) $slug);
     }
@@ -42,7 +42,7 @@ class ProductSlugTest extends TestCase
     public function testInvalidSlug(string $value)
     {
         $this->expectException(InvalidArgumentException::class);
-        new ProductSlug($value);
+        new Slug($value);
     }
 
     /**

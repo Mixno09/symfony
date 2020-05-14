@@ -6,8 +6,8 @@ namespace App\UseCase\CreateProduct;
 
 use App\Entity\Product;
 use App\Entity\ValueObject\ProductDescription;
-use App\Entity\ValueObject\ProductSlug;
-use App\Entity\ValueObject\ProductTitle;
+use App\Entity\ValueObject\Slug;
+use App\Entity\ValueObject\Title;
 use App\Service\AssetManager;
 use Doctrine\ORM\EntityManagerInterface;
 use Ramsey\Uuid\Uuid;
@@ -41,7 +41,7 @@ final class Handler implements MessageHandlerInterface
 
         try {
             $product = new Product(
-                Uuid::fromString($command->id), new ProductTitle($command->title), new ProductSlug($command->slug), new ProductDescription($command->description), $image
+                Uuid::fromString($command->id), new Title($command->title), new Slug($command->slug), new ProductDescription($command->description), $image
             );
             $this->entityManager->persist($product);
             $this->entityManager->flush();

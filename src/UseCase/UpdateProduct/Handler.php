@@ -7,7 +7,7 @@ namespace App\UseCase\UpdateProduct;
 use App\Entity\Product;
 use App\Entity\ValueObject\Asset;
 use App\Entity\ValueObject\ProductDescription;
-use App\Entity\ValueObject\ProductTitle;
+use App\Entity\ValueObject\Title;
 use App\Service\AssetManager;
 use Doctrine\ORM\EntityManagerInterface;
 use LogicException;
@@ -53,7 +53,7 @@ final class Handler implements MessageHandlerInterface
 
         try {
             $product->update(
-                new ProductTitle($command->title),
+                new Title($command->title),
                 new ProductDescription($command->description),
                 $image
             );

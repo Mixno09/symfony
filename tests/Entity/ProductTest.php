@@ -7,11 +7,9 @@ namespace App\Tests\Entity;
 use App\Entity\Category;
 use App\Entity\Product;
 use App\Entity\ValueObject\Asset;
-use App\Entity\ValueObject\CategorySlug;
-use App\Entity\ValueObject\CategoryTitle;
 use App\Entity\ValueObject\ProductDescription;
-use App\Entity\ValueObject\ProductSlug;
-use App\Entity\ValueObject\ProductTitle;
+use App\Entity\ValueObject\Slug;
+use App\Entity\ValueObject\Title;
 use PHPUnit\Framework\TestCase;
 use Ramsey\Uuid\Uuid;
 
@@ -20,20 +18,20 @@ class ProductTest extends TestCase
     public function testCreateProduct()
     {
         $id = Uuid::uuid4();
-        $title = new ProductTitle('title');
-        $slug = new ProductSlug('slug');
+        $title = new Title('title');
+        $slug = new Slug('slug');
         $description = new ProductDescription('description');
         $image = new Asset('image.jpg');
         $categories = [
             new Category(
                 Uuid::uuid4(),
-                new CategoryTitle('title'),
-                new CategorySlug('slug')
+                new Title('title'),
+                new Slug('slug')
             ),
             new Category(
                 Uuid::uuid4(),
-                new CategoryTitle('title'),
-                new CategorySlug('slug')
+                new Title('title'),
+                new Slug('slug')
             ),
         ];
 
@@ -51,24 +49,24 @@ class ProductTest extends TestCase
         $image = new Asset('image.jpg');
         $product = new Product(
             Uuid::uuid4(),
-            new ProductTitle('title'),
-            new ProductSlug('slug'),
+            new Title('title'),
+            new Slug('slug'),
             new ProductDescription('description'),
             $image,
             [
                 new Category(
                     Uuid::uuid4(),
-                    new CategoryTitle('title'),
-                    new CategorySlug('slug')
+                    new Title('title'),
+                    new Slug('slug')
                 ),
                 new Category(
                     Uuid::uuid4(),
-                    new CategoryTitle('title'),
-                    new CategorySlug('slug')
+                    new Title('title'),
+                    new Slug('slug')
                 ),
             ],
         );
-        $title = new ProductTitle('title');
+        $title = new Title('title');
         $description = new ProductDescription('description');
 
         $product->update($title, $description);

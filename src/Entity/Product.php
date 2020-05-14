@@ -6,8 +6,10 @@ namespace App\Entity;
 
 use App\Entity\ValueObject\Asset;
 use App\Entity\ValueObject\ProductDescription;
-use App\Entity\ValueObject\ProductSlug;
-use App\Entity\ValueObject\ProductTitle;
+use App\Entity\ValueObject\Slug;
+use App\Entity\ValueObject\Title;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use InvalidArgumentException;
 use Ramsey\Uuid\UuidInterface;
@@ -25,13 +27,13 @@ final class Product
      */
     private UuidInterface $id;
     /**
-     * @ORM\Embedded(class="App\Entity\ValueObject\ProductTitle")
+     * @ORM\Embedded(class="App\Entity\ValueObject\Title")
      */
-    private ProductTitle $title;
+    private Title $title;
     /**
-     * @ORM\Embedded(class="App\Entity\ValueObject\ProductSlug")
+     * @ORM\Embedded(class="App\Entity\ValueObject\Slug")
      */
-    private ProductSlug $slug;
+    private Slug $slug;
     /**
      * @ORM\Embedded(class="App\Entity\ValueObject\ProductDescription")
      */
@@ -41,23 +43,24 @@ final class Product
      */
     private Asset $image;
     /**
-     * @var \App\Entity\Category[]
+     * @ORM\ManyToMany(targetEntity="App\Entity\Category")
+     * @var \Doctrine\Common\Collections\Collection
      */
-    private array $categories;
+    private Collection $categories;
 
     /**
      * Product constructor.
      * @param UuidInterface $id
-     * @param \App\Entity\ValueObject\ProductTitle $title
-     * @param \App\Entity\ValueObject\ProductSlug $slug
+     * @param \App\Entity\ValueObject\Title $title
+     * @param \App\Entity\ValueObject\Slug $slug
      * @param \App\Entity\ValueObject\ProductDescription $description
      * @param \App\Entity\ValueObject\Asset $image
      * @param \App\Entity\Category[] $categories
      */
     public function __construct(
         UuidInterface $id,
-        ProductTitle $title,
-        ProductSlug $slug,
+        Title $title,
+        Slug $slug,
         ProductDescription $description,
         Asset $image,
         array $categories
@@ -67,6 +70,7 @@ final class Product
         $this->slug = $slug;
         $this->description = $description;
         $this->image = $image;
+        $this->categories = new ArrayCollection();
 
         if (count($categories) === 0) {
             throw new InvalidArgumentException('Аргумент $categories не должен быть пустым');
@@ -76,18 +80,23 @@ final class Product
                 throw new InvalidArgumentException('Аргумент $categories должен содержать только Category');
             }
         }
-        if (count($categories) !== count(array_unique($categories, SORT_REGULAR))) {
+        $categoriesId = array_map(function (Category $category) {
+            return $category->getId()->toString();
+        }, $categories);
+        if (count($categoriesId) !== count(array_unique($categoriesId, SORT_REGULAR))) {
             throw new InvalidArgumentException('Аргумент $categories должен содержать только уникальные Category');
         }
-        $this->categories = $categories;
+        foreach ($categories as $category) {
+            $this->categories->add($category);
+        }
     }
 
     /**
-     * @param \App\Entity\ValueObject\ProductTitle $title
+     * @param \App\Entity\ValueObject\Title $title
      * @param \App\Entity\ValueObject\ProductDescription $description
      * @param \App\Entity\ValueObject\Asset|null $image
      */
-    public function update(ProductTitle $title, ProductDescription $description, Asset $image = null): void
+    public function update(Title $title, ProductDescription $description, Asset $image = null): void
     {
         $this->title = $title;
         $this->description = $description;
@@ -106,9 +115,9 @@ final class Product
     }
 
     /**
-     * @return \App\Entity\ValueObject\ProductTitle
+     * @return \App\Entity\ValueObject\Title
      */
-    public function getTitle(): ProductTitle
+    public function getTitle(): Title
     {
         return $this->title;
     }
@@ -130,9 +139,9 @@ final class Product
     }
 
     /**
-     * @return \App\Entity\ValueObject\ProductSlug
+     * @return \App\Entity\ValueObject\Slug
      */
-    public function getSlug(): ProductSlug
+    public function getSlug(): Slug
     {
         return $this->slug;
     }

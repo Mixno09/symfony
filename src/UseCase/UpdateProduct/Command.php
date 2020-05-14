@@ -22,6 +22,10 @@ final class Command
     public $title;
     /**
      * @var string
+     */
+    public $slug;
+    /**
+     * @var string
      * @Assert\NotBlank
      * @AppAssert\ProductDescription
      */
@@ -47,6 +51,7 @@ final class Command
     {
         $this->id = $product->getId()->toString();
         $this->title = (string) $product->getTitle();
+        $this->slug = (string) $product->getSlug();
         $this->description = (string) $product->getDescription();
     }
 }

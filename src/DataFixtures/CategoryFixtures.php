@@ -5,49 +5,47 @@ declare(strict_types=1);
 namespace App\DataFixtures;
 
 use App\Entity\Category;
-use App\Entity\ValueObject\CategorySlug;
-use App\Entity\ValueObject\CategoryTitle;
+use App\Entity\ValueObject\Slug;
+use App\Entity\ValueObject\Title;
 use Doctrine\Bundle\FixturesBundle\Fixture;
 use Doctrine\Persistence\ObjectManager;
-use Faker\Factory;
-use Faker\Generator;
+use InvalidArgumentException;
 use Ramsey\Uuid\Uuid;
 
 final class CategoryFixtures extends Fixture
 {
-    private Generator $faker;
-
-    /**
-     * CategoryFixtures constructor.
-     */
-    public function __construct()
-    {
-        $this->faker = Factory::create();
-    }
+    public const CATEGORY_NUMBER = 100;
 
     /**
      * @inheritDoc
      */
     public function load(ObjectManager $manager)
     {
-        for ($i = 0; $i < 10; $i++) {
-            $category = $this->createCategory();
+        for ($i = 0; $i < self::CATEGORY_NUMBER; $i++) {
+            $category = $this->createCategory($i);
             $manager->persist($category);
-            $this->addReference(Category::class . '_' . $i, $category);
+            $this->addReference(
+                self::getReferenceName($i),
+                $category
+            );
         }
         $manager->flush();
     }
 
-    private function createCategory(): Category
+    private function createCategory(int $i): Category
     {
         $id = Uuid::uuid4();
-        $title = new CategoryTitle(
-            $this->faker->realText(255)
-        );
-        $slug = new CategorySlug(
-            $this->faker->unique()->slug(1)
-        );
+        $title = new Title("Категория {$i}");
+        $slug = new Slug("category-{$i}");
 
         return new Category($id, $title, $slug);
+    }
+
+    public static function getReferenceName(int $i): string
+    {
+        if ($i < 0 || $i >= self::CATEGORY_NUMBER) {
+            throw new InvalidArgumentException("Неверный номер категории");
+        }
+        return (Category::class . '_' . $i);
     }
 }

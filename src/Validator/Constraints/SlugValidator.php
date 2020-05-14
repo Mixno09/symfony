@@ -5,14 +5,14 @@ declare(strict_types=1);
 namespace App\Validator\Constraints;
 
 use App\Entity\Product;
-use App\Entity\ValueObject\ProductSlug as ValueObject;
+use App\Entity\ValueObject\Slug as ValueObject;
 use App\Repository\ProductRepository;
 use Symfony\Component\Validator\Constraint;
 use Symfony\Component\Validator\ConstraintValidator;
 use Symfony\Component\Validator\Exception\UnexpectedTypeException;
 use Symfony\Component\Validator\Exception\UnexpectedValueException;
 
-final class ProductSlugValidator extends ConstraintValidator
+final class SlugValidator extends ConstraintValidator
 {
     private ProductRepository $repository;
 
@@ -30,8 +30,8 @@ final class ProductSlugValidator extends ConstraintValidator
      */
     public function validate($value, Constraint $constraint)
     {
-        if (! $constraint instanceof ProductSlug) {
-            throw new UnexpectedTypeException($constraint, ProductSlug::class);
+        if (! $constraint instanceof Slug) {
+            throw new UnexpectedTypeException($constraint, Slug::class);
         }
 
         if (! is_string($value)) {
