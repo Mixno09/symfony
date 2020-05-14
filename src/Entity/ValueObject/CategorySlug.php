@@ -4,10 +4,17 @@ declare(strict_types=1);
 
 namespace App\Entity\ValueObject;
 
+use Doctrine\ORM\Mapping as ORM;
 use InvalidArgumentException;
 
+/**
+ * @ORM\Embeddable
+ */
 final class CategorySlug
 {
+    /**
+     * @ORM\Column(type="string", length=64, unique=true)
+     */
     private string $value;
 
     /**

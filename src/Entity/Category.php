@@ -7,11 +7,27 @@ namespace App\Entity;
 use App\Entity\ValueObject\CategorySlug;
 use App\Entity\ValueObject\CategoryTitle;
 use Ramsey\Uuid\UuidInterface;
+use Doctrine\ORM\Mapping as ORM;
 
-final class Category
+/**
+ * @ORM\Entity
+ * @ORM\Table(name="categories")
+ */
+class Category
 {
+    /**
+     * @ORM\Id
+     * @ORM\GeneratedValue(strategy="NONE")
+     * @ORM\Column(type="uuid")
+     */
     private UuidInterface $id;
+    /**
+     * @ORM\Embedded(class="App\Entity\ValueObject\CategoryTitle")
+     */
     private CategoryTitle $title;
+    /**
+     * @ORM\Embedded(class="App\Entity\ValueObject\CategorySlug")
+     */
     private CategorySlug $slug;
 
     /**
