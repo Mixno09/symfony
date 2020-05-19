@@ -1,19 +1,20 @@
-import React, {useState, useCallback, useEffect} from "react";
+import React, {useState, useCallback, useEffect} from 'react';
 import FormTextInput from "../common/FormTextInput";
 import FormTextAria from "../common/FormTextAria";
 import FormImageElement from "../common/FormImageElement";
 import {generateSlug} from "../common/SlugUtil";
-import {createProduct} from "./ProductAPI";
+import api from "./API";
+import {v4 as uuid} from "uuid";
 
-export default function CreateProductForm() {
-    const [data, setData] = useState({
+function CreateProductForm() {
+    const [data, setProduct] = useState({
         title: '',
         slug: '',
         description: '',
         image: null,
     });
     const [image, setImage] = useState('');
-    const [errors, setErrors] = useState({});
+    const [errors, setErrors] = useState(EMPTY_ERRORS);
     const [isProcessed, setIsProcessed] = useState(false);
     const [isRedirect, setIsRedirect] = useState(false);
 
@@ -24,16 +25,17 @@ export default function CreateProductForm() {
 
         (async () => {
             try {
-                const result = await createProduct(data);
+                const id = uuid();
+                const response = await api.createProduct({...data, id});
 
-                if (result.type === 'success') {
-                    location.href = ('/admin/product/' + encodeURIComponent(result.id) + '/update');
-                    setErrors({});
+                if (response.status === 201) {
+                    location.href = `/admin/product/${encodeURIComponent(id)}/update`;
+                    setErrors(EMPTY_ERRORS);
                     setIsRedirect(true);
-                } else if (result.type === 'validation_error') {
-                    setErrors(result.errors);
+                } else if (response.status === 422) {
+                    setErrors(response.data.errors);
                 } else {
-                    console.log(result);
+                    console.log(response);
                     alert('Неизвестный формат ответа от сервера. Дополнительная информация в консоли');
                 }
             } catch (e) {
@@ -47,13 +49,13 @@ export default function CreateProductForm() {
 
     const onChangeTitle = useCallback((title) => {
         const slug = generateSlug(title);
-        setData((data) => ({...data, title, slug}));
+        setProduct((data) => ({...data, title, slug}));
     }, []);
     const onChangeSlug = useCallback((slug) => {
-        setData((data) => ({...data, slug}));
+        setProduct((data) => ({...data, slug}));
     }, []);
     const onChangeDescription = useCallback((description) => {
-        setData((data) => ({...data, description}));
+        setProduct((data) => ({...data, description}));
     }, []);
     const onChangeImage = useCallback((value) => {
         let file = null;
@@ -62,7 +64,7 @@ export default function CreateProductForm() {
             file = value;
             image = URL.createObjectURL(file);
         }
-        setData((data) => ({...data, image: file}));
+        setProduct((data) => ({...data, image: file}));
         setImage(image);
     }, []);
     const onSubmit = useCallback((event) => {
@@ -107,12 +109,21 @@ export default function CreateProductForm() {
                 <button type="submit" className="btn btn-success btn-lg mr-1" disabled={isProcessed || isRedirect}>Создать</button>
                 <a href={'/admin/product'} className="btn btn-light btn-lg mr-3">Отмена</a>
                 { (isProcessed || isRedirect) &&
-                    <>
-                        <div className="spinner-grow spinner-grow-sm text-info mr-1" />
-                        <span className="text-info">{ isProcessed ? 'Обработка...' : 'Переход...' }</span>
-                    </>
+                <>
+                    <div className="spinner-grow spinner-grow-sm text-info mr-1" />
+                    <span className="text-info">{ isProcessed ? 'Обработка...' : 'Переход...' }</span>
+                </>
                 }
             </div>
         </form>
     )
 }
+
+const EMPTY_ERRORS = {
+    title: null,
+    slug: null,
+    description: null,
+    image: null,
+}
+
+export default CreateProductForm;
