@@ -64,3 +64,6 @@ services:
     App\Controller\Api\SwaggerController:
         bind:
             $resourcesDir: '%resources%'
+
+    App\Repository\CategoryRepository:
+        tags: ['knp_paginator.injectable']

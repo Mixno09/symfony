@@ -44,7 +44,6 @@ final class Product
     private Asset $image;
     /**
      * @ORM\ManyToMany(targetEntity="App\Entity\Category")
-     * @var \Doctrine\Common\Collections\Collection
      */
     private Collection $categories;
 
@@ -71,24 +70,7 @@ final class Product
         $this->description = $description;
         $this->image = $image;
         $this->categories = new ArrayCollection();
-
-        if (count($categories) === 0) {
-            throw new InvalidArgumentException('Аргумент $categories не должен быть пустым');
-        }
-        foreach ($categories as $category) {
-            if (! $category instanceof Category) {
-                throw new InvalidArgumentException('Аргумент $categories должен содержать только Category');
-            }
-        }
-        $categoriesId = array_map(function (Category $category) {
-            return $category->getId()->toString();
-        }, $categories);
-        if (count($categoriesId) !== count(array_unique($categoriesId, SORT_REGULAR))) {
-            throw new InvalidArgumentException('Аргумент $categories должен содержать только уникальные Category');
-        }
-        foreach ($categories as $category) {
-            $this->categories->add($category);
-        }
+        $this->setCategories(...$categories);
     }
 
     /**
@@ -103,6 +85,23 @@ final class Product
 
         if ($image instanceof Asset) {
             $this->image = $image;
+        }
+    }
+
+    /**
+     * @param \App\Entity\Category ...$categories
+     */
+    private function setCategories(Category ...$categories): void
+    {
+        if (count($categories) === 0) {
+            throw new InvalidArgumentException('Аргумент $categories не должен быть пустым');
+        }
+        foreach ($categories as $category) {
+            $key = $category->getId()->toString();
+            if ($this->categories->containsKey($key)) {
+                throw new InvalidArgumentException('Аргумент $categories должен содержать только уникальные Category');
+            }
+            $this->categories->set($key, $category);
         }
     }
 

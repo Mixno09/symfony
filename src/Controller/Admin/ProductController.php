@@ -30,7 +30,7 @@ final class ProductController extends AbstractController
     }
 
     /**
-     * @Route("/admin/product", name="product_index", methods={"GET"})
+     * @Route("/admin/products", name="product_index", methods={"GET"})
      * @param \Symfony\Component\HttpFoundation\Request $request
      * @param \App\Repository\ProductRepository $repository
      * @return \Symfony\Component\HttpFoundation\Response
@@ -48,7 +48,7 @@ final class ProductController extends AbstractController
     }
 
     /**
-     * @Route("/admin/product/create", name="product_create", methods={"GET"})
+     * @Route("/admin/products/create", name="product_create", methods={"GET"})
      * @return \Symfony\Component\HttpFoundation\Response
      */
     public function create(): Response
@@ -57,7 +57,7 @@ final class ProductController extends AbstractController
     }
 
     /**
-     * @Route("/admin/product/{id}/update", name="product_update", methods={"GET", "POST"})
+     * @Route("/admin/products/{id}/update", name="product_update", methods={"GET", "POST"})
      * @param \Ramsey\Uuid\UuidInterface $id
      * @param \Symfony\Component\HttpFoundation\Request $request
      * @return \Symfony\Component\HttpFoundation\Response
@@ -85,7 +85,7 @@ final class ProductController extends AbstractController
     }
 
     /**
-     * @Route("/admin/product/{id}/delete", name="product_delete", methods={"GET", "POST"})
+     * @Route("/admin/products/{id}/delete", name="product_delete", methods={"GET", "POST"})
      * @param \Ramsey\Uuid\UuidInterface $id
      * @param \Symfony\Component\HttpFoundation\Request $request
      * @return \Symfony\Component\HttpFoundation\Response
