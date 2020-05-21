@@ -8,7 +8,7 @@ Content-Disposition: form-data; name="image"; filename="file.txt"
 --WebAppBoundary--
 Content-Disposition: form-data; name="id"
 
-08abef60-3874-4332-8a0e-caa66b8295bc
+028f71e6-f569-41b6-a589-e9f0f7eedfc4
 --WebAppBoundary--
 Content-Disposition: form-data; name="title"
 
@@ -23,7 +23,7 @@ Content-Disposition: form-data; name="description"
 description
 --WebAppBoundary--
 ###
-GET http://symfony.local/api/products/6f366118-abee-4b29-83e5-f6d2ff7ebbd5
+GET http://symfony.local/api/products/028f71e6-f569-41b6-a589-e9f0f7eedfc4
 Accept: application/json
 
 ###

@@ -1,0 +1,17 @@
+{% extends 'admin/layout.html.twig' %}
+
+{% block title %}Создание продукта{% endblock %}
+
+{% block h1 %}Создание продукта{% endblock %}
+
+{% block content %}
+    <div class="row">
+        <div class="offset-md-3 col-md-6">
+            <div id="createCategoryForm"></div>
+        </div>
+    </div>
+{% endblock %}
+
+{% block javascript %}
+{{ encore_entry_script_tags('create-category-form') }}
+{% endblock %}

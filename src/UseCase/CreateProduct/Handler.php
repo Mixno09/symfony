@@ -41,7 +41,11 @@ final class Handler implements MessageHandlerInterface
 
         try {
             $product = new Product(
-                Uuid::fromString($command->id), new Title($command->title), new Slug($command->slug), new ProductDescription($command->description), $image
+                Uuid::fromString($command->id),
+                new Title($command->title),
+                new Slug($command->slug),
+                new ProductDescription($command->description),
+                $image,
             );
             $this->entityManager->persist($product);
             $this->entityManager->flush();

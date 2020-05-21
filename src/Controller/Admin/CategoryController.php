@@ -29,4 +29,13 @@ final class CategoryController extends AbstractController
             'pagination' => $pagination,
         ]);
     }
+
+    /**
+     * @Route("/admin/categories/create", name="category_create", methods={"GET"})
+     * @return \Symfony\Component\HttpFoundation\Response
+     */
+    public function create(): Response
+    {
+        return $this->render('admin/category/create.html.twig');
+    }
 }

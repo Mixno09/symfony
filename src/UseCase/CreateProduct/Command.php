@@ -13,18 +13,19 @@ final class Command
      * @var string
      * @Assert\NotBlank
      * @Assert\Uuid
+     * @AppAssert\NotExistsProduct
      */
     public $id;
     /**
      * @var string
      * @Assert\NotBlank
-     * @AppAssert\ProductTitle
+     * @AppAssert\Title
      */
     public $title;
     /**
      * @var string
      * @Assert\NotBlank
-     * @AppAssert\ProductSlug
+     * @AppAssert\Slug
      */
     public $slug;
     /**
