@@ -8,6 +8,7 @@ use App\Entity\Product;
 use App\Entity\ValueObject\Asset;
 use App\Entity\ValueObject\ProductDescription;
 use App\Entity\ValueObject\Title;
+use App\Repository\CategoryRepository;
 use App\Service\AssetManager;
 use Doctrine\ORM\EntityManagerInterface;
 use LogicException;
@@ -20,16 +21,19 @@ final class Handler implements MessageHandlerInterface
 {
     private EntityManagerInterface $entityManager;
     private AssetManager $assetManager;
+    private CategoryRepository $categoryRepository;
 
     /**
      * Handler constructor.
      * @param \Doctrine\ORM\EntityManagerInterface $entityManager
      * @param \App\Service\AssetManager $assetManager
+     * @param \App\Repository\CategoryRepository $categoryRepository
      */
-    public function __construct(EntityManagerInterface $entityManager, AssetManager $assetManager)
+    public function __construct(EntityManagerInterface $entityManager, AssetManager $assetManager, CategoryRepository $categoryRepository)
     {
         $this->entityManager = $entityManager;
         $this->assetManager = $assetManager;
+        $this->categoryRepository = $categoryRepository;
     }
 
     /**
@@ -44,6 +48,12 @@ final class Handler implements MessageHandlerInterface
             throw new LogicException("Продукта с ID={$id} не существует");
         }
 
+        $categoriesId = array_map(
+            fn(string $id): string => Uuid::fromString($id)->getBytes(),
+            $command->categories
+        );
+        $categories = $this->categoryRepository->findBy(['id' => $categoriesId]);
+
         $image = null;
         $oldImage = null;
         if ($command->image instanceof File) {
@@ -54,6 +64,7 @@ final class Handler implements MessageHandlerInterface
         try {
             $product->update(
                 new Title($command->title),
+                $categories,
                 new ProductDescription($command->description),
                 $image
             );

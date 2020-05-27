@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\UseCase\UpdateProduct;
 
+use App\Entity\Category;
 use App\Entity\Product;
 use App\Validator\Constraints as AppAssert;
 use Symfony\Component\Validator\Constraints as Assert;
@@ -17,13 +18,24 @@ final class Command
     /**
      * @var string
      * @Assert\NotBlank
-     * @AppAssert\ProductTitle
+     * @AppAssert\Title
      */
     public $title;
     /**
      * @var string
+     * @Assert\NotBlank
      */
     public $slug;
+    /**
+     * @var string[]
+     * @Assert\NotBlank
+     * @Assert\Unique
+     * @Assert\All({
+     *     @Assert\NotBlank,
+     *     @AppAssert\ExistsCategory
+     * })
+     */
+    public $categories;
     /**
      * @var string
      * @Assert\NotBlank
@@ -52,6 +64,10 @@ final class Command
         $this->id = $product->getId()->toString();
         $this->title = (string) $product->getTitle();
         $this->slug = (string) $product->getSlug();
+        $this->categories = array_map(
+            fn(Category $category): string => $category->getId()->toString(),
+            $product->getCategories()
+        );
         $this->description = (string) $product->getDescription();
     }
 }

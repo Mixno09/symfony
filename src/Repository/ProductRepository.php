@@ -27,7 +27,7 @@ final class ProductRepository extends ServiceEntityRepository implements Paginat
      */
     public function pagination(int $page, int $limit = 10): PaginationInterface
     {
-        $query = $this->createQueryBuilder('p');
+        $query = $this->createQueryBuilder('p')->orderBy('p.title.value', 'ASC');
         return $this->paginator->paginate($query, $page, $limit);
     }
 

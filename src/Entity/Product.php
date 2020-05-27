@@ -44,6 +44,7 @@ final class Product
     private Asset $image;
     /**
      * @ORM\ManyToMany(targetEntity="App\Entity\Category")
+     * @ORM\OrderBy(value={"title.value": "ASC"})
      */
     private Collection $categories;
 
@@ -75,12 +76,14 @@ final class Product
 
     /**
      * @param \App\Entity\ValueObject\Title $title
+     * @param \App\Entity\Category[] $categories
      * @param \App\Entity\ValueObject\ProductDescription $description
      * @param \App\Entity\ValueObject\Asset|null $image
      */
-    public function update(Title $title, ProductDescription $description, Asset $image = null): void
+    public function update(Title $title, array $categories, ProductDescription $description, Asset $image = null): void
     {
         $this->title = $title;
+        $this->setCategories(...$categories);
         $this->description = $description;
 
         if ($image instanceof Asset) {
@@ -96,13 +99,15 @@ final class Product
         if (count($categories) === 0) {
             throw new InvalidArgumentException('Аргумент $categories не должен быть пустым');
         }
+        $collection = new ArrayCollection();
         foreach ($categories as $category) {
             $key = $category->getId()->toString();
-            if ($this->categories->containsKey($key)) {
+            if ($collection->containsKey($key)) {
                 throw new InvalidArgumentException('Аргумент $categories должен содержать только уникальные Category');
             }
-            $this->categories->set($key, $category);
+            $collection->set($key, $category);
         }
+        $this->categories = $collection;
     }
 
     /**
@@ -127,6 +132,14 @@ final class Product
     public function getDescription(): ProductDescription
     {
         return $this->description;
+    }
+
+    /**
+     * @return \App\Entity\Category[]
+     */
+    public function getCategories(): array
+    {
+        return $this->categories->toArray();
     }
 
     /**

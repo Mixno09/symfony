@@ -4,12 +4,12 @@ declare(strict_types=1);
 
 namespace App\ArgumentResolver;
 
+use InvalidArgumentException;
 use Ramsey\Uuid\Uuid;
 use Ramsey\Uuid\UuidInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\Controller\ArgumentValueResolverInterface;
 use Symfony\Component\HttpKernel\ControllerMetadata\ArgumentMetadata;
-use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
 final class UuidValueResolver implements ArgumentValueResolverInterface
 {
@@ -18,7 +18,7 @@ final class UuidValueResolver implements ArgumentValueResolverInterface
      */
     public function supports(Request $request, ArgumentMetadata $argument)
     {
-        return is_a($argument->getType(), UuidInterface::class, true);
+        return ($argument->getType() === UuidInterface::class);
     }
 
     /**
@@ -28,11 +28,11 @@ final class UuidValueResolver implements ArgumentValueResolverInterface
     {
         $argumentValue = $request->attributes->get($argument->getName());
         if (! is_string($argumentValue)) {
-            throw new NotFoundHttpException();
+            throw new InvalidArgumentException('Аргумент не является строкой');
         }
 
         if (! Uuid::isValid($argumentValue)) {
-            throw new NotFoundHttpException();
+            throw new InvalidArgumentException('Аргумент не является Uuid');
         }
 
         yield Uuid::fromString($argumentValue);
