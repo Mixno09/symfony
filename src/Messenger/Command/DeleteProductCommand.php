@@ -2,9 +2,9 @@
 
 declare(strict_types=1);
 
-namespace App\UseCase\DeleteProduct;
+namespace App\Messenger\Command;
 
-final class Command
+final class DeleteProductCommand
 {
     /**
      * @var string

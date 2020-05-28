@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace App\Controller\Api;
 
-use App\UseCase\CreateCategory\Command as CreateCommand;
+use App\Messenger\Command\CreateProductCommand;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -31,7 +31,7 @@ final class CategoryApiController extends AbstractController
      */
     public function createCategory(Request $request): Response
     {
-        $command = new CreateCommand();
+        $command = new CreateProductCommand();
 
         $data = $request->request->all();
 
@@ -41,6 +41,6 @@ final class CategoryApiController extends AbstractController
             }
         }
         $this->messageBus->dispatch($command);
-
+        //TODO вернуть ответ API
     }
 }

@@ -6,9 +6,9 @@ namespace App\Controller\Admin;
 
 use App\Entity\Product;
 use App\Form\Admin\ProductType;
+use App\Messenger\Command\DeleteProductCommand;
+use App\Messenger\Command\UpdateProductCommand;
 use App\Repository\ProductRepository;
-use App\UseCase\DeleteProduct\Command as DeleteCommand;
-use App\UseCase\UpdateProduct\Command as UpdateCommand;
 use Ramsey\Uuid\UuidInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
@@ -70,7 +70,7 @@ final class ProductController extends AbstractController
             throw $this->createNotFoundException("Продукта с ID={$id} не существует");
         }
 
-        $command = new UpdateCommand();
+        $command = new UpdateProductCommand();
         $command->populate($product);
         $form = $this->createForm(ProductType::class, $command);
         $form->handleRequest($request);
@@ -101,7 +101,7 @@ final class ProductController extends AbstractController
         $form = $this->createFormBuilder()->getForm();
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
-            $command = new DeleteCommand();
+            $command = new DeleteProductCommand();
             $command->id = $product->getId()->toString();
             $this->messageBus->dispatch($command);
             return $this->redirectToRoute('product_index');

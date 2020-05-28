@@ -3,8 +3,8 @@
 namespace App\Controller\Api;
 
 use App\Entity\Product;
+use App\Messenger\Command\CreateProductCommand;
 use App\Repository\ProductRepository;
-use App\UseCase\CreateProduct\Command as CreateCommand;
 use Ramsey\Uuid\UuidInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Asset\Packages;
@@ -34,7 +34,7 @@ class ProductApiController extends AbstractController
      */
     public function createProduct(Request $request): Response
     {
-        $command = new CreateCommand();
+        $command = new CreateProductCommand();
 
         $data = array_merge(
             $request->request->all(),

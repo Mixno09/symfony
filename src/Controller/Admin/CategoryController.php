@@ -5,8 +5,8 @@ declare(strict_types=1);
 namespace App\Controller\Admin;
 
 use App\Form\Admin\CategoryType;
+use App\Messenger\Command\CreateCategoryCommand;
 use App\Repository\CategoryRepository;
-use App\UseCase\CreateCategory\Command as CreateCommand;
 use Ramsey\Uuid\Uuid;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
@@ -52,7 +52,7 @@ final class CategoryController extends AbstractController
      */
     public function create(Request $request): Response
     {
-        $command = new CreateCommand();
+        $command = new CreateCategoryCommand();
         $command->id = Uuid::uuid4()->toString();
         $form = $this->createForm(CategoryType::class, $command);
         $form->handleRequest($request);

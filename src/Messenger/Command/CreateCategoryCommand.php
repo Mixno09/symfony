@@ -2,12 +2,12 @@
 
 declare(strict_types=1);
 
-namespace App\UseCase\CreateCategory;
+namespace App\Messenger\Command;
 
 use App\Validator\Constraints as AppAssert;
 use Symfony\Component\Validator\Constraints as Assert;
 
-final class Command
+final class CreateCategoryCommand
 {
     /**
      * @var string

@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace App\UseCase\CreateCategory;
+namespace App\Messenger\Command;
 
 use App\Entity\Category;
 use App\Entity\ValueObject\Slug;
@@ -11,7 +11,7 @@ use Doctrine\ORM\EntityManagerInterface;
 use Ramsey\Uuid\Uuid;
 use Symfony\Component\Messenger\Handler\MessageHandlerInterface;
 
-final class Handler implements MessageHandlerInterface
+final class CreateCategoryHandler implements MessageHandlerInterface
 {
     private EntityManagerInterface $entityManager;
 
@@ -25,10 +25,10 @@ final class Handler implements MessageHandlerInterface
     }
 
     /**
-     * @param \App\UseCase\CreateCategory\Command $command
+     * @param \App\Messenger\Command\CreateCategoryCommand $command
      * @return void
      */
-    public function __invoke(Command $command): void
+    public function __invoke(CreateCategoryCommand $command): void
     {
             $category = new Category(
                 Uuid::fromString($command->id),

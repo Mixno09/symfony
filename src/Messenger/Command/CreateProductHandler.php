@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace App\UseCase\CreateProduct;
+namespace App\Messenger\Command;
 
 use App\Entity\Product;
 use App\Entity\ValueObject\ProductDescription;
@@ -14,7 +14,7 @@ use Ramsey\Uuid\Uuid;
 use Symfony\Component\Messenger\Handler\MessageHandlerInterface;
 use Throwable;
 
-final class Handler implements MessageHandlerInterface
+final class CreateProductHandler implements MessageHandlerInterface
 {
     private EntityManagerInterface $entityManager;
     private AssetManager $assetManager;
@@ -31,11 +31,11 @@ final class Handler implements MessageHandlerInterface
     }
 
     /**
-     * @param \App\UseCase\CreateProduct\Command $command
+     * @param \App\Messenger\Command\CreateProductCommand $command
      * @return void
      * @throws \Throwable
      */
-    public function __invoke(Command $command): void
+    public function __invoke(CreateProductCommand $command): void
     {
         $image = $this->assetManager->upload($command->image);
 

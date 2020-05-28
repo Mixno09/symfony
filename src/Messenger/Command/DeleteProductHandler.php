@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace App\UseCase\DeleteProduct;
+namespace App\Messenger\Command;
 
 use App\Entity\Product;
 use App\Service\AssetManager;
@@ -11,7 +11,7 @@ use Ramsey\Uuid\Uuid;
 use RuntimeException;
 use Symfony\Component\Messenger\Handler\MessageHandlerInterface;
 
-final class Handler implements MessageHandlerInterface
+final class DeleteProductHandler implements MessageHandlerInterface
 {
     private EntityManagerInterface $entityManager;
     private AssetManager $assetManager;
@@ -28,10 +28,10 @@ final class Handler implements MessageHandlerInterface
     }
 
     /**
-     * @param \App\UseCase\DeleteProduct\Command $command
+     * @param \App\Messenger\Command\DeleteProductCommand $command
      * @throws \Throwable
      */
-    public function __invoke(Command $command): void
+    public function __invoke(DeleteProductCommand $command): void
     {
         $id = Uuid::fromString($command->id);
         $product = $this->entityManager->find(Product::class, $id);

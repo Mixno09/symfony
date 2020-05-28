@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace App\UseCase\UpdateProduct;
+namespace App\Messenger\Command;
 
 use App\Entity\Product;
 use App\Entity\ValueObject\Asset;
@@ -17,7 +17,7 @@ use Symfony\Component\HttpFoundation\File\File;
 use Symfony\Component\Messenger\Handler\MessageHandlerInterface;
 use Throwable;
 
-final class Handler implements MessageHandlerInterface
+final class UpdateProductHandler implements MessageHandlerInterface
 {
     private EntityManagerInterface $entityManager;
     private AssetManager $assetManager;
@@ -37,10 +37,10 @@ final class Handler implements MessageHandlerInterface
     }
 
     /**
-     * @param \App\UseCase\UpdateProduct\Command $command
+     * @param \App\Messenger\Command\UpdateProductCommand $command
      * @throws \Throwable
      */
-    public function __invoke(Command $command): void
+    public function __invoke(UpdateProductCommand $command): void
     {
         $id = Uuid::fromString($command->id);
         $product = $this->entityManager->find(Product::class, $id);

@@ -34,15 +34,15 @@ services:
             $targetDirectory: '%upload.product%'
             $packageName: 'product'
 
-    App\UseCase\CreateProduct\Handler:
+    App\Messenger\Command\CreateProductHandler:
         bind:
             App\Service\AssetManager: '@asset_manager.product'
 
-    App\UseCase\UpdateProduct\Handler:
+    App\Messenger\Command\UpdateProductHandler:
         bind:
             App\Service\AssetManager: '@asset_manager.product'
 
-    App\UseCase\DeleteProduct\Handler:
+    App\Messenger\Command\DeleteProductHandler:
         bind:
             App\Service\AssetManager: '@asset_manager.product'
 
