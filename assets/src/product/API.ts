@@ -1,6 +1,14 @@
 import axios from "./../common/Axios"
 import {AxiosResponse, AxiosStatic} from "axios";
-import {makeFormData} from "../common/APIUtils";
+import APIUtils from "../common/APIUtils";
+
+interface CreateProduct {
+    id: string;
+    title: string;
+    slug: string;
+    description: string;
+    image: File | null;
+}
 
 class API {
     private readonly axios: AxiosStatic;
@@ -10,20 +18,10 @@ class API {
     }
 
     async createProduct(product: CreateProduct): Promise<AxiosResponse> {
-        const data = makeFormData(product);
+        const data = APIUtils.makeFormData(product);
 
         return await this.axios.post('/api/products', data);
     }
 }
 
-interface CreateProduct {
-    id: string;
-    title: string;
-    slug: string;
-    description: string;
-    image?: File;
-}
-
-const api = new API(axios);
-
-export default api;
+export default new API(axios);
