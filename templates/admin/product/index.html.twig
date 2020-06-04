@@ -35,7 +35,7 @@
                             {% endfor %}
                         </td>
                         <td class="col-md-1">
-                            <img src="{{ asset(product.image.path, product.image.packageName) }}"
+                            <img src="{{ file(product.image) }}"
                                  alt="Нет изображения"
                                  class="img-thumbnail"
                                  width="50px"

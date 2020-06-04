@@ -30,12 +30,12 @@ final class CreateCategoryHandler implements MessageHandlerInterface
      */
     public function __invoke(CreateCategoryCommand $command): void
     {
-            $category = new Category(
-                Uuid::fromString($command->id),
-                new Title($command->title),
-                new Slug($command->slug)
-            );
-            $this->entityManager->persist($category);
-            $this->entityManager->flush();
+        $category = new Category(
+            Uuid::fromString($command->id),
+            new Title($command->title),
+            new Slug($command->slug)
+        );
+        $this->entityManager->persist($category);
+        $this->entityManager->flush();
     }
 }
