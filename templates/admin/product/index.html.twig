@@ -16,10 +16,10 @@
                 <thead>
                 <tr class="d-flex">
                     <th scope="col" class="col-md-1">ID</th>
-                    <th scope="col" class="col-md-3">Название</th>
+                    <th scope="col" class="col-md-2">Название</th>
                     <th scope="col" class="col-md-3">Категория</th>
                     <th scope="col" class="col-md-1">Картинка</th>
-                    <th scope="col" class="col-md-4">Действия</th>
+                    <th scope="col" class="col-md-5">Действия</th>
                 </tr>
                 </thead>
                 <tbody>
@@ -27,7 +27,7 @@
                     {# @var \App\Entity\Product product #}
                     <tr class="d-flex">
                         <th scope="row" class="col-md-1">{{ product.id }}</th>
-                        <td class="col-md-3">{{ product.title|u.truncate(64, '...') }}</td>
+                        <td class="col-md-2">{{ product.title|u.truncate(64, '...') }}</td>
                         <td class="col-md-3">
                             {% for category in product.categories %}
                                 {# @var \App\Entity\Category category #}
@@ -41,7 +41,7 @@
                                  width="50px"
                                  height="50px">
                         </td>
-                        <td class="col-md-4">
+                        <td class="col-md-5">
                             <a href="{{ path('product', {'slug': product.slug}) }}" target="_blank"
                                class="btn btn-outline-primary text-nowrap">
                                 <span data-feather="eye"></span> Просмотреть

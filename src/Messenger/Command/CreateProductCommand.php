@@ -48,4 +48,8 @@ final class CreateProductCommand
      * )
      */
     public $image;
+    /**
+     * @var string[]
+     */
+    public $categories;
 }

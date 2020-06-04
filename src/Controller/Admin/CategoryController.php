@@ -4,10 +4,13 @@ declare(strict_types=1);
 
 namespace App\Controller\Admin;
 
+use App\Entity\Category;
 use App\Form\Admin\CategoryType;
 use App\Messenger\Command\CreateCategoryCommand;
+use App\Messenger\Command\UpdateCategoryCommand;
 use App\Repository\CategoryRepository;
 use Ramsey\Uuid\Uuid;
+use Ramsey\Uuid\UuidInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -63,5 +66,24 @@ final class CategoryController extends AbstractController
         return $this->render('admin/category/create.html.twig', [
             'form' => $form->createView(),
         ]);
+    }
+
+    /**
+     * @Route("/admin/categories/{id}/update", name="category_update", methods={"GET", "POST"})
+     * @param \Ramsey\Uuid\UuidInterface $id
+     * @param \Symfony\Component\HttpFoundation\Request $request
+     * @return \Symfony\Component\HttpFoundation\Response
+     */
+    public function update(UuidInterface $id, Request $request): Response
+    {
+        $entityManager = $this->getDoctrine()->getManager();
+        $category = $entityManager->find(Category::class, $id);
+
+        if (! $category instanceof Category) {
+            throw $this->createNotFoundException("Категории с ID={$id} не существует");
+        }
+
+        $command = new UpdateCategoryCommand();
+//TODO return response
     }
 }

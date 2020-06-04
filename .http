@@ -8,20 +8,23 @@ Content-Disposition: form-data; name="image"; filename="file.txt"
 --WebAppBoundary--
 Content-Disposition: form-data; name="id"
 
-028f71e6-f569-41b6-a589-e9f0f7eedfc4
+4e142da0-1f5e-4dc9-99c5-3615c3592192
 --WebAppBoundary--
 Content-Disposition: form-data; name="title"
 
-title
+tests
 --WebAppBoundary--
 Content-Disposition: form-data; name="slug"
 
-slug
+tests
 --WebAppBoundary--
 Content-Disposition: form-data; name="description"
 
 description
 --WebAppBoundary--
+Content-Disposition: form-data; name="categories"
+
+{"product" : {"categories" : "059bdb3d-9595-4697-9a9e-f20d31bbb4c1"}}
 ###
 GET http://symfony.local/api/products/028f71e6-f569-41b6-a589-e9f0f7eedfc4
 Accept: application/json
