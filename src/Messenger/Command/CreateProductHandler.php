@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace App\Messenger\Command;
 
-use App\Entity\Category;
 use App\Entity\Product;
 use App\Entity\ValueObject\ProductDescription;
 use App\Entity\ValueObject\Slug;
@@ -28,7 +27,7 @@ final class CreateProductHandler implements MessageHandlerInterface
      * @param \App\Service\AssetManager $assetManager
      * @param \App\Repository\CategoryRepository $categoryRepository
      */
-    public function __construct(EntityManagerInterface $entityManager, AssetManager $assetManager, \App\Repository\CategoryRepository $categoryRepository)
+    public function __construct(EntityManagerInterface $entityManager, AssetManager $assetManager, CategoryRepository $categoryRepository)
     {
         $this->entityManager = $entityManager;
         $this->assetManager = $assetManager;
@@ -43,8 +42,10 @@ final class CreateProductHandler implements MessageHandlerInterface
     public function __invoke(CreateProductCommand $command): void
     {
         $image = $this->assetManager->upload($command->image);
-        /** @var Category[] $categories */
-        $categories = $this->categoryRepository->findAll();
+        $categoriesId = array_map(function (string $id): string {
+            return Uuid::fromString($id)->getBytes();
+        }, $command->categories);
+        $categories = $this->categoryRepository->findBy(['id' => $categoriesId]);
 
         try {
             $product = new Product(
