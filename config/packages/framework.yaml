@@ -14,9 +14,3 @@ framework:
     #fragments: true
     php_errors:
         log: true
-
-    assets:
-        packages:
-            product:
-                base_path: '/upload/product'
-                version: ~

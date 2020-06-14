@@ -6,9 +6,10 @@ namespace App\Messenger\Command;
 
 use App\Entity\Product;
 use App\Entity\ValueObject\ProductDescription;
+use App\Entity\ValueObject\ProductImage;
 use App\Entity\ValueObject\Slug;
 use App\Entity\ValueObject\Title;
-use App\Service\AssetManager;
+use App\Service\FileManager;
 use Doctrine\ORM\EntityManagerInterface;
 use Ramsey\Uuid\Uuid;
 use Symfony\Component\Messenger\Handler\MessageHandlerInterface;
@@ -17,17 +18,17 @@ use Throwable;
 final class CreateProductHandler implements MessageHandlerInterface
 {
     private EntityManagerInterface $entityManager;
-    private AssetManager $assetManager;
+    private FileManager $fileManager;
 
     /**
      * Handler constructor.
      * @param \Doctrine\ORM\EntityManagerInterface $entityManager
-     * @param \App\Service\AssetManager $assetManager
+     * @param \App\Service\FileManager $fileManager
      */
-    public function __construct(EntityManagerInterface $entityManager, AssetManager $assetManager)
+    public function __construct(EntityManagerInterface $entityManager, FileManager $fileManager)
     {
         $this->entityManager = $entityManager;
-        $this->assetManager = $assetManager;
+        $this->fileManager = $fileManager;
     }
 
     /**
@@ -37,7 +38,7 @@ final class CreateProductHandler implements MessageHandlerInterface
      */
     public function __invoke(CreateProductCommand $command): void
     {
-        $image = $this->assetManager->upload($command->image);
+        $image = ProductImage::create($command->image, $this->fileManager);
 
         try {
             $product = new Product(
@@ -50,7 +51,7 @@ final class CreateProductHandler implements MessageHandlerInterface
             $this->entityManager->persist($product);
             $this->entityManager->flush();
         } catch (Throwable $exception) {
-            $this->assetManager->delete($image);
+            $image->delete($this->fileManager);
             throw $exception;
         }
     }

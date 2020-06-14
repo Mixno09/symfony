@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace App\Messenger\Command;
 
 use App\Entity\Product;
-use App\Service\AssetManager;
+use App\Service\FileManager;
 use Doctrine\ORM\EntityManagerInterface;
 use Ramsey\Uuid\Uuid;
 use RuntimeException;
@@ -14,17 +14,17 @@ use Symfony\Component\Messenger\Handler\MessageHandlerInterface;
 final class DeleteProductHandler implements MessageHandlerInterface
 {
     private EntityManagerInterface $entityManager;
-    private AssetManager $assetManager;
+    private FileManager $fileManager;
 
     /**
      * Handler constructor.
      * @param \Doctrine\ORM\EntityManagerInterface $entityManager
-     * @param \App\Service\AssetManager $assetManager
+     * @param \App\Service\FileManager $fileManager
      */
-    public function __construct(EntityManagerInterface $entityManager, AssetManager $assetManager)
+    public function __construct(EntityManagerInterface $entityManager, FileManager $fileManager)
     {
         $this->entityManager = $entityManager;
-        $this->assetManager = $assetManager;
+        $this->fileManager = $fileManager;
     }
 
     /**
@@ -41,7 +41,6 @@ final class DeleteProductHandler implements MessageHandlerInterface
         $this->entityManager->remove($product);
         $this->entityManager->flush();
 
-        $image = $product->getImage();
-        $this->assetManager->delete($image);
+        $product->getImage()->delete($this->fileManager);
     }
 }

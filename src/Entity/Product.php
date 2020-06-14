@@ -4,8 +4,8 @@ declare(strict_types=1);
 
 namespace App\Entity;
 
-use App\Entity\ValueObject\Asset;
 use App\Entity\ValueObject\ProductDescription;
+use App\Entity\ValueObject\ProductImage;
 use App\Entity\ValueObject\Slug;
 use App\Entity\ValueObject\Title;
 use Doctrine\Common\Collections\ArrayCollection;
@@ -39,9 +39,9 @@ final class Product
      */
     private ProductDescription $description;
     /**
-     * @ORM\Embedded(class="App\Entity\ValueObject\Asset")
+     * @ORM\Embedded(class="App\Entity\ValueObject\ProductImage")
      */
-    private Asset $image;
+    private ProductImage $image;
     /**
      * @ORM\ManyToMany(targetEntity="App\Entity\Category")
      * @ORM\OrderBy(value={"title.value": "ASC"})
@@ -54,7 +54,7 @@ final class Product
      * @param \App\Entity\ValueObject\Title $title
      * @param \App\Entity\ValueObject\Slug $slug
      * @param \App\Entity\ValueObject\ProductDescription $description
-     * @param \App\Entity\ValueObject\Asset $image
+     * @param \App\Entity\ValueObject\ProductImage $image
      * @param \App\Entity\Category[] $categories
      */
     public function __construct(
@@ -62,7 +62,7 @@ final class Product
         Title $title,
         Slug $slug,
         ProductDescription $description,
-        Asset $image,
+        ProductImage $image,
         array $categories
     ) {
         $this->id = $id;
@@ -78,15 +78,15 @@ final class Product
      * @param \App\Entity\ValueObject\Title $title
      * @param \App\Entity\Category[] $categories
      * @param \App\Entity\ValueObject\ProductDescription $description
-     * @param \App\Entity\ValueObject\Asset|null $image
+     * @param \App\Entity\ValueObject\ProductImage $image
      */
-    public function update(Title $title, array $categories, ProductDescription $description, Asset $image = null): void
+    public function update(Title $title, array $categories, ProductDescription $description, ProductImage $image = null): void
     {
         $this->title = $title;
         $this->setCategories(...$categories);
         $this->description = $description;
 
-        if ($image instanceof Asset) {
+        if ($image instanceof ProductImage) {
             $this->image = $image;
         }
     }
@@ -143,9 +143,9 @@ final class Product
     }
 
     /**
-     * @return \App\Entity\ValueObject\Asset
+     * @return \App\Entity\ValueObject\ProductImage
      */
-    public function getImage(): Asset
+    public function getImage(): ProductImage
     {
         return $this->image;
     }

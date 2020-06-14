@@ -4,9 +4,10 @@ namespace App\DataFixtures;
 
 use App\Entity\Product;
 use App\Entity\ValueObject\ProductDescription;
+use App\Entity\ValueObject\ProductImage;
 use App\Entity\ValueObject\Slug;
 use App\Entity\ValueObject\Title;
-use App\Service\AssetManager;
+use App\Service\FileManager;
 use Doctrine\Bundle\FixturesBundle\Fixture;
 use Doctrine\Common\DataFixtures\DependentFixtureInterface;
 use Doctrine\Persistence\ObjectManager;
@@ -20,16 +21,16 @@ class ProductFixtures extends Fixture implements DependentFixtureInterface
     private const PRODUCT_NUMBER = 1000;
 
     private Generator $faker;
-    private AssetManager $assetManager;
+    private FileManager $fileManager;
 
     /**
      * ProductFixtures constructor.
-     * @param \App\Service\AssetManager $assetManager
+     * @param \App\Service\FileManager $fileManager
      */
-    public function __construct(AssetManager $assetManager)
+    public function __construct(FileManager $fileManager)
     {
         $this->faker = Factory::create();
-        $this->assetManager = $assetManager;
+        $this->fileManager = $fileManager;
     }
 
     public function load(ObjectManager $manager)
@@ -47,8 +48,9 @@ class ProductFixtures extends Fixture implements DependentFixtureInterface
         $title = new Title("Продукт {$i}");
         $slug = new Slug("product-{$i}");
         $description = new ProductDescription("Описание продукта {$i}");
-        $image = $this->assetManager->upload(
-            new File(__DIR__ . '/images/product.jpeg')
+        $image = ProductImage::create(
+            new File(__DIR__ . '/images/product.jpeg'),
+            $this->fileManager
         );
         $categories = [];
         $categories[] = $this->getReference(
