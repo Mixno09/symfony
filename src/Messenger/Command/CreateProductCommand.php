@@ -54,7 +54,7 @@ final class CreateProductCommand
      * @Assert\Unique
      * @Assert\All({
      *     @Assert\NotBlank
-     *     @AppAssert\ExistsCategory
+     *     @AppAssert\CategoryExists
      * })
      */
     public $categories;
