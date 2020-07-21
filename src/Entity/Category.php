@@ -43,6 +43,12 @@ class Category
         $this->slug = $slug;
     }
 
+    public function update(Title $title, Slug $slug): void
+    {
+        $this->title = $title;
+        $this->slug = $slug;
+    }
+
     /**
      * @return \Ramsey\Uuid\UuidInterface
      */

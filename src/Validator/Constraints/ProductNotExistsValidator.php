@@ -11,7 +11,7 @@ use Symfony\Component\Validator\ConstraintValidator;
 use Symfony\Component\Validator\Exception\UnexpectedTypeException;
 use Symfony\Component\Validator\Exception\UnexpectedValueException;
 
-final class NotExistsProductValidator extends ConstraintValidator
+final class ProductNotExistsValidator extends ConstraintValidator
 {
     private ProductRepository $repository;
 
@@ -29,8 +29,8 @@ final class NotExistsProductValidator extends ConstraintValidator
      */
     public function validate($value, Constraint $constraint)
     {
-        if (! $constraint instanceof NotExistsProduct) {
-            throw new UnexpectedTypeException($constraint, NotExistsProduct::class);
+        if (! $constraint instanceof ProductNotExists) {
+            throw new UnexpectedTypeException($constraint, ProductNotExists::class);
         }
 
         if (! is_string($value)) {

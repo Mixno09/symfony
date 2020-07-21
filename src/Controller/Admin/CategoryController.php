@@ -78,12 +78,23 @@ final class CategoryController extends AbstractController
     {
         $entityManager = $this->getDoctrine()->getManager();
         $category = $entityManager->find(Category::class, $id);
-
         if (! $category instanceof Category) {
             throw $this->createNotFoundException("Категории с ID={$id} не существует");
         }
 
         $command = new UpdateCategoryCommand();
-//TODO return response
+        $command->populate($category);
+        $form = $this->createForm(CategoryType::class, $command);
+        $form->handleRequest($request);
+        if ($form->isSubmitted() && $form->isValid()) {
+            $this->messageBus->dispatch($command);
+            return $this->redirectToRoute('category_update', ['id' => $id]);
+        }
+        return $this->render('admin/category/update.html.twig',
+            [
+                'form' => $form->createView(),
+                'category' => $category,
+            ]
+        );
     }
 }

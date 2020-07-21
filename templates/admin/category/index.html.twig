@@ -26,16 +26,16 @@
                     <tr class="d-flex">
                         <th scope="row" class="col-md-2">{{ category.id }}</th>
                         <td class="col-md-5">{{ category.title|u.truncate(64, '...') }}</td>
-{#                        <td class="col-md-5">#}
-{#                            <a href="{{ path('category_update', {'id': category.id}) }}"#}
-{#                               class="btn btn-primary text-nowrap">#}
-{#                                <span data-feather="edit"></span> Редактировать#}
-{#                            </a>#}
+                        <td class="col-md-5">
+                            <a href="{{ path('category_update', {'id': category.id}) }}"
+                               class="btn btn-primary text-nowrap">
+                                <span data-feather="edit"></span> Редактировать
+                            </a>
 {#                            <a href="{{ path('category_delete', {'id': category.id}) }}"#}
 {#                               class="btn btn-danger text-nowrap">#}
 {#                                <span data-feather="x-square"></span> Удалить#}
 {#                            </a>#}
-{#                        </td>#}
+                        </td>
                     </tr>
                 {% endfor %}
                 </tbody>

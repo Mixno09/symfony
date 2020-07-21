@@ -5,14 +5,25 @@ declare(strict_types=1);
 namespace App\Messenger\Command;
 
 use App\Entity\Category;
-use Doctrine\ORM\EntityManager;
+use App\Entity\ValueObject\Slug;
+use App\Entity\ValueObject\Title;
+use Doctrine\ORM\EntityManagerInterface;
 use LogicException;
 use Ramsey\Uuid\Uuid;
 use Symfony\Component\Messenger\Handler\MessageHandlerInterface;
 
 final class UpdateCategoryHandler implements MessageHandlerInterface
 {
-    private EntityManager $entityManager;
+    private EntityManagerInterface $entityManager;
+
+    /**
+     * UpdateCategoryHandler constructor.
+     * @param \Doctrine\ORM\EntityManagerInterface $entityManager
+     */
+    public function __construct(EntityManagerInterface $entityManager)
+    {
+        $this->entityManager = $entityManager;
+    }
 
     public function __invoke(UpdateCategoryCommand $command): void
     {
@@ -22,6 +33,8 @@ final class UpdateCategoryHandler implements MessageHandlerInterface
             throw new LogicException("Категории с ID={$id} не существует");
         }
 
+        $category->update(new Title($command->title), new Slug($command->slug));
+        $this->entityManager->flush();
     }
 
 }

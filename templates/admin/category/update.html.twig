@@ -1,0 +1,18 @@
+{% extends 'admin/layout.html.twig' %}
+
+{% block title %}Редактирование категории{% endblock %}
+
+{% block h1 %}Редактирование категории{% endblock %}
+
+{% block content %}
+    <div class="row">
+        <div class="offset-md-3 col-md-6">
+            {{ form_start(form) }}
+            {{ form_row(form.title) }}
+            {{ form_row(form.slug) }}
+            <button type="submit" class="btn btn-success btn-lg">Сохранить</button>
+            <a href="{{ path('category_index') }}" class="btn btn-light btn-lg">Отмена</a>
+            {{ form_end(form) }}
+        </div>
+    </div>
+{% endblock %}

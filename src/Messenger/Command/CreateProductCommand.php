@@ -13,7 +13,7 @@ final class CreateProductCommand
      * @var string
      * @Assert\NotBlank
      * @Assert\Uuid
-     * @AppAssert\NotExistsProduct
+     * @AppAssert\ProductNotExists
      */
     public $id;
     /**
@@ -50,6 +50,12 @@ final class CreateProductCommand
     public $image;
     /**
      * @var string[]
+     * @Assert\NotBlank
+     * @Assert\Unique
+     * @Assert\All({
+     *     @Assert\NotBlank
+     *     @AppAssert\ExistsCategory
+     * })
      */
     public $categories;
 }

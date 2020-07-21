@@ -13,6 +13,8 @@ final class UpdateProductCommand
 {
     /**
      * @var string
+     * @Assert\Uuid
+     * @Assert\NotBlank
      */
     public $id;
     /**
@@ -24,6 +26,7 @@ final class UpdateProductCommand
     /**
      * @var string
      * @Assert\NotBlank
+     * @AppAssert\Slug
      */
     public $slug;
     /**

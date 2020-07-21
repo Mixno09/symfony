@@ -9,7 +9,7 @@ use Symfony\Component\Validator\Constraint;
 /**
  * @Annotation
  */
-final class ExistsCategory extends Constraint
+final class CategoryExists extends Constraint
 {
     public string $invalidUuidMessage = 'Значение должно быть Uuid';
 
@@ -17,6 +17,6 @@ final class ExistsCategory extends Constraint
 
     public function validatedBy()
     {
-        return ExistsCategoryValidator::class;
+        return CategoryExistsValidator::class;
     }
 }

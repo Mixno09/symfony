@@ -12,7 +12,7 @@ use Symfony\Component\Validator\ConstraintValidator;
 use Symfony\Component\Validator\Exception\UnexpectedTypeException;
 use Symfony\Component\Validator\Exception\UnexpectedValueException;
 
-final class ExistsCategoryValidator extends ConstraintValidator
+final class CategoryExistsValidator extends ConstraintValidator
 {
     private CategoryRepository $repository;
 
@@ -30,8 +30,8 @@ final class ExistsCategoryValidator extends ConstraintValidator
      */
     public function validate($value, Constraint $constraint)
     {
-        if (! $constraint instanceof ExistsCategory) {
-            throw new UnexpectedTypeException($constraint, ExistsCategory::class);
+        if (! $constraint instanceof CategoryExists) {
+            throw new UnexpectedTypeException($constraint, CategoryExists::class);
         }
 
         if ($value === null || $value === '') {
